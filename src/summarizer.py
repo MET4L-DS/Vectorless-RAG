@@ -5,14 +5,15 @@ import itertools
 import time
 import pandas as pd
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 load_dotenv(override=True)
 
-# Initialize API configuration
+# Initialize API client
 api_key = os.getenv("GOOGLE_API_KEY")
+client = None
 if api_key:
-    genai.configure(api_key=api_key)
+    client = genai.Client(api_key=api_key)
 else:
     print("Warning: GOOGLE_API_KEY is not set in environment.")
 
@@ -45,11 +46,12 @@ async def call_model(prompt: str) -> str:
     if delay > 0:
         await asyncio.sleep(delay)
         
-    model = genai.GenerativeModel(model_name)
+    if not client:
+        raise ValueError("Google GenAI client is not configured (missing GOOGLE_API_KEY).")
     
     # Call SDK in executor thread
     response = await asyncio.to_thread(
-        lambda: model.generate_content(prompt)
+        lambda: client.models.generate_content(model=model_name, contents=prompt)
     )
     
     model_calls_tracker[model_name] += 1
@@ -161,7 +163,8 @@ def chunk_text(text, max_chars=14000):
 ACT_FULL_NAMES = {
     "BNS": "Bharatiya Nyaya Sanhita, 2023",
     "BNSS": "Bharatiya Nagarik Suraksha Sanhita, 2023",
-    "BSA": "Bharatiya Sakshya Adhiniyam, 2023"
+    "BSA": "Bharatiya Sakshya Adhiniyam, 2023",
+    "SOP": "Telangana Police Standard Operating Procedures"
 }
 
 def get_leaf_prompt(act_code, section_no, title, content, node_id):
@@ -174,6 +177,18 @@ def get_leaf_prompt(act_code, section_no, title, content, node_id):
             "Do NOT describe referenced BNS sections as if they are defined inside this section.\n"
         )
         
+    if act_code == "SOP":
+        return f"""You are a precise legal procedure summarizer for Indian police officers. Summarize the following Standard Operating Procedure of the {act_name} in 2–4 sentences.
+
+Rules:
+- Make the summary highly keyword-rich and dense, preserving all specific procedural steps, officer roles, timelines, and required actions.
+- Preserve exact numbers, timelines (e.g. days, hours), and forms verbatim.
+- If it references specific sections of BNSS, BNS, or BSA, name them explicitly.
+- Do not add interpretation or inference beyond what is stated.
+
+SOP {section_no}. {title}:
+{content}"""
+
     return f"""You are a precise legal summarizer. Summarize the following section of the {act_name} in 2–4 sentences.
 
 Rules:
@@ -322,7 +337,14 @@ async def summarize_root(node):
             
     summaries_text = "\n".join(chapter_summaries)
     
-    prompt = f"""You are a precise legal summarizer. The following are chapter summaries for the {act_name}.
+    if act_code == "SOP":
+        prompt = f"""You are a precise legal procedure summarizer. The following are summaries of individual Standard Operating Procedures for the {act_name}.
+Provide a dense, keyword-rich one-paragraph summary (3–5 sentences) of the overall scope, key procedural workflows (such as investigation, arrest, and electronic evidence), and operational guidelines introduced by this manual.
+
+SOP summaries:
+{summaries_text}"""
+    else:
+        prompt = f"""You are a precise legal summarizer. The following are chapter summaries for the {act_name}.
 Provide a dense, keyword-rich one-paragraph summary (3–5 sentences) of the overall scope, structure, and main legal systems/topics introduced by this Act.
 
 Chapter summaries:
@@ -358,7 +380,7 @@ async def run_summarization_pipeline(trees):
             front_matters.append(node)
         elif nt == "schedule":
             schedules.append(node)
-        elif nt == "section":
+        elif nt in ["section", "sop_procedure", "sop_form", "sop_reference", "sop_table"]:
             sections.append(node)
         elif nt == "schedule_row":
             schedule_rows.append(node)

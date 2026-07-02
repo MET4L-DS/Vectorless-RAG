@@ -2,6 +2,7 @@ import os
 import time
 import pandas as pd
 from parser import PDFParser
+from sop_parser import SOPParser
 from validation import validate_datasets
 
 # Define paths
@@ -11,7 +12,8 @@ OUTPUT_DIR = "output"
 PDF_FILES = {
     "BNS": os.path.join(SOURCE_DIR, "BNS.pdf"),
     "BNSS": os.path.join(SOURCE_DIR, "BNSS.pdf"),
-    "BSA": os.path.join(SOURCE_DIR, "BSA.pdf")
+    "BSA": os.path.join(SOURCE_DIR, "BSA.pdf"),
+    "SOP": os.path.join(SOURCE_DIR, "Standard_Operating_Procedures.pdf")
 }
 
 def main():
@@ -34,10 +36,14 @@ def main():
             print(f"Error: Source PDF for {act} not found at {path}")
             continue
             
-        print(f"\nParsing {act} Act from: {path}...")
+        print(f"\nParsing {act} from: {path}...")
         act_start = time.time()
         
-        parser = PDFParser(act, path)
+        if act == "SOP":
+            parser = SOPParser(path)
+        else:
+            parser = PDFParser(act, path)
+            
         page_df, line_df, toc_df, schedule_df = parser.parse()
         
         print(f"Finished parsing {act} in {time.time() - act_start:.2f} seconds.")

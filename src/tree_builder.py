@@ -52,6 +52,8 @@ def build_unsummarized_trees(output_dir="output"):
     section_texts = line_df.groupby("section_id")["text"].apply(lambda lines: " ".join(lines)).to_dict()
 
     acts = ["BNS", "BNSS", "BSA"]
+    if "SOP" in toc_df["act_code"].values:
+        acts.append("SOP")
     trees = {}
 
     for act in acts:
@@ -70,7 +72,7 @@ def build_unsummarized_trees(output_dir="output"):
             
             # Content population
             content = None
-            if node_type == "section":
+            if node_type in ["section", "sop_procedure", "sop_form", "sop_reference", "sop_table"]:
                 content = section_texts.get(node_id, "")
                 
             # Cross references

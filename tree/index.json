@@ -1,6 +1,6 @@
 {
   "corpus": "Bharatiya Nyaya Sanhita Corpus",
-  "generated_at": "2026-07-02T14:54:46Z",
+  "generated_at": "2026-07-02T17:40:40Z",
   "acts": {
     "BNS": {
       "path": "tree/BNS.json",
@@ -22,6 +22,13 @@
       "total_sections": 170,
       "total_pages": 54,
       "summary": "The Bharatiya Sakshya Adhiniyam, 2023, establishes the comprehensive legal framework for the admissibility, relevancy, and proof of evidence in judicial proceedings and Courts-martial, effectively repealing the Indian Evidence Act, 1872. The Act delineates the standards for oral and documentary evidence, with a modernized emphasis on the authentication, certification, and integrity of electronic and digital records. It codifies essential legal doctrines, including the relevancy of facts in issue, the burden of proof, various judicial presumptions—particularly regarding criminal liability under the Bharatiya Nyaya Sanhita—and the doctrine of estoppel. Furthermore, the Act regulates witness competency, testimonial privileges, and the procedural protocols for examination, ensuring systemic integration with the Bharatiya Nyaya Sanhita and the Bharatiya Nagarik Suraksha Sanhita."
+    },
+    "SOP": {
+      "path": "tree/SOP.json",
+      "full_title": "Telangana Police Standard Operating Procedures",
+      "total_sections": 47,
+      "total_pages": 238,
+      "summary": "This manual establishes the comprehensive operational framework for the Telangana Police under the BNSS, BNS, and BSA 2023, governing the end-to-end criminal justice process from complaint receipt to trial. Key procedural workflows include the registration of oral, electronic, and Zero FIRs, strict arrest protocols requiring DSP authorization for infirm or elderly persons, and the restricted application of handcuffs limited to grave offenses. A central operational pillar is the integration of Audio-Video Electronic Means (AVEM) and forensic-grade digital evidence collection, utilizing HASH values (MD5, SHA) and BSA-compliant certifications to ensure the integrity of searches, seizures, and statements. Furthermore, the guidelines mandate rigorous timelines for investigation progress reports, medical examinations for victims, and the electronic submission of charge sheets to enhance judicial efficiency and transparency."
     }
   }
 }

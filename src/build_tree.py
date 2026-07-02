@@ -76,6 +76,14 @@ def main():
             }
         }
     }
+    if "SOP" in trees:
+        index_data["acts"]["SOP"] = {
+            "path": "tree/SOP.json",
+            "full_title": "Telangana Police Standard Operating Procedures",
+            "total_sections": len([c for c in trees["SOP"]["children"] if c["node_type"] != "front_matter"]),
+            "total_pages": 238,
+            "summary": trees["SOP"]["summary"]
+        }
     with open(index_file, "w", encoding="utf-8") as f:
         json.dump(index_data, f, indent=2, ensure_ascii=False)
     print(f"  Saved index.json to {index_file}")

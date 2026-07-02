@@ -50,10 +50,15 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
 
     # 3b. Root & Hierarchy Structure Verification
     roots = toc_df[toc_df["node_type"] == "root"]
-    if len(roots) != 3:
-        errors.append(f"Error: Expected exactly 3 root nodes, found {len(roots)}: {roots['section_id'].tolist()}")
+    expected_roots_count = 4 if "SOP" in toc_df["act_code"].values else 3
+    if len(roots) != expected_roots_count:
+        errors.append(f"Error: Expected exactly {expected_roots_count} root nodes, found {len(roots)}: {roots['section_id'].tolist()}")
     else:
-        for act in EXPECTED_CHAPTERS.keys():
+        acts_to_check = list(EXPECTED_CHAPTERS.keys())
+        if "SOP" in toc_df["act_code"].values:
+            acts_to_check.append("SOP")
+            
+        for act in acts_to_check:
             act_root = roots[roots["act_code"] == act]
             if act_root.empty:
                 errors.append(f"Error: Missing root node for Act {act}.")
@@ -63,7 +68,11 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
                     errors.append(f"Error: Act {act} root node has invalid level ({row['level']}) or parent_id ({row['parent_id']}).")
                     
     # Check that all chapters point to their Act's root
-    for act in EXPECTED_CHAPTERS.keys():
+    acts_to_check = list(EXPECTED_CHAPTERS.keys())
+    if "SOP" in toc_df["act_code"].values:
+        acts_to_check.append("SOP")
+        
+    for act in acts_to_check:
         act_toc = toc_df[toc_df["act_code"] == act]
         chapters = act_toc[act_toc["node_type"] == "chapter"]
         for _, chap in chapters.iterrows():
@@ -190,6 +199,8 @@ def validate_completed_trees(tree_dir="tree", output_dir="output"):
         return False
         
     acts = ["BNS", "BNSS", "BSA"]
+    if "SOP" in index_data.get("acts", {}):
+        acts.append("SOP")
     for act in acts:
         if act not in index_data.get("acts", {}):
             errors.append(f"Error: Act {act} is missing in index.json.")
@@ -246,8 +257,8 @@ def validate_completed_trees(tree_dir="tree", output_dir="output"):
             if not summary:
                 errors.append(f"Error: Node {nid} has an empty or missing summary.")
                 
-            # Leaf nodes (node_type == "section" or "schedule_row")
-            if ntype in ["section", "schedule_row"]:
+            # Leaf nodes (node_type == "section", "schedule_row", or SOP node types)
+            if ntype in ["section", "schedule_row", "sop_procedure", "sop_form", "sop_reference", "sop_table"]:
                 if content is None or len(content) == 0:
                     errors.append(f"Error: Leaf node {nid} has null or empty content.")
                 if len(children) > 0:
