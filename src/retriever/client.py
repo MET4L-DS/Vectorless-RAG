@@ -32,18 +32,19 @@ model_cycle = itertools.cycle(MODELS)
 new_calls_count = 0
 model_calls_tracker = {m: 0 for m in MODELS}
 
-async def call_model(prompt: str, json_mode: bool = False) -> str:
+async def call_model(prompt: str, json_mode: bool = False, model_name: str = None) -> str:
     """
     Alternates between models and enforces model-specific rate limits
     using an async leaky bucket slot reservation system.
     """
     global new_calls_count
-    model_name = next(model_cycle)
-    min_interval = MODEL_CONFIGS[model_name]
+    if not model_name:
+        model_name = next(model_cycle)
+    min_interval = MODEL_CONFIGS.get(model_name, 1.0)
     
-    async with model_locks[model_name]:
+    async with model_locks.setdefault(model_name, asyncio.Lock()):
         now = asyncio.get_event_loop().time()
-        target_time = max(now, model_next_allowed_time[model_name])
+        target_time = max(now, model_next_allowed_time.get(model_name, 0.0))
         delay = target_time - now
         model_next_allowed_time[model_name] = target_time + min_interval
 
@@ -70,17 +71,18 @@ async def call_model(prompt: str, json_mode: bool = False) -> str:
     elapsed = asyncio.get_event_loop().time() - start_time
     print(f"[Call] Model: {model_name} (Response time: {elapsed:.2f}s)")
     
+    model_calls_tracker.setdefault(model_name, 0)
     model_calls_tracker[model_name] += 1
     new_calls_count += 1
     return response.text.strip()
 
-async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool = False) -> str:
+async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool = False, model_name: str = None) -> str:
     """
     Helper with retry and exponential backoff, handling rate limits specifically.
     """
     for attempt in range(retries):
         try:
-            return await call_model(prompt, json_mode=json_mode)
+            return await call_model(prompt, json_mode=json_mode, model_name=model_name)
         except Exception as e:
             err_msg = str(e)
             print(f"Error calling model (attempt {attempt+1}/{retries}): {e}")
