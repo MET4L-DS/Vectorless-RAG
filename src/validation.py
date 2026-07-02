@@ -167,3 +167,136 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
     else:
         print("\nSuccess: All core validation checks passed successfully!")
         return True
+
+def validate_completed_trees(tree_dir="tree", output_dir="output"):
+    import os
+    import json
+    import pandas as pd
+    
+    print("\n==================== Running Tree Validation Checks ====================")
+    errors = []
+    
+    # 1. Check index.json
+    index_path = os.path.join(tree_dir, "index.json")
+    if not os.path.exists(index_path):
+        errors.append(f"Error: index.json is missing in {tree_dir}.")
+        return False
+        
+    try:
+        with open(index_path, "r", encoding="utf-8") as f:
+            index_data = json.load(f)
+    except Exception as e:
+        errors.append(f"Error: Failed to parse index.json: {e}")
+        return False
+        
+    acts = ["BNS", "BNSS", "BSA"]
+    for act in acts:
+        if act not in index_data.get("acts", {}):
+            errors.append(f"Error: Act {act} is missing in index.json.")
+        else:
+            act_info = index_data["acts"][act]
+            if not act_info.get("summary"):
+                errors.append(f"Error: Summary for Act {act} is missing or empty in index.json.")
+            if not act_info.get("path"):
+                errors.append(f"Error: Path for Act {act} is missing in index.json.")
+                
+    # 2. Check each Act's JSON tree
+    all_nodes_flat = []
+    
+    for act in acts:
+        act_path = os.path.join(tree_dir, f"{act}.json")
+        if not os.path.exists(act_path):
+            errors.append(f"Error: {act}.json is missing in {tree_dir}.")
+            continue
+            
+        try:
+            with open(act_path, "r", encoding="utf-8") as f:
+                root_node = json.load(f)
+        except Exception as e:
+            errors.append(f"Error: Failed to parse {act}.json: {e}")
+            continue
+            
+        # Collect all nodes recursively
+        act_nodes = []
+        def traverse(node):
+            act_nodes.append(node)
+            for child in node.get("children", []):
+                traverse(child)
+        traverse(root_node)
+        all_nodes_flat.extend(act_nodes)
+        
+        # Verify root properties
+        if root_node.get("level") != 0 or root_node.get("node_type") != "root":
+            errors.append(f"Error: Root node for {act} has invalid level ({root_node.get('level')}) or node_type ({root_node.get('node_type')}).")
+        if not root_node.get("summary"):
+            errors.append(f"Error: Root node for {act} has empty or missing summary.")
+        if root_node.get("content") is not None:
+            errors.append(f"Error: Root node for {act} has non-null content.")
+            
+        # Verify node-specific properties
+        for node in act_nodes:
+            nid = node.get("node_id")
+            ntype = node.get("node_type")
+            level = node.get("level")
+            summary = node.get("summary")
+            content = node.get("content")
+            children = node.get("children", [])
+            
+            # Every node must have a non-empty summary
+            if not summary:
+                errors.append(f"Error: Node {nid} has an empty or missing summary.")
+                
+            # Leaf nodes (node_type == "section" or "schedule_row")
+            if ntype in ["section", "schedule_row"]:
+                if content is None or len(content) == 0:
+                    errors.append(f"Error: Leaf node {nid} has null or empty content.")
+                if len(children) > 0:
+                    errors.append(f"Error: Leaf node {nid} has children.")
+            else:
+                # Non-leaf nodes
+                if content is not None:
+                    errors.append(f"Error: Non-leaf node {nid} ({ntype}) has non-null content.")
+                    
+            # Check metadata fields
+            meta = node.get("metadata", {})
+            if not meta:
+                errors.append(f"Error: Node {nid} is missing metadata.")
+            else:
+                for field in ["act_code", "page_range", "internal_refs", "cross_act_refs", "token_estimate", "stable_hash"]:
+                    if field not in meta:
+                        errors.append(f"Error: Node {nid} metadata is missing field '{field}'.")
+                        
+    # 3. Check duplicate node_ids across all acts
+    node_ids = [n.get("node_id") for n in all_nodes_flat if n.get("node_id")]
+    if len(node_ids) != len(set(node_ids)):
+        seen = set()
+        dupes = set()
+        for x in node_ids:
+            if x in seen:
+                dupes.add(x)
+            seen.add(x)
+        errors.append(f"Error: Duplicate node_ids found: {dupes}")
+        
+    # 4. Check that combined nav scaffold fits within token budget (< 250,000 tokens)
+    total_nav_tokens = sum(len(n.get("summary", "")) // 4 for n in all_nodes_flat)
+    print(f"Total navigation scaffold token estimate: {total_nav_tokens} tokens (limit 250,000).")
+    if total_nav_tokens >= 250000:
+        errors.append(f"Error: Combined nav scaffold token count ({total_nav_tokens}) exceeds the 250,000 token limit.")
+        
+    # Summary of validation
+    errors_only = [e for e in errors if e.startswith("Error")]
+    warnings_only = [w for w in errors if w.startswith("Warning")]
+    
+    if warnings_only:
+        print("\nTree Validation Warnings:")
+        for warn in warnings_only:
+            print(f"  - {warn}")
+            
+    if errors_only:
+        print("\nTree Validation FAILED with the following errors:")
+        for err in errors_only:
+            print(f"  - {err}")
+        return False
+    else:
+        print("\nSuccess: All tree validation checks passed successfully!")
+        return True

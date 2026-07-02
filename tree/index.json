@@ -1,0 +1,27 @@
+{
+  "corpus": "Bharatiya Nyaya Sanhita Corpus",
+  "generated_at": "2026-07-02T14:54:46Z",
+  "acts": {
+    "BNS": {
+      "path": "tree/BNS.json",
+      "full_title": "BHARATIYA NYAYA SANHITA, 2023",
+      "total_sections": 358,
+      "total_pages": 112,
+      "summary": "The Bharatiya Nyaya Sanhita, 2023, is a comprehensive penal code that repeals the Indian Penal Code (1860), expanding jurisdictional scope to encompass electronic records and inclusive definitions of gender. Structured across twenty chapters, it establishes a modern penal framework that integrates traditional sanctions—such as death and imprisonment—with new measures like community service and refined sentencing protocols. The Act codifies a broad spectrum of offences, ranging from crimes against women, children, and the human body—including new specialized categories for organized crime and terrorism—to threats against the State’s sovereignty and national security. Furthermore, it regulates public tranquillity, health, and religion, while penalizing property crimes, forgery, and official misconduct to safeguard judicial integrity. By balancing these provisions with general exceptions and the law on inchoate offences (abetment, conspiracy, and attempt), the Sanhita provides a holistic legal system for determining criminal liability in contemporary India."
+    },
+    "BNSS": {
+      "path": "tree/BNSS.json",
+      "full_title": "BHARATIYA NAGARIK SURAKSHA SANHITA, 2023",
+      "total_sections": 531,
+      "total_pages": 279,
+      "summary": "The Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023, establishes the exhaustive procedural framework for criminal justice in India, governing offences under the Bharatiya Nyaya Sanhita (BNS) and other special laws through a structured hierarchy of High Courts, Sessions Courts, and both Judicial and Executive Magistrates. It encompasses the full spectrum of criminal proceedings, ranging from the investigation of cognizable offences, arrest protocols, and search and seizure to the maintenance of public order, preventive justice, and the adjudication of maintenance claims. The Act delineates diverse trial modalities—including warrant, summons, summary trials, and plea bargaining—while modernizing legal processes through the mandatory integration of audio-video electronic recording and electronic communication for evidence and service of process. Furthermore, it provides comprehensive mechanisms for post-trial recourse, governing the framing of charges, the pronouncement of judgments, the confirmation of death sentences, appeals, revisions, and the execution, remission, or commutation of sentences. Ultimately, the BNSS balances state investigative authority with judicial oversight by incorporating critical safeguards such as bail provisions, limitation periods, and specialized protections for vulnerable persons."
+    },
+    "BSA": {
+      "path": "tree/BSA.json",
+      "full_title": "BHARATIYA SAKSHYA ADHINIYAM, 2023",
+      "total_sections": 170,
+      "total_pages": 54,
+      "summary": "The Bharatiya Sakshya Adhiniyam, 2023, establishes the comprehensive legal framework for the admissibility, relevancy, and proof of evidence in judicial proceedings and Courts-martial, effectively repealing the Indian Evidence Act, 1872. The Act delineates the standards for oral and documentary evidence, with a modernized emphasis on the authentication, certification, and integrity of electronic and digital records. It codifies essential legal doctrines, including the relevancy of facts in issue, the burden of proof, various judicial presumptions—particularly regarding criminal liability under the Bharatiya Nyaya Sanhita—and the doctrine of estoppel. Furthermore, the Act regulates witness competency, testimonial privileges, and the procedural protocols for examination, ensuring systemic integration with the Bharatiya Nyaya Sanhita and the Bharatiya Nagarik Suraksha Sanhita."
+    }
+  }
+}
