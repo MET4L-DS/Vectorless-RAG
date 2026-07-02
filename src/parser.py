@@ -12,6 +12,13 @@ BODY_START_PAGES = {
     "BSA": 9
 }
 
+# Act full names mapping
+ACT_NAMES = {
+    "BNS": "BHARATIYA NYAYA SANHITA, 2023",
+    "BNSS": "BHARATIYA NAGARIK SURAKSHA SANHITA, 2023",
+    "BSA": "BHARATIYA SAKSHYA ADHINIYAM, 2023"
+}
+
 # Define the First Schedule page range (0-indexed) in BNSS
 BNSS_FIRST_SCHEDULE_PAGES = range(172, 219)
 
@@ -54,13 +61,31 @@ class PDFParser:
         # Chapter V injection state for BNSS
         injected_chapter_v = False
         
-        # 1. Create a default front-matter node in TOC
+        # 1. Create a root node for the Act
+        root_id = f"{self.act_code}_root"
+        act_title = ACT_NAMES.get(self.act_code, self.act_code)
+        toc_nodes.append({
+            "section_id": root_id,
+            "act_code": self.act_code,
+            "level": 0,
+            "parent_id": None,
+            "title": act_title,
+            "chapter_no": None,
+            "section_no": None,
+            "start_page": 1,
+            "end_page": len(doc),
+            "node_type": "root",
+            "cross_references": json.dumps([]),
+            "stable_hash": hashlib.sha1(f"{self.act_code}_root".encode()).hexdigest()
+        })
+        
+        # 2. Create a default front-matter node in TOC (under the root node)
         front_matter_id = f"{self.act_code}_front_matter"
         toc_nodes.append({
             "section_id": front_matter_id,
             "act_code": self.act_code,
-            "level": 0,
-            "parent_id": None,
+            "level": 1,
+            "parent_id": root_id,
             "title": "Front Matter (Arrangement of Sections & Preamble)",
             "chapter_no": None,
             "section_no": None,
@@ -220,7 +245,7 @@ class PDFParser:
                                     "section_id": current_chapter_id,
                                     "act_code": self.act_code,
                                     "level": 1,
-                                    "parent_id": None,
+                                    "parent_id": root_id,
                                     "title": f"CHAPTER {current_chapter_no}: {current_chapter_title}",
                                     "chapter_no": current_chapter_no,
                                     "section_no": None,
@@ -248,7 +273,7 @@ class PDFParser:
                                 "section_id": current_chapter_id,
                                 "act_code": self.act_code,
                                 "level": 1,
-                                "parent_id": None,
+                                "parent_id": root_id,
                                 "title": f"CHAPTER {current_chapter_no}: {current_chapter_title}",
                                 "chapter_no": current_chapter_no,
                                 "section_no": None,
@@ -340,7 +365,7 @@ class PDFParser:
                 "section_id": schedule_id,
                 "act_code": "BNSS",
                 "level": 1,
-                "parent_id": None,
+                "parent_id": "BNSS_root",
                 "title": "THE FIRST SCHEDULE (Classification of Offences)",
                 "chapter_no": None,
                 "section_no": None,
@@ -604,6 +629,7 @@ class PDFParser:
         # Post-process schedule rows to clean up and split merged cells
         schedule_df = pd.DataFrame(all_rows)
         if not schedule_df.empty:
+            schedule_df["act_code"] = "BNSS"
             for col in ["section", "offence", "punishment", "cognizable", "bailable", "court"]:
                 schedule_df[col] = schedule_df[col].astype(str).str.strip().replace("nan", "")
                 

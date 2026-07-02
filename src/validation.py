@@ -47,6 +47,41 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
             
         if chapter_count != expected:
             errors.append(f"Error: Chapter count mismatch for {act}. Found {chapter_count}, expected {expected}.")
+
+    # 3b. Root & Hierarchy Structure Verification
+    roots = toc_df[toc_df["node_type"] == "root"]
+    if len(roots) != 3:
+        errors.append(f"Error: Expected exactly 3 root nodes, found {len(roots)}: {roots['section_id'].tolist()}")
+    else:
+        for act in EXPECTED_CHAPTERS.keys():
+            act_root = roots[roots["act_code"] == act]
+            if act_root.empty:
+                errors.append(f"Error: Missing root node for Act {act}.")
+            else:
+                row = act_root.iloc[0]
+                if row["level"] != 0 or not pd.isna(row["parent_id"]):
+                    errors.append(f"Error: Act {act} root node has invalid level ({row['level']}) or parent_id ({row['parent_id']}).")
+                    
+    # Check that all chapters point to their Act's root
+    for act in EXPECTED_CHAPTERS.keys():
+        act_toc = toc_df[toc_df["act_code"] == act]
+        chapters = act_toc[act_toc["node_type"] == "chapter"]
+        for _, chap in chapters.iterrows():
+            expected_parent = f"{act}_root"
+            if chap["parent_id"] != expected_parent:
+                errors.append(f"Error: Chapter {chap['section_id']} has invalid parent_id: expected {expected_parent}, got {chap['parent_id']}.")
+            if chap["level"] != 1:
+                errors.append(f"Error: Chapter {chap['section_id']} has invalid level: expected 1, got {chap['level']}.")
+                
+        # Check front_matter
+        front = act_toc[act_toc["node_type"] == "front_matter"]
+        if not front.empty:
+            frow = front.iloc[0]
+            expected_parent = f"{act}_root"
+            if frow["parent_id"] != expected_parent:
+                errors.append(f"Error: Front matter of {act} has invalid parent_id: expected {expected_parent}, got {frow['parent_id']}.")
+            if frow["level"] != 1:
+                errors.append(f"Error: Front matter of {act} has invalid level: expected 1, got {frow['level']}.")
             
     # 4. Section Numbering Sequence Contiguity Check
     for act in EXPECTED_CHAPTERS.keys():
@@ -94,7 +129,7 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
     # 5. BNSS Schedule Checks
     if not schedule_df.empty:
         # Check columns
-        expected_cols = ["page_no", "section", "offence", "punishment", "cognizable", "bailable", "court"]
+        expected_cols = ["act_code", "page_no", "section", "offence", "punishment", "cognizable", "bailable", "court"]
         for c in expected_cols:
             if c not in schedule_df.columns:
                 errors.append(f"Error: Expected column '{c}' missing in schedule_df.")
