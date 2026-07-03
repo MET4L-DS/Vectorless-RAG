@@ -1,6 +1,7 @@
 from typing import TypedDict, List, Dict, Any, Annotated
 from operator import add
 from src.retriever.state import RetrievedNode, RetrievalResult
+from src.retriever.schemas import GeneratedAnswer
 
 class Citation(TypedDict):
     node_id: str          # e.g., "BNSS_S35"
@@ -22,6 +23,7 @@ class GeneratorState(TypedDict):
     retrieval_result: RetrievalResult  # The retrieval context (either new or persisted)
     context_str: str                   # Formatted context passed to LLM
     raw_answer: str                    # Raw LLM answer
+    generated: GeneratedAnswer | None         # Structured LLM output
     citations: List[Citation]
     verification: VerificationReport
     final_answer: str                  # Post-verification final answer
@@ -29,3 +31,4 @@ class GeneratorState(TypedDict):
     bypassed_retrieval: bool           # Track if retrieval was bypassed
     error: str | None
     latency_ms: int
+

@@ -1,10 +1,10 @@
-import json
 import asyncio
 from typing import List
 
 from .corpus_index import CorpusIndex
 from .state import RetrievedNode
-from .client import call_model_with_retry
+from .client import call_model_with_retry, call_model_structured
+from .schemas import NodeSelection
 from .utils import get_token_estimate, truncate_to_token_limit
 
 class TreeNavigator:
@@ -92,16 +92,10 @@ Below are the chapters in this act:
 {catalog_str}
 
 Select up to {k} chapter IDs that are most likely to contain the answer to the user's query.
-Return your answer AS A JSON ARRAY of strings (the IDs only). For example: ["BNSS_C1", "BNSS_C5"]
-Do not return anything other than the JSON array.
 """
-        response = await call_model_with_retry(prompt, json_mode=True)
-        if response.startswith("```json"): response = response[7:]
-        if response.startswith("```"): response = response[3:]
-        if response.endswith("```"): response = response[:-3]
-        response = response.strip()
         try:
-            selected = json.loads(response)
+            result: NodeSelection = await call_model_structured(prompt, NodeSelection)
+            selected = result.selected_ids
             if isinstance(selected, list):
                 mapped_titles = []
                 for cid in selected[:k]:
@@ -110,8 +104,8 @@ Do not return anything other than the JSON array.
                     mapped_titles.append(f"{cid} ({title})")
                 print(f"[Tree Nav] Act {act_code}: Chapter selection LLM selected: {', '.join(mapped_titles)}")
                 return selected[:k]
-        except json.JSONDecodeError:
-            print(f"Failed to decode chapter selection JSON: {response}")
+        except Exception as e:
+            print(f"Failed structured chapter selection: {e}")
             
         return []
         
@@ -123,7 +117,6 @@ Do not return anything other than the JSON array.
         sections = self.corpus_index.get_children(chapter_id)
         
         # BNSS has Chapter V -> Parts -> Sections. We need to get flat leaves under the chapter.
-        # Let's write a small helper to get all leaves under a node
         def get_all_leaves(node_id):
             leaves = []
             children = self.corpus_index.get_children(node_id)
@@ -153,16 +146,10 @@ Below are the sections in this chapter:
 {catalog_str}
 
 Select up to {k} section IDs that are most likely to answer the user's query.
-Return your answer AS A JSON ARRAY of strings (the IDs only). For example: ["BNSS_S1", "BNSS_S5"]
-Do not return anything other than the JSON array.
 """
-        response = await call_model_with_retry(prompt, json_mode=True)
-        if response.startswith("```json"): response = response[7:]
-        if response.startswith("```"): response = response[3:]
-        if response.endswith("```"): response = response[:-3]
-        response = response.strip()
         try:
-            selected = json.loads(response)
+            result: NodeSelection = await call_model_structured(prompt, NodeSelection)
+            selected = result.selected_ids
             if isinstance(selected, list):
                 mapped_titles = []
                 for sid in selected[:k]:
@@ -171,7 +158,8 @@ Do not return anything other than the JSON array.
                     mapped_titles.append(f"{sid} ({title})")
                 print(f"[Tree Nav] Act {act_code}: Section selection LLM selected: {', '.join(mapped_titles)}")
                 return selected[:k]
-        except json.JSONDecodeError:
-            print(f"Failed to decode section selection JSON: {response}")
+        except Exception as e:
+            print(f"Failed structured section selection: {e}")
             
         return []
+

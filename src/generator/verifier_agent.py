@@ -1,7 +1,8 @@
 import re
 from typing import List, Dict, Tuple, Any
-from src.retriever.client import call_model_with_retry
+from src.retriever.client import call_model_with_retry, call_model_structured
 from src.retriever.state import RetrievalResult, RetrievedNode
+from src.retriever.schemas import GeneratedAnswer, GroundednessCheck
 from src.generator.state import Citation, VerificationReport
 
 def split_sentences(text: str) -> List[str]:
@@ -52,7 +53,7 @@ def match_citation_to_node(bracket_text: str, retrieved_nodes: List[RetrievedNod
     return None
 
 async def verify_answer(
-    raw_answer: str,
+    generated: GeneratedAnswer,
     retrieval_result: RetrievalResult,
     context_str: str
 ) -> Tuple[VerificationReport, List[Citation]]:
@@ -60,7 +61,7 @@ async def verify_answer(
     Performs a 2-stage grounding verification check on the generated answer.
     """
     retrieved_nodes = retrieval_result.get("primary", []) + retrieval_result.get("supporting", [])
-    sentences = split_sentences(raw_answer)
+    sentences = split_sentences(generated.answer_text)
     
     grounded_claims = 0
     ungrounded_claims = 0
@@ -117,7 +118,6 @@ async def check_groundedness_via_llm(sentence: str, context_str: str) -> bool:
     """
     Calls Gemini Flash-Lite to verify if a single claim is grounded in the context.
     """
-    # Keep prompt minimal to reduce latency
     prompt = f"""You are a strict legal editor.
 Review if the claim is fully supported by the legal context. Do not allow any extrapolation.
 
@@ -126,15 +126,17 @@ LEGAL CONTEXT:
 
 CLAIM:
 "{sentence}"
-
-Is this claim fully supported by the context? Answer ONLY with YES or NO.
 """
     try:
-        response = await call_model_with_retry(prompt, model_name="models/gemini-3.1-flash-lite")
-        cleaned = response.strip().upper()
-        if "YES" in cleaned:
-            return True
+        result: GroundednessCheck = await call_model_structured(
+            prompt, 
+            GroundednessCheck, 
+            model_name="models/gemini-3.1-flash-lite"
+        )
+        print(f"[Verifier] LLM grounding check: {result.is_grounded} (Reason: {result.reasoning})")
+        return result.is_grounded
     except Exception as e:
         print(f"[Verifier] Error in LLM grounding check: {e}")
         
     return False
+

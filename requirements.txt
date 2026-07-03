@@ -11,3 +11,4 @@ fastapi>=0.115.0
 uvicorn>=0.32.0
 colorama>=0.4.6
 tiktoken>=0.7.0
+langchain-google-genai>=2.0.0

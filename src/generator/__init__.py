@@ -21,6 +21,7 @@ async def generate(
         "retrieval_result": last_retrieval or {"primary": [], "supporting": [], "citations": [], "sources": [], "query_metadata": {}},
         "context_str": "",
         "raw_answer": "",
+        "generated": None,
         "citations": [],
         "verification": {"passed": False, "score": 0.0, "grounded_claims": 0, "ungrounded_claims": 0, "issues": []},
         "final_answer": "",
@@ -29,6 +30,7 @@ async def generate(
         "error": None,
         "latency_ms": 0
     }
+
     
     final_state = await COMPILED_GRAPH.ainvoke(initial_state)
     

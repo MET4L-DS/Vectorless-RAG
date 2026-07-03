@@ -55,11 +55,14 @@ async def generate_answer_node(state: GeneratorState) -> dict:
     else:
         print("[GeneratorGraph] GeneratorAgent: Generating answer...")
         
-    raw_ans = await generate_answer(query, history, context_str, feedback)
-    return {"raw_answer": raw_ans}
+    generated = await generate_answer(query, history, context_str, feedback)
+    return {
+        "generated": generated,
+        "raw_answer": generated.answer_text
+    }
 
 async def verify_answer_node(state: GeneratorState) -> dict:
-    raw_ans = state["raw_answer"]
+    generated = state["generated"]
     retrieval_res = state["retrieval_result"]
     context_str = state["context_str"]
     bypassed = state.get("bypassed_retrieval", False)
@@ -67,7 +70,7 @@ async def verify_answer_node(state: GeneratorState) -> dict:
     history = state["history"]
     
     # Edge Case 1: Insufficient context escape hatch
-    if raw_ans.strip().startswith("INSUFFICIENT_CONTEXT"):
+    if generated.is_insufficient_context:
         if bypassed:
             print("[GeneratorGraph] VerifierAgent: Insufficient Context detected on Cache Hit. Forcing fresh retrieval.")
             # Trigger fresh retrieval
@@ -92,7 +95,7 @@ async def verify_answer_node(state: GeneratorState) -> dict:
             }
             
     print("[GeneratorGraph] VerifierAgent: Verifying groundedness (Threshold: 0.90)...")
-    report, citations = await verify_answer(raw_ans, retrieval_res, context_str)
+    report, citations = await verify_answer(generated, retrieval_res, context_str)
     print(f"[GeneratorGraph] VerifierAgent: Score={report['score']}, Passed={report['passed']}")
     
     # Increment retry counter if failed
@@ -107,16 +110,37 @@ async def verify_answer_node(state: GeneratorState) -> dict:
     }
 
 async def finalize_node(state: GeneratorState) -> dict:
-    raw_ans = state["raw_answer"]
+    generated = state["generated"]
     report = state["verification"]
+    citations = state.get("citations", [])
     
-    final_ans = raw_ans
+    lines = []
+    lines.append("[Answer]")
+    lines.append(generated.answer_text)
+    lines.append("")
+    
+    if generated.key_provisions:
+        lines.append("[Key Provisions]")
+        for provision in generated.key_provisions:
+            p_strip = provision.strip()
+            if not p_strip.startswith("-"):
+                p_strip = f"- {p_strip}"
+            lines.append(p_strip)
+        lines.append("")
+        
+    if citations:
+        lines.append("[References]")
+        for idx, citation in enumerate(citations):
+            lines.append(f"[{idx+1}] {citation['node_id']}: {citation['title']}")
+            
+    final_ans = "\n".join(lines).strip()
+    
     # Edge Case 2: Verification fails twice -> append warning
     if not report["passed"]:
         warning_block = "\n\n[LOW CONFIDENCE - UNVERIFIED CLAIMS DETECTED]\n"
         for issue in report["issues"]:
             warning_block += f"- {issue}\n"
-        final_ans = raw_ans + warning_block
+        final_ans = final_ans + warning_block
         print("[GeneratorGraph] VerifierAgent: Answer failed verification twice. Warning appended.")
         
     return {"final_answer": final_ans}
@@ -124,11 +148,11 @@ async def finalize_node(state: GeneratorState) -> dict:
 # --- Routing logic ---
 
 def route_after_verification(state: GeneratorState) -> str:
-    raw_ans = state["raw_answer"]
+    generated = state["generated"]
     bypassed = state.get("bypassed_retrieval", False)
     
     # Escape hatch
-    if raw_ans.strip().startswith("INSUFFICIENT_CONTEXT"):
+    if generated.is_insufficient_context:
         if bypassed:
             return "build_context" # loop back with fresh retrieval result
         else:
@@ -146,6 +170,7 @@ def route_after_verification(state: GeneratorState) -> str:
     else:
         # Fails twice, go to finalize
         return "finalize"
+
 
 # --- Define graph ---
 

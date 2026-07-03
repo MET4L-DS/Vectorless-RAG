@@ -10,7 +10,8 @@ from .tree_navigator import TreeNavigator
 from .sop_retriever import SOPRetriever
 from .cross_ref_linker import CrossRefLinker
 from .assembler import Assembler
-from .client import call_model_with_retry
+from .client import call_model_with_retry, call_model_structured
+from .schemas import IntentClassification
 
 # Define Singletons that will be injected into nodes
 _corpus_index = None
@@ -60,16 +61,14 @@ Classify which of these Indian legal documents might contain the answer:
 - BNSS (Bharatiya Nagarik Suraksha Sanhita - Criminal Procedure / Arrest / Trial)
 - BSA (Bharatiya Sakshya Adhiniyam - Evidence Act)
 - SOP (Police Standard Operating Procedures)
-
-Return only the abbreviations separated by commas. (e.g. "BNS, BNSS"). If unsure, return all four.
 """
-        response = await call_model_with_retry(prompt)
-        response_upper = response.upper()
-        if "BNS" in response_upper and "BNSS" not in response_upper: targets.add("BNS")
-        if "BNSS" in response_upper: targets.add("BNSS")
-        if "BSA" in response_upper: targets.add("BSA")
-        if "SOP" in response_upper: targets.add("SOP")
-        print(f"[Router] Query was ambiguous. LLM Classifier selected: {list(targets)}")
+        try:
+            result: IntentClassification = await call_model_structured(prompt, IntentClassification)
+            targets = set(result.target_corpora)
+            print(f"[Router] Query was ambiguous. LLM Classifier selected: {list(targets)} (Reason: {result.reasoning})")
+        except Exception as e:
+            print(f"[Router] Error in LLM intent classification: {e}. Falling back to searching all.")
+            targets = {"BNS", "BNSS", "BSA", "SOP"}
     else:
         print(f"[Router] Query matched keyword heuristics. Target corpora: {list(targets)}")
         

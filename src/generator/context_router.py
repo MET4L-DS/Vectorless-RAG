@@ -1,6 +1,7 @@
 from typing import List, Dict
-from src.retriever.client import call_model_with_retry
+from src.retriever.client import call_model_with_retry, call_model_structured
 from src.retriever.state import RetrievalResult
+from src.retriever.schemas import CacheDecision, RewrittenQuery
 
 def format_history(history: List[Dict[str, str]]) -> str:
     if not history:
@@ -48,15 +49,11 @@ User Query: "{query}"
 Determine if this user query can be fully and accurately answered using ONLY the already retrieved legal nodes.
 - If yes (e.g., it is a follow-up, clarification, or references the exact same sections), reply with YES.
 - If no (e.g., it asks about a completely different act, procedure, or offence not covered by the retrieved nodes), reply with NO.
-
-Response (YES/NO):
 """
     try:
-        response = await call_model_with_retry(prompt)
-        cleaned = response.strip().upper()
-        print(f"[ContextRouter] Router response: {cleaned}")
-        if "YES" in cleaned:
-            return True
+        result: CacheDecision = await call_model_structured(prompt, CacheDecision)
+        print(f"[ContextRouter] Router response: {result.can_reuse} (Reason: {result.reasoning})")
+        return result.can_reuse
     except Exception as e:
         print(f"[ContextRouter] Error in analyze_context: {e}")
         
@@ -73,21 +70,18 @@ async def rewrite_query(query: str, history: List[Dict[str, str]]) -> str:
     
     prompt = f"""You are a query rewriter for a legal RAG system.
 Given the conversation history and the latest user query, reformulate the query into a standalone search query that contains all necessary names, legal terms, and context, making it suitable for a direct search index.
-Do not add unnecessary text, just output the reformulated query.
 
 Conversation History:
 {history_str}
 
 User Query: "{query}"
-
-Standalone Query:
 """
     try:
-        response = await call_model_with_retry(prompt)
-        rewritten = response.strip()
-        print(f"[ContextRouter] Rewritten query: '{rewritten}'")
-        return rewritten
+        result: RewrittenQuery = await call_model_structured(prompt, RewrittenQuery)
+        print(f"[ContextRouter] Rewritten query: '{result.standalone_query}'")
+        return result.standalone_query
     except Exception as e:
         print(f"[ContextRouter] Error in rewrite_query: {e}")
         
     return query
+
