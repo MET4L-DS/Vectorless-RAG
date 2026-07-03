@@ -138,23 +138,104 @@ async def chat_message(thread_id: str, payload: ChatRequest, request: Request):
 
 @router.get("/chats/{thread_id}/history")
 async def get_chat_history(thread_id: str, request: Request):
-    """Retrieves thread message history from SQLite checkpointer."""
+    """Retrieves thread message history from SQLite checkpointer, populating reasoning steps, citations, and key provisions."""
     try:
         agent = request.app.state.agent
         config = {"configurable": {"thread_id": thread_id}}
-        state = await agent.aget_state(config)
-        messages = state.values.get("messages", [])
+        
+        # 1. Fetch checkpoints history chronologically (oldest first)
+        snapshots = []
+        async for s in agent.aget_state_history(config):
+            snapshots.append(s)
+        snapshots.reverse()
         
         formatted_messages = []
-        for m in messages:
-            if isinstance(m, HumanMessage):
-                formatted_messages.append({"role": "user", "content": parse_message_content(m.content)})
-            elif isinstance(m, AIMessage):
-                # Only include assistant messages that are not intermediate steps/tool calls
-                content = parse_message_content(m.content)
-                if content and not m.tool_calls:
-                    formatted_messages.append({"role": "assistant", "content": content})
+        prev_msg_count = 0
+        
+        for snapshot in snapshots:
+            # Checkpoints where 'next' is empty signify completed conversational turns
+            if not snapshot.next:
+                messages = snapshot.values.get("messages", [])
+                turn_messages = messages[prev_msg_count:]
+                prev_msg_count = len(messages)
+                
+                user_content = ""
+                assistant_content = ""
+                steps = []
+                
+                for m in turn_messages:
+                    if isinstance(m, HumanMessage):
+                        user_content = parse_message_content(m.content)
+                    elif isinstance(m, AIMessage):
+                        if m.tool_calls:
+                            content = parse_message_content(m.content) or ""
+                            if content.strip():
+                                steps.append({"type": "thought", "content": content.strip()})
+                            for tc in m.tool_calls:
+                                steps.append({
+                                    "type": "tool_call",
+                                    "content": f"Calling tool: {tc['name']} with parameters: {tc['args']}"
+                                })
+                        else:
+                            assistant_content = parse_message_content(m.content)
+                    elif isinstance(m, ToolMessage):
+                        content = parse_message_content(m.content)
+                        preview = content[:300] + "..." if len(content) > 300 else content
+                        steps.append({"type": "observation", "content": preview.strip()})
+                
+                # Fetch structured response (citations/key provisions) from the snapshot values
+                structured = snapshot.values.get("structured_response")
+                citations_list = []
+                key_provisions_list = []
+                
+                if structured:
+                    assistant_content = structured.answer_text
+                    key_provisions_list = structured.key_provisions
+                    
+                    # Resolve citation titles and page ranges
+                    if structured.citations:
+                        for cid in structured.citations:
+                            node = graph._corpus_index.get_node(cid) if graph._corpus_index else None
+                            if node:
+                                citations_list.append({
+                                    "node_id": cid,
+                                    "title": node.get("title", ""),
+                                    "page_range": node.get("metadata", {}).get("page_range", [])
+                                })
+                            else:
+                                citations_list.append({
+                                    "node_id": cid,
+                                    "title": f"Citation: {cid.replace('_', ' ')}",
+                                    "page_range": []
+                                })
+                
+                if user_content:
+                    formatted_messages.append({"role": "user", "content": user_content})
+                if assistant_content or steps:
+                    formatted_messages.append({
+                        "role": "assistant",
+                        "content": assistant_content,
+                        "steps": steps,
+                        "citations": citations_list,
+                        "key_provisions": key_provisions_list
+                    })
                     
         return {"thread_id": thread_id, "messages": formatted_messages}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load chat history: {str(e)}")
+
+@router.delete("/chats/{thread_id}/history")
+async def clear_chat_history(thread_id: str):
+    """Deletes all checkpoints and writes for a given thread_id from local_agent_memory.db."""
+    try:
+        import sqlite3
+        conn = sqlite3.connect("local_agent_memory.db")
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM checkpoints WHERE thread_id = ?", (thread_id,))
+        cursor.execute("DELETE FROM writes WHERE thread_id = ?", (thread_id,))
+        conn.commit()
+        conn.close()
+        return {"status": "success", "message": f"Successfully cleared checkpoints for thread: {thread_id}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to clear checkpointer database: {str(e)}")
+

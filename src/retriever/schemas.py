@@ -31,7 +31,7 @@ class GroundednessCheck(BaseModel):
 
 class GeneratedAnswer(BaseModel):
     answer_text: str = Field(
-        description="The narrative answer. Always include inline citations in [Source: ID] format."
+        description="The detailed response. MUST be formatted using Markdown (bullet points, line breaks, bold text) for high readability. Do NOT write a single dense paragraph. Always include inline citations in [Source: ID] format."
     )
     key_provisions: List[str] = Field(
         description="List of key provisions or points. Cite their source in [Source: ID] format."
