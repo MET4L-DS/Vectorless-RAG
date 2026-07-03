@@ -12,8 +12,8 @@ api_key = os.getenv("GOOGLE_API_KEY")
 
 # Define our model pool and their specific rate limits (minimum seconds between calls)
 MODEL_CONFIGS = {
-    "models/gemma-4-26b-a4b-it": 6.0,
-    "models/gemma-4-31b-it": 6.0,
+    # "models/gemma-4-26b-a4b-it": 6.0,
+    # "models/gemma-4-31b-it": 6.0,
     "models/gemini-3.1-flash-lite": 0.5, # Very low delay for flash-lite
 }
 
