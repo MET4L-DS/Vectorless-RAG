@@ -1,9 +1,9 @@
-import json
 from typing import List
 
 from .corpus_index import CorpusIndex
 from .state import RetrievedNode
-from .client import call_model_with_retry
+from .client import call_model_structured
+from .schemas import NodeSelection
 from .utils import truncate_to_token_limit
 
 class SOPRetriever:
@@ -43,17 +43,11 @@ Below are the procedures available in the SOP:
 {catalog_str}
 
 Select up to {top_k} procedure IDs that are most likely to provide the operational steps to answer the user's query.
-Return your answer AS A JSON ARRAY of strings (the IDs only). For example: ["SOP_Procedure_12", "SOP_Procedure_15"]
-Do not return anything other than the JSON array.
 """
-        response = await call_model_with_retry(prompt, json_mode=True)
-        if response.startswith("```json"): response = response[7:]
-        if response.startswith("```"): response = response[3:]
-        if response.endswith("```"): response = response[:-3]
-        response = response.strip()
         selected_ids = []
         try:
-            selected = json.loads(response)
+            result: NodeSelection = await call_model_structured(prompt, NodeSelection)
+            selected = result.selected_ids
             if isinstance(selected, list):
                 selected_ids = selected[:top_k]
                 mapped_titles = []
@@ -62,8 +56,8 @@ Do not return anything other than the JSON array.
                     title = node.get("title", sid) if node else sid
                     mapped_titles.append(f"{sid} ({title})")
                 print(f"[Tree Nav] SOP: Procedure selection LLM selected: {', '.join(mapped_titles)}")
-        except json.JSONDecodeError:
-            print(f"Failed to decode SOP selection JSON: {response}")
+        except Exception as e:
+            print(f"Failed structured SOP selection: {e}")
             
         retrieved_nodes = []
         for s_id in selected_ids:
@@ -85,3 +79,4 @@ Do not return anything other than the JSON array.
                 retrieved_nodes.append(retrieved_node)
                 
         return retrieved_nodes
+

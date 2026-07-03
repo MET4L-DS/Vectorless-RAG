@@ -30,16 +30,14 @@ def get_langchain_model(model_name: str, temperature: float = 0.0, json_mode: bo
     if not api_key:
         raise ValueError("GOOGLE_API_KEY is not set in environment.")
     
-    model_kwargs = {}
-    if json_mode:
-        model_kwargs["response_mime_type"] = "application/json"
+    # Pass response_mime_type directly to constructor to prevent UserWarning
+    mime_type = "application/json" if json_mode else None
 
-    # We map "models/" prefixes if necessary, but ChatGoogleGenerativeAI accepts them as-is.
     return ChatGoogleGenerativeAI(
         model=model_name,
         google_api_key=api_key,
         temperature=temperature,
-        model_kwargs=model_kwargs
+        response_mime_type=mime_type
     )
 
 async def _execute_with_rate_limit(model_name: str, fn) -> Any:
@@ -85,7 +83,24 @@ async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool =
             # ainvoke returns a BaseMessage, content is the text response
             fn = lambda: llm.ainvoke(prompt)
             response = await _execute_with_rate_limit(model_name, fn)
-            return response.content.strip()
+            
+            # Handle list content in newer model output wrappers
+            content = response.content
+            if isinstance(content, list):
+                parts = []
+                for part in content:
+                    if isinstance(part, str):
+                        parts.append(part)
+                    elif isinstance(part, dict) and "text" in part:
+                        parts.append(part["text"])
+                    elif hasattr(part, "text"):
+                        parts.append(part.text)
+                    elif hasattr(part, "get") and part.get("text"):
+                        parts.append(part.get("text"))
+                content = "".join(parts)
+                
+            return content.strip()
+
         except Exception as e:
             err_msg = str(e)
             print(f"Error calling model (attempt {attempt+1}/{retries}): {e}")
