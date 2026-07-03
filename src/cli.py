@@ -76,13 +76,13 @@ async def main():
             conf = res.get("confidence", 0.0)
             latency = res.get("latency_ms", 0)
             if conf >= 0.90:
-                badge = f"[bold green]✓ HIGH CONFIDENCE ({conf:.2f})[/bold green]"
+                badge = f"[bold green][OK] HIGH CONFIDENCE ({conf:.2f})[/bold green]"
                 border_color = "green"
             elif conf >= 0.70:
-                badge = f"[bold yellow]⚠ MEDIUM CONFIDENCE ({conf:.2f})[/bold yellow]"
+                badge = f"[bold yellow][WARN] MEDIUM CONFIDENCE ({conf:.2f})[/bold yellow]"
                 border_color = "yellow"
             else:
-                badge = f"[bold red]✗ LOW CONFIDENCE ({conf:.2f})[/bold red]"
+                badge = f"[bold red][FAIL] LOW CONFIDENCE ({conf:.2f})[/bold red]"
                 border_color = "red"
                 
             console.print(Panel(
