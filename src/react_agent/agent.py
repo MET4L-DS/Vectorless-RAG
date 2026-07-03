@@ -26,9 +26,17 @@ CONSTRAINTS & STRATEGY:
 - If, after searching, the context is completely insufficient, set is_insufficient_context to True.
 """
 
-COMPILED_AGENT = create_react_agent(
-    model=llm,
-    tools=tools,
-    response_format=GeneratedAnswer,
-    prompt=SYSTEM_PROMPT
-)
+def get_agent(checkpointer=None):
+    """Compiles and returns the LangGraph ReAct agent with an optional state checkpointer."""
+    return create_react_agent(
+        model=llm,
+        tools=tools,
+        response_format=GeneratedAnswer,
+        prompt=SYSTEM_PROMPT,
+        checkpointer=checkpointer
+    )
+
+# Default COMPILED_AGENT (without checkpointer) for legacy CLI and benchmark scripts
+COMPILED_AGENT = get_agent()
+
+
