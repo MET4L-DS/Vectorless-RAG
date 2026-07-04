@@ -99,7 +99,8 @@ async def run_agent_stream(agent, thread_id: str, query: str) -> AsyncGenerator[
                     citations_list.append({
                         "node_id": cid,
                         "title": node.get("title", ""),
-                        "page_range": node.get("metadata", {}).get("page_range", [])
+                        "page_range": node.get("metadata", {}).get("page_range", []),
+                        "content": node.get("content", "")
                     })
                     
         # 5. Format key provisions
@@ -200,7 +201,8 @@ async def get_chat_history(thread_id: str, request: Request):
                                 citations_list.append({
                                     "node_id": cid,
                                     "title": node.get("title", ""),
-                                    "page_range": node.get("metadata", {}).get("page_range", [])
+                                    "page_range": node.get("metadata", {}).get("page_range", []),
+                                    "content": node.get("content", "")
                                 })
                             else:
                                 citations_list.append({

@@ -60,6 +60,8 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+*.db
+*.db-journal
 
 # Flask stuff:
 instance/
@@ -181,3 +183,5 @@ cython_debug/
 .cursorindexingignore
 
 source_documents
+local_agent_memory.db-wal
+local_agent_memory.db-shm
