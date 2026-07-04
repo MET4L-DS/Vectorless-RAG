@@ -2,7 +2,7 @@ import json
 import asyncio
 import time
 from typing import AsyncGenerator
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
@@ -11,6 +11,7 @@ from src import retriever
 from src.retriever import graph
 from src.react_agent.tools import retrieved_nodes_var
 from src.retriever.schemas import GeneratedAnswer
+from src.api.auth import verify_jwt
 
 router = APIRouter()
 
@@ -129,20 +130,32 @@ async def run_agent_stream(agent, thread_id: str, query: str) -> AsyncGenerator[
         retrieved_nodes_var.reset(token)
 
 @router.post("/chats/{thread_id}/message")
-async def chat_message(thread_id: str, payload: ChatRequest, request: Request):
+async def chat_message(
+    thread_id: str,
+    payload: ChatRequest,
+    request: Request,
+    user: dict = Depends(verify_jwt)
+):
     """Streams the ReAct agent thought process and final response as Server-Sent Events (SSE)."""
     agent = request.app.state.agent
+    # Scope thread_id by user_id to isolate histories between users securely
+    scoped_thread_id = f"{user['sub']}:{thread_id}"
     return StreamingResponse(
-        run_agent_stream(agent, thread_id, payload.message),
+        run_agent_stream(agent, scoped_thread_id, payload.message),
         media_type="text/event-stream"
     )
 
 @router.get("/chats/{thread_id}/history")
-async def get_chat_history(thread_id: str, request: Request):
+async def get_chat_history(
+    thread_id: str,
+    request: Request,
+    user: dict = Depends(verify_jwt)
+):
     """Retrieves thread message history from SQLite checkpointer, populating reasoning steps, citations, and key provisions."""
     try:
         agent = request.app.state.agent
-        config = {"configurable": {"thread_id": thread_id}}
+        scoped_thread_id = f"{user['sub']}:{thread_id}"
+        config = {"configurable": {"thread_id": scoped_thread_id}}
         
         # 1. Fetch checkpoints history chronologically (oldest first)
         snapshots = []
@@ -227,16 +240,23 @@ async def get_chat_history(thread_id: str, request: Request):
         raise HTTPException(status_code=500, detail=f"Failed to load chat history: {str(e)}")
 
 @router.delete("/chats/{thread_id}/history")
-async def clear_chat_history(thread_id: str):
-    """Deletes all checkpoints and writes for a given thread_id from local_agent_memory.db."""
+async def clear_chat_history(
+    thread_id: str,
+    request: Request,
+    user: dict = Depends(verify_jwt)
+):
+    """Deletes all checkpoints and writes for a given thread_id from Supabase Postgres database."""
     try:
-        import sqlite3
-        conn = sqlite3.connect("local_agent_memory.db")
-        cursor = conn.cursor()
-        cursor.execute("DELETE FROM checkpoints WHERE thread_id = ?", (thread_id,))
-        cursor.execute("DELETE FROM writes WHERE thread_id = ?", (thread_id,))
-        conn.commit()
-        conn.close()
+        scoped_thread_id = f"{user['sub']}:{thread_id}"
+        pool = request.app.state.pool
+        
+        # Deleting all checkpoints, writes, and blobs for this user thread
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("DELETE FROM checkpoints WHERE thread_id = %s", (scoped_thread_id,))
+                await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id = %s", (scoped_thread_id,))
+                await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = %s", (scoped_thread_id,))
+                
         return {"status": "success", "message": f"Successfully cleared checkpoints for thread: {thread_id}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to clear checkpointer database: {str(e)}")

@@ -1,0 +1,59 @@
+name: Keep-Alive Cron Job
+
+on:
+  schedule:
+    # Run every 3 days at midnight UTC (Supabase pauses after 7 days, HF Spaces after 48h)
+    - cron: '0 0 */3 * *'
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  ping-services:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install psycopg2-binary httpx
+
+      - name: Ping Supabase Database
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          python -c "
+          import os
+          import psycopg2
+          db_url = os.getenv('DATABASE_URL')
+          if not db_url:
+              print('DATABASE_URL not set, skipping DB ping')
+              exit(0)
+          conn = psycopg2.connect(db_url)
+          cur = conn.cursor()
+          cur.execute('SELECT 1;')
+          print('Supabase DB Ping Status:', cur.fetchone()[0])
+          cur.close()
+          conn.close()
+          "
+
+      - name: Ping Hugging Face Space
+        env:
+          HF_SPACE_URL: ${{ secrets.HF_SPACE_URL }}
+        run: |
+          python -c "
+          import os
+          import httpx
+          hf_url = os.getenv('HF_SPACE_URL')
+          if not hf_url:
+              print('HF_SPACE_URL not set, skipping Space ping')
+              exit(0)
+          # Query backend health endpoint to keep container active
+          response = httpx.get(f'{hf_url.rstrip(\"/\")}/')
+          print('HF Space Ping Status:', response.status_code)
+          "

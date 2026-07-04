@@ -1,16 +1,41 @@
+import os
+import sys
+import asyncio
 from contextlib import asynccontextmanager
+from dotenv import load_dotenv
+
+# Psycopg 3 async requires SelectorEventLoop on Windows
+if sys.platform == "win32":
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
+from psycopg_pool import AsyncConnectionPool
+from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from src.react_agent.agent import get_agent
 from src.api.routes import router as chat_router
 
+# Load environment variables (such as DATABASE_URL and GOOGLE_API_KEY)
+load_dotenv()
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Setup AsyncSqliteSaver for the local async FastAPI runtime environment
-    async with AsyncSqliteSaver.from_conn_string("local_agent_memory.db") as memory:
-        # Compile agent with the persistent async checkpointer
-        app.state.agent = get_agent(memory)
+    database_url = os.getenv("DATABASE_URL")
+    if not database_url:
+        raise ValueError("DATABASE_URL environment variable is not set")
+    
+    # Establish persistent connection pool to Supabase
+    async with AsyncConnectionPool(
+        conninfo=database_url,
+        max_size=10,
+        kwargs={"autocommit": True}
+    ) as pool:
+        app.state.pool = pool
+        checkpointer = AsyncPostgresSaver(pool)
+        # Create checkpoint tables if they don't exist (migrations)
+        await checkpointer.setup()
+        # Compile agent with the persistent Postgres checkpointer
+        app.state.agent = get_agent(checkpointer)
         yield
 
 app = FastAPI(
