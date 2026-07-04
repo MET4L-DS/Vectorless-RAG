@@ -8,11 +8,11 @@ from pydantic import BaseModel
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 
 from src import retriever
+from src.retriever import client
 from src.retriever import graph
 from src.react_agent.tools import retrieved_nodes_var
 from src.retriever.schemas import GeneratedAnswer
 from src.api.auth import verify_jwt
-
 router = APIRouter()
 
 # Load the indices on module import so they are ready
@@ -38,7 +38,7 @@ def parse_message_content(content) -> str:
         return "".join(parts)
     return str(content)
 
-async def run_agent_stream(agent, thread_id: str, query: str) -> AsyncGenerator[str, None]:
+async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> AsyncGenerator[str, None]:
     """Runs the LangGraph agent and yields SSE events showing thoughts, tool calls, and final answer."""
     start_time = time.time()
     
@@ -91,6 +91,35 @@ async def run_agent_stream(agent, thread_id: str, query: str) -> AsyncGenerator[
             
         latency = round((time.time() - start_time) * 1000)
         
+        # Update session title if it is currently "New Legal Chat"
+        if pool:
+            try:
+                async with pool.connection() as conn:
+                    async with conn.cursor() as cur:
+                        await cur.execute(
+                            "SELECT title FROM chat_sessions WHERE thread_id = %s",
+                            (thread_id,)
+                        )
+                        row = await cur.fetchone()
+                        if row and row[0] == "New Legal Chat":
+                            new_title = getattr(generated, "chat_title", None)
+                            if not new_title or not new_title.strip():
+                                new_title = query[:27] + "..." if len(query) > 30 else query
+                            
+                            new_title = new_title.strip().replace('"', '').replace("'", "")
+                            if new_title.endswith('.'):
+                                new_title = new_title[:-1]
+                            if len(new_title) > 50:
+                                new_title = new_title[:47] + "..."
+                                
+                            await cur.execute(
+                                "UPDATE chat_sessions SET title = %s WHERE thread_id = %s",
+                                (new_title, thread_id)
+                            )
+                            yield f"data: {json.dumps({'type': 'title_generated', 'title': new_title})}\n\n"
+            except Exception as title_err:
+                print(f"[Title Update Error]: {title_err}")
+        
         # 4. Resolve citations
         citations_list = []
         if generated.citations:
@@ -118,6 +147,8 @@ async def run_agent_stream(agent, thread_id: str, query: str) -> AsyncGenerator[
             "answer_text": generated.answer_text,
             "key_provisions": key_provisions_formatted,
             "citations": citations_list,
+            "suggested_follow_up_questions": getattr(generated, "suggested_follow_up_questions", []),
+            "action_items": getattr(generated, "action_items", []),
             "is_insufficient_context": generated.is_insufficient_context,
             "confidence": 0.0 if generated.is_insufficient_context else 1.0,
             "latency_ms": latency
@@ -140,8 +171,34 @@ async def chat_message(
     agent = request.app.state.agent
     # Scope thread_id by user_id to isolate histories between users securely
     scoped_thread_id = f"{user['sub']}:{thread_id}"
+    pool = request.app.state.pool
+
+    # Handle session creation
+    try:
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    "SELECT 1 FROM chat_sessions WHERE thread_id = %s",
+                    (scoped_thread_id,)
+                )
+                exists = await cur.fetchone()
+                if not exists:
+                    # Insert fallback first
+                    fallback_title = "New Legal Chat"
+                    await cur.execute(
+                        "INSERT INTO chat_sessions (thread_id, user_id, title) VALUES (%s, %s, %s)",
+                        (scoped_thread_id, user['sub'], fallback_title)
+                    )
+                else:
+                    await cur.execute(
+                        "UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE thread_id = %s",
+                        (scoped_thread_id,)
+                    )
+    except Exception as db_err:
+        print(f"[chat_message] DB tracking error: {db_err}")
+
     return StreamingResponse(
-        run_agent_stream(agent, scoped_thread_id, payload.message),
+        run_agent_stream(agent, scoped_thread_id, payload.message, pool),
         media_type="text/event-stream"
     )
 
@@ -204,7 +261,15 @@ async def get_chat_history(
                 
                 if structured:
                     assistant_content = structured.answer_text
-                    key_provisions_list = structured.key_provisions
+                    
+                    key_provisions_formatted = []
+                    if structured.key_provisions:
+                        for kp in structured.key_provisions:
+                            kp_strip = kp.strip()
+                            if not kp_strip.startswith("-"):
+                                kp_strip = f"- {kp_strip}"
+                            key_provisions_formatted.append(kp_strip)
+                    key_provisions_list = key_provisions_formatted
                     
                     # Resolve citation titles and page ranges
                     if structured.citations:
@@ -223,7 +288,6 @@ async def get_chat_history(
                                     "title": f"Citation: {cid.replace('_', ' ')}",
                                     "page_range": []
                                 })
-                
                 if user_content:
                     formatted_messages.append({"role": "user", "content": user_content})
                 if assistant_content or steps:
@@ -232,12 +296,43 @@ async def get_chat_history(
                         "content": assistant_content,
                         "steps": steps,
                         "citations": citations_list,
-                        "key_provisions": key_provisions_list
+                        "key_provisions": key_provisions_list,
+                        "suggested_follow_up_questions": getattr(structured, "suggested_follow_up_questions", []) if structured else [],
+                        "action_items": getattr(structured, "action_items", []) if structured else []
                     })
                     
         return {"thread_id": thread_id, "messages": formatted_messages}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to load chat history: {str(e)}")
+
+@router.get("/chats/sessions")
+async def get_chat_sessions(
+    request: Request,
+    user: dict = Depends(verify_jwt)
+):
+    """Retrieves all active chat sessions for the authenticated user, ordered by most recent."""
+    try:
+        pool = request.app.state.pool
+        prefix = f"{user['sub']}:"
+        
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
+                    """
+                    SELECT thread_id, title
+                    FROM chat_sessions 
+                    WHERE user_id = %s
+                    ORDER BY updated_at DESC
+                    """, 
+                    (user['sub'],)
+                )
+                rows = await cur.fetchall()
+                
+        # thread_id format is "sub:real_thread_id"
+        sessions = [{"id": row[0].replace(prefix, ""), "title": row[1]} for row in rows]
+        return {"sessions": sessions}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to fetch sessions: {str(e)}")
 
 @router.delete("/chats/{thread_id}/history")
 async def clear_chat_history(
@@ -245,19 +340,19 @@ async def clear_chat_history(
     request: Request,
     user: dict = Depends(verify_jwt)
 ):
-    """Deletes all checkpoints and writes for a given thread_id from Supabase Postgres database."""
+    """Deletes all checkpoints, writes, blobs, and the session mapping itself for a given thread_id."""
     try:
         scoped_thread_id = f"{user['sub']}:{thread_id}"
         pool = request.app.state.pool
         
-        # Deleting all checkpoints, writes, and blobs for this user thread
         async with pool.connection() as conn:
             async with conn.cursor() as cur:
                 await cur.execute("DELETE FROM checkpoints WHERE thread_id = %s", (scoped_thread_id,))
                 await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id = %s", (scoped_thread_id,))
                 await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = %s", (scoped_thread_id,))
+                await cur.execute("DELETE FROM chat_sessions WHERE thread_id = %s", (scoped_thread_id,))
                 
-        return {"status": "success", "message": f"Successfully cleared checkpoints for thread: {thread_id}"}
+        return {"status": "success", "message": f"Successfully deleted session and checkpoints for thread: {thread_id}"}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to clear checkpointer database: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete session: {str(e)}")
 

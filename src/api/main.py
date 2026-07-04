@@ -34,6 +34,19 @@ async def lifespan(app: FastAPI):
         checkpointer = AsyncPostgresSaver(pool)
         # Create checkpoint tables if they don't exist (migrations)
         await checkpointer.setup()
+        
+        # Create custom chat_sessions table for thread names
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                await cur.execute("""
+                    CREATE TABLE IF NOT EXISTS chat_sessions (
+                        thread_id TEXT PRIMARY KEY,
+                        user_id TEXT NOT NULL,
+                        title TEXT NOT NULL,
+                        updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
+                    )
+                """)
+        
         # Compile agent with the persistent Postgres checkpointer
         app.state.agent = get_agent(checkpointer)
         yield
