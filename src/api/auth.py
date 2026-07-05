@@ -23,17 +23,22 @@ def get_supabase_project_id() -> str:
         if parts:
             return parts[0]
     
-    # 2. Fallback: Parse DATABASE_URL if it has the format postgresql://...db.project_id.supabase.co...
+    # 2. Fallback: Parse DATABASE_URL
     db_url = os.getenv("DATABASE_URL")
     if db_url:
         try:
-            if "@" in db_url:
-                host_part = db_url.split("@")[1].split("/")[0]
-                if ":" in host_part:
-                    host_part = host_part.split(":")[0]
-                parts = host_part.split(".")
-                if len(parts) >= 2 and parts[0] == "db":
-                    return parts[1]
+            parsed = urllib.parse.urlparse(db_url)
+            # Try to parse from username (e.g. postgres.sjqiojrqigyufftigvyp)
+            if parsed.username and "." in parsed.username:
+                user_parts = parsed.username.split(".")
+                if len(user_parts) >= 2:
+                    return user_parts[1]
+            
+            # Try to parse from host (e.g. db.sjqiojrqigyufftigvyp.supabase.co)
+            if parsed.hostname:
+                host_parts = parsed.hostname.split(".")
+                if len(host_parts) >= 2 and host_parts[0] == "db":
+                    return host_parts[1]
         except Exception:
             pass
             
