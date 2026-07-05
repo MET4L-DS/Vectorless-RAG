@@ -4,7 +4,7 @@ import time
 from typing import AsyncGenerator
 from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 
 from src import retriever
@@ -36,7 +36,7 @@ def get_supabase_admin() -> Client:
 retriever.load("tree")
 
 class ChatRequest(BaseModel):
-    message: str
+    message: str = Field(..., max_length=5000)
 
 def parse_message_content(content) -> str:
     """Helper to cleanly flatten content strings or lists of dicts."""

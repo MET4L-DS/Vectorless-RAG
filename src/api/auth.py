@@ -39,10 +39,10 @@ def get_supabase_project_id() -> str:
             
     raise RuntimeError("Neither SUPABASE_URL nor DATABASE_URL was found or could be parsed to retrieve the Supabase project ID.")
 
-async def fetch_jwks() -> dict:
+async def fetch_jwks(force_refresh: bool = False) -> dict:
     global JWKS_CACHE, JWKS_LAST_FETCH
     now = time.time()
-    if JWKS_CACHE and (now - JWKS_LAST_FETCH) < JWKS_TTL:
+    if not force_refresh and JWKS_CACHE and (now - JWKS_LAST_FETCH) < JWKS_TTL:
         return JWKS_CACHE
     
     project_id = get_supabase_project_id()
@@ -84,6 +84,11 @@ async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(securi
             raise HTTPException(status_code=401, detail="Missing kid in JWT header")
             
         key_data = next((k for k in jwks["keys"] if k["kid"] == kid), None)
+        if not key_data:
+            print(f"[auth.py] verify_jwt: Key ID '{kid}' not found in cached JWKS. Forcing immediate refresh...")
+            jwks = await fetch_jwks(force_refresh=True)
+            key_data = next((k for k in jwks["keys"] if k["kid"] == kid), None)
+            
         if not key_data:
             print(f"[auth.py] verify_jwt: Validation error - Key ID '{kid}' not found in JWKS")
             raise HTTPException(status_code=401, detail="Key ID not found in JWKS")
