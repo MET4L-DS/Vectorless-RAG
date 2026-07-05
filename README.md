@@ -1,3 +1,13 @@
+---
+title: Legal Vectorless RAG HF
+emoji: 🏢
+colorFrom: green
+colorTo: yellow
+sdk: docker
+pinned: false
+app_port: 7860
+---
+
 # Vectorless-RAG — Legal Statutory & SOP Conversational Assistant
 
 Vectorless-RAG is a highly precise statutory and Standard Operating Procedures (SOP) query resolver. Unlike traditional RAG systems that split documents into arbitrary text chunks and rely on approximate vector embeddings (which often lose structural hierarchy, context, and cross-references), Vectorless-RAG indexes legal texts into their native hierarchical trees (Acts → Chapters → Sections) and applies guided traversal logic alongside keyword indexing (BM25) to retrieve exact statutory content with 100% groundedness.
