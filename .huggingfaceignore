@@ -1,0 +1,13 @@
+.venv/
+.git/
+__pycache__/
+*.db
+*.db-wal
+*.db-shm
+output/
+tree/bm25_index/
+.env
+scratch/
+*.pyc
+*.pyo
+*.pyd

@@ -200,26 +200,39 @@ A premium Next.js client interface is available to serve as the application's us
    ```
 3. Add a `.env` file containing local credentials:
    ```env
-   BETTER_AUTH_SECRET=a_very_secure_local_secret_key_123456
-   BETTER_AUTH_URL=http://localhost:3000
    NEXT_PUBLIC_API_URL=http://localhost:8000
+   NEXT_PUBLIC_SUPABASE_URL=https://your-supabase-url.supabase.co
+   NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your-supabase-publishable-key
    ```
-4. Run Better Auth migrations to initialize the local SQLite auth schema:
-   ```bash
-   npx @better-auth/cli migrate
-   ```
-5. Launch the local Turbopack dev server:
+4. Launch the local Turbopack dev server:
    ```bash
    npm run dev
    ```
 
 ### Key Client Features:
-- **Better Auth Integration**: Stateful, SQLite-backed user registration and secure login.
+- **Supabase Authentication**: Supports stateful, secure user session management and Google OAuth login workflows.
+- **Markdown-Enabled Reasoning Accordion**: Full client-side `ReactMarkdown` support inside the reasoning drawer, parsing thoughts, tools, and observations (with horizontal dividers (`---`) and formatted inline code).
 - **Axios-Powered SSE Streaming**: Uses `axios` with `responseType: 'stream'` to seamlessly process and render LangGraph Server-Sent Events (Thought-Action-Observation updates).
 - **Micro-Animations**: Framer Motion transitions handling height/fade pop-in animations for live-streaming reasoning logs, and smooth rotate/slide swaps for the light-dark theme toggle.
-- **Comprehensive Markdown Rendering**: Renders full Markdown responses including dedicated inline elements for `Key Provisions` to provide detailed statutory context matching the CLI output.
 - **Inline Clickable Citations**: Converts plain footnotes into interactive link badges inside Markdown replies. Clicking a badge triggers a broad slide-out Sheet (sidebar drawer) detailing page counts and official statutory titles.
 - **Memory Purging**: Clear Chat action syncs directly with the FastAPI `DELETE` route, purging persistent checkpointer turns from the database.
+
+---
+
+## 🌐 Deploying to Hugging Face Spaces
+
+To avoid Git history rejection errors caused by binary files (like `.parquet`, `.npy`, and `.db`) being stored in past Git commits, and to bypass Windows command-line glob expansion limitations, we provide a Python deployment script that uploads your code using the Hugging Face Hub SDK:
+
+### 1. Authenticate with Hugging Face (First Time Only)
+```bash
+.venv\Scripts\hf auth login
+```
+
+### 2. Deploy your Space
+Run the local python deployment script, which automatically excludes `.venv/`, `.git/`, local database files, and secrets:
+```bash
+.venv\Scripts\python.exe deploy.py
+```
 
 ---
 
