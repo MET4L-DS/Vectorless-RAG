@@ -48,12 +48,17 @@ async def fetch_jwks() -> dict:
     project_id = get_supabase_project_id()
     jwks_url = f"https://{project_id}.supabase.co/auth/v1/.well-known/jwks.json"
     
-    async with httpx.AsyncClient() as client:
-        response = await client.get(jwks_url)
-        response.raise_for_status()
-        JWKS_CACHE = response.json()
-        JWKS_LAST_FETCH = now
-        return JWKS_CACHE
+    import urllib.request
+    import json
+    import asyncio
+    
+    def _fetch():
+        with urllib.request.urlopen(jwks_url, timeout=10.0) as response:
+            return json.loads(response.read().decode())
+            
+    JWKS_CACHE = await asyncio.to_thread(_fetch)
+    JWKS_LAST_FETCH = now
+    return JWKS_CACHE
 
 async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(security)) -> dict:
     """FastAPI security dependency to verify the JWT from Supabase.
@@ -62,20 +67,25 @@ async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(securi
     Otherwise, cryptographically verifies the token signature against the JWKS.
     """
     if credentials is None:
-        # Fallback to guest mode
+        print("[auth.py] verify_jwt: No credentials/header provided. Falling back to guest user session.")
         return {"sub": "guest"}
         
     token = credentials.credentials
+    print(f"[auth.py] verify_jwt: Authenticating request. JWT token prefix: {token[:15]}...")
     try:
         jwks = await fetch_jwks()
         headers = jwt.get_unverified_header(token)
+        print(f"[auth.py] verify_jwt: JWT Headers decoded: {headers}")
+        
         kid = headers.get("kid")
         alg = headers.get("alg", "RS256")
         if not kid:
+            print("[auth.py] verify_jwt: Validation error - Missing kid in token header")
             raise HTTPException(status_code=401, detail="Missing kid in JWT header")
             
         key_data = next((k for k in jwks["keys"] if k["kid"] == kid), None)
         if not key_data:
+            print(f"[auth.py] verify_jwt: Validation error - Key ID '{kid}' not found in JWKS")
             raise HTTPException(status_code=401, detail="Key ID not found in JWKS")
             
         # Select correct algorithm parsing based on the algorithm used by Supabase
@@ -84,6 +94,7 @@ async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(securi
         elif alg == "ES256":
             public_key = jwt.algorithms.ECAlgorithm.from_jwk(key_data)
         else:
+            print(f"[auth.py] verify_jwt: Validation error - Unsupported signing algorithm '{alg}'")
             raise HTTPException(status_code=401, detail=f"Unsupported signing algorithm: {alg}")
         
         # Verify the token. Supabase default audience is 'authenticated'.
@@ -93,10 +104,14 @@ async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(securi
             algorithms=["RS256", "ES256"],
             audience="authenticated"
         )
+        print(f"[auth.py] verify_jwt: Cryptographic validation succeeded! sub: {payload.get('sub')}, email: {payload.get('email')}, role: {payload.get('role')}")
         return payload
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e:
+        print("[auth.py] verify_jwt: Token signature has expired.")
         raise HTTPException(status_code=401, detail="Token has expired")
     except jwt.InvalidTokenError as e:
+        print(f"[auth.py] verify_jwt: Invalid token error - {str(e)}")
         raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
     except Exception as e:
+        print(f"[auth.py] verify_jwt: Authentication failed with unhandled exception - {str(e)}")
         raise HTTPException(status_code=401, detail=f"Authentication failed: {str(e)}")

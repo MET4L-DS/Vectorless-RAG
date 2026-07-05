@@ -332,7 +332,9 @@ async def get_chat_sessions(
         sessions = [{"id": row[0].replace(prefix, ""), "title": row[1]} for row in rows]
         return {"sessions": sessions}
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to fetch sessions: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Failed to fetch sessions: {str(e)} - {traceback.format_exc()}")
 
 @router.delete("/chats/{thread_id}/history")
 async def clear_chat_history(
@@ -355,4 +357,37 @@ async def clear_chat_history(
         return {"status": "success", "message": f"Successfully deleted session and checkpoints for thread: {thread_id}"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to delete session: {str(e)}")
+
+@router.delete("/users/me")
+async def delete_user(
+    request: Request,
+    user: dict = Depends(verify_jwt)
+):
+    """Deletes the user's account and all associated chat sessions and history."""
+    try:
+        user_id = user.get("sub")
+        if not user_id or user_id == "guest":
+            raise HTTPException(status_code=400, detail="Guest users cannot delete accounts")
+            
+        pool = request.app.state.pool
+        prefix = f"{user_id}:%"
+        
+        async with pool.connection() as conn:
+            async with conn.cursor() as cur:
+                # 1. Delete checkpoints, writes, and blobs for this user
+                await cur.execute("DELETE FROM checkpoints WHERE thread_id LIKE %s", (prefix,))
+                await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id LIKE %s", (prefix,))
+                await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id LIKE %s", (prefix,))
+                
+                # 2. Delete chat sessions mapping
+                await cur.execute("DELETE FROM chat_sessions WHERE user_id = %s", (user_id,))
+                
+                # 3. Delete from auth.users
+                await cur.execute("DELETE FROM auth.users WHERE id = %s", (user_id,))
+                
+        return {"status": "success", "message": "Account and all history deleted successfully"}
+    except HTTPException as he:
+        raise he
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to delete account: {str(e)}")
 
