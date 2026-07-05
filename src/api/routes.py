@@ -403,7 +403,10 @@ async def delete_user(
         
         # 4. Delete user using the official Supabase Admin API
         supabase_admin = get_supabase_admin()
-        supabase_admin.auth.admin.delete_user(user_id)
+        
+        # Run the synchronous Supabase client call in a separate thread to prevent 
+        # blocking the FastAPI asyncio event loop, which can cause deadlocks on Windows.
+        await asyncio.to_thread(supabase_admin.auth.admin.delete_user, user_id)
                 
         return {"status": "success", "message": "Account and all history deleted successfully"}
     except HTTPException as he:
