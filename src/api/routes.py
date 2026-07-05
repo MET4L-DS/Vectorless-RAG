@@ -12,8 +12,24 @@ from src.retriever import client
 from src.retriever import graph
 from src.react_agent.tools import retrieved_nodes_var
 from src.retriever.schemas import GeneratedAnswer
-from src.api.auth import verify_jwt
+from src.api.auth import verify_jwt, get_supabase_project_id
+from supabase import create_client, Client
+import os
 router = APIRouter()
+
+# Initialize Supabase Admin Client
+def get_supabase_admin() -> Client:
+    supabase_url = os.getenv("SUPABASE_URL") or os.getenv("NEXT_PUBLIC_SUPABASE_URL")
+    if not supabase_url:
+        project_id = get_supabase_project_id()
+        supabase_url = f"https://{project_id}.supabase.co"
+    
+    service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    if not service_role_key:
+        raise RuntimeError("SUPABASE_SERVICE_ROLE_KEY environment variable is not set. Required for Admin API operations.")
+        
+    return create_client(supabase_url, service_role_key)
+
 
 # Load the indices on module import so they are ready
 # (Safe to call multiple times as it checks if already loaded)
@@ -173,27 +189,20 @@ async def chat_message(
     scoped_thread_id = f"{user['sub']}:{thread_id}"
     pool = request.app.state.pool
 
-    # Handle session creation
+    # Handle session creation with an Atomic UPSERT to avoid race conditions
     try:
         async with pool.connection() as conn:
             async with conn.cursor() as cur:
+                fallback_title = "New Legal Chat"
                 await cur.execute(
-                    "SELECT 1 FROM chat_sessions WHERE thread_id = %s",
-                    (scoped_thread_id,)
+                    """
+                    INSERT INTO chat_sessions (thread_id, user_id, title, updated_at)
+                    VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+                    ON CONFLICT (thread_id) 
+                    DO UPDATE SET updated_at = CURRENT_TIMESTAMP
+                    """,
+                    (scoped_thread_id, user['sub'], fallback_title)
                 )
-                exists = await cur.fetchone()
-                if not exists:
-                    # Insert fallback first
-                    fallback_title = "New Legal Chat"
-                    await cur.execute(
-                        "INSERT INTO chat_sessions (thread_id, user_id, title) VALUES (%s, %s, %s)",
-                        (scoped_thread_id, user['sub'], fallback_title)
-                    )
-                else:
-                    await cur.execute(
-                        "UPDATE chat_sessions SET updated_at = CURRENT_TIMESTAMP WHERE thread_id = %s",
-                        (scoped_thread_id,)
-                    )
     except Exception as db_err:
         print(f"[chat_message] DB tracking error: {db_err}")
 
@@ -348,11 +357,12 @@ async def clear_chat_history(
         pool = request.app.state.pool
         
         async with pool.connection() as conn:
-            async with conn.cursor() as cur:
-                await cur.execute("DELETE FROM checkpoints WHERE thread_id = %s", (scoped_thread_id,))
-                await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id = %s", (scoped_thread_id,))
-                await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = %s", (scoped_thread_id,))
-                await cur.execute("DELETE FROM chat_sessions WHERE thread_id = %s", (scoped_thread_id,))
+            async with conn.transaction():
+                async with conn.cursor() as cur:
+                    await cur.execute("DELETE FROM checkpoints WHERE thread_id = %s", (scoped_thread_id,))
+                    await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id = %s", (scoped_thread_id,))
+                    await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = %s", (scoped_thread_id,))
+                    await cur.execute("DELETE FROM chat_sessions WHERE thread_id = %s", (scoped_thread_id,))
                 
         return {"status": "success", "message": f"Successfully deleted session and checkpoints for thread: {thread_id}"}
     except Exception as e:
@@ -370,20 +380,30 @@ async def delete_user(
             raise HTTPException(status_code=400, detail="Guest users cannot delete accounts")
             
         pool = request.app.state.pool
-        prefix = f"{user_id}:%"
         
         async with pool.connection() as conn:
-            async with conn.cursor() as cur:
-                # 1. Delete checkpoints, writes, and blobs for this user
-                await cur.execute("DELETE FROM checkpoints WHERE thread_id LIKE %s", (prefix,))
-                await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id LIKE %s", (prefix,))
-                await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id LIKE %s", (prefix,))
-                
-                # 2. Delete chat sessions mapping
-                await cur.execute("DELETE FROM chat_sessions WHERE user_id = %s", (user_id,))
-                
-                # 3. Delete from auth.users
-                await cur.execute("DELETE FROM auth.users WHERE id = %s", (user_id,))
+            async with conn.transaction():
+                async with conn.cursor() as cur:
+                    # 1. Fetch all thread IDs for this user first
+                    await cur.execute(
+                        "SELECT thread_id FROM chat_sessions WHERE user_id = %s",
+                        (user_id,)
+                    )
+                    rows = await cur.fetchall()
+                    thread_ids = [row[0] for row in rows]
+                    
+                    # 2. Delete checkpoints, writes, and blobs using ANY(%s)
+                    if thread_ids:
+                        await cur.execute("DELETE FROM checkpoints WHERE thread_id = ANY(%s)", (thread_ids,))
+                        await cur.execute("DELETE FROM checkpoint_blobs WHERE thread_id = ANY(%s)", (thread_ids,))
+                        await cur.execute("DELETE FROM checkpoint_writes WHERE thread_id = ANY(%s)", (thread_ids,))
+                    
+                    # 3. Delete chat sessions mapping
+                    await cur.execute("DELETE FROM chat_sessions WHERE user_id = %s", (user_id,))
+        
+        # 4. Delete user using the official Supabase Admin API
+        supabase_admin = get_supabase_admin()
+        supabase_admin.auth.admin.delete_user(user_id)
                 
         return {"status": "success", "message": "Account and all history deleted successfully"}
     except HTTPException as he:

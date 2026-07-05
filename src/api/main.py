@@ -46,6 +46,10 @@ async def lifespan(app: FastAPI):
                         updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
                     )
                 """)
+                await cur.execute("""
+                    CREATE INDEX IF NOT EXISTS idx_chat_sessions_user_id_updated_at 
+                    ON chat_sessions (user_id, updated_at DESC)
+                """)
         
         # Compile agent with the persistent Postgres checkpointer
         app.state.agent = get_agent(checkpointer)
@@ -58,10 +62,15 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Enable CORS for Next.js frontend calls on localhost
+# Enable CORS for Next.js frontend calls
+allowed_origins = [
+    o.strip() for o in os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+    if o.strip()
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
