@@ -1,0 +1,34 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Git
+.git/
+.github/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environment variables
+.env
+.env.local
+
+# Local SQLite databases (Supabase is used in prod)
+local_agent_memory.db
+local_agent_memory.db-wal
+local_agent_memory.db-shm
+
+# IDE / Editor
+.vscode/
+.idea/
+.cursorignore
+.cursorindexingignore
+
+# Build/distribution
+build/
+dist/
+*.egg-info/
