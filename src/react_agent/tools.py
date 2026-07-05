@@ -32,7 +32,7 @@ def _format_nodes(nodes: List[RetrievedNode]) -> str:
             f"Score: {node.get('score', 1.0):.2f}"
         )
         formatted.append(fmt)
-    return "\n" + "="*50 + "\n" + ("\n" + "="*50 + "\n").join(formatted)
+    return "\n---\n" + "\n---\n".join(formatted)
 
 @tool
 async def search_statutes(
