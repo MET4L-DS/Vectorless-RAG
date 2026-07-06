@@ -1,5 +1,9 @@
 import asyncio
 import time
+import os
+import sys
+# Add project root to path to resolve 'src' imports when run directly
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..")))
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
