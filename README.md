@@ -110,7 +110,9 @@ Vectorless-RAG/
 
 ### Prerequisites
 - Python 3.10+
-- Access to Google Gemini API (recommend `models/gemini-3.1-flash-lite` or `models/gemini-3.1-pro`)
+- Access to Google Gemini API with enablement for the following models:
+  - **Gemma Models** (used for bottom-up summarization during tree construction): `models/gemma-4-26b-a4b-it` and `models/gemma-4-31b-it`
+  - **Gemini Models** (used for dynamic agent retrieval and runtime query processing): `models/gemini-3.1-flash-lite` (or custom overrides like `models/gemini-3.1-pro`)
 
 ### 1. Environment Configuration
 Create a virtual environment and install all necessary dependencies:
