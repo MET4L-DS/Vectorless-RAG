@@ -7,6 +7,7 @@ description: Guided trajectory for building new features safely aligns scope, an
 Follow this precise sequence when the user wants to implement a new feature or modify an existing UI component. Do not skip steps.
 
 ## Step 1: Scope Alignment & Grilling
+
 1. Invoke the `/grill-me` command to ask the user clarifying questions about the feature scope, edge cases, and UI expectations.
 2. Ensure you clearly understand the acceptance criteria before touching any code.
 
