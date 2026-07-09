@@ -16,6 +16,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           1,
           10
@@ -36,6 +42,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           11,
           11
@@ -56,6 +68,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           12,
           12
@@ -76,6 +94,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           13,
           13
@@ -101,6 +125,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           14,
           14
@@ -126,6 +156,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           15,
           15
@@ -151,6 +187,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           16,
           17
@@ -180,6 +222,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           18,
           19
@@ -187,7 +235,7 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNS",
+            "act": "BNSS",
             "section": "175"
           },
           {
@@ -195,12 +243,12 @@
             "section": "173"
           },
           {
-            "act": "BNSS",
-            "section": "175"
+            "act": "BNS",
+            "section": "173"
           },
           {
             "act": "BNS",
-            "section": "173"
+            "section": "175"
           },
           {
             "act": "BNSS",
@@ -221,6 +269,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           20,
           21
@@ -228,7 +282,7 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNS",
+            "act": "BNSS",
             "section": "175"
           },
           {
@@ -240,7 +294,7 @@
             "section": "210"
           },
           {
-            "act": "BNSS",
+            "act": "BNS",
             "section": "175"
           },
           {
@@ -262,6 +316,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           22,
           22
@@ -282,6 +342,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           23,
           24
@@ -307,6 +373,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           25,
           33
@@ -327,6 +399,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           34,
           50
@@ -347,6 +425,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           51,
           73
@@ -355,7 +439,19 @@
         "cross_act_refs": [
           {
             "act": "BNSS",
+            "section": "42"
+          },
+          {
+            "act": "BNSS",
             "section": "48"
+          },
+          {
+            "act": "BNSS",
+            "section": "47"
+          },
+          {
+            "act": "BNSS",
+            "section": "35"
           },
           {
             "act": "BNSS",
@@ -364,18 +460,6 @@
           {
             "act": "BNS",
             "section": "39"
-          },
-          {
-            "act": "BNSS",
-            "section": "35"
-          },
-          {
-            "act": "BNSS",
-            "section": "42"
-          },
-          {
-            "act": "BNSS",
-            "section": "47"
           }
         ],
         "token_estimate": 7565,
@@ -392,6 +476,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           74,
           82
@@ -425,6 +515,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           83,
           85
@@ -445,6 +541,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           86,
           86
@@ -465,6 +567,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           87,
           88
@@ -490,6 +598,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           89,
           90
@@ -510,6 +624,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           91,
           96
@@ -535,6 +655,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           97,
           100
@@ -543,7 +669,15 @@
         "cross_act_refs": [
           {
             "act": "BNSS",
+            "section": "3"
+          },
+          {
+            "act": "BNSS",
             "section": "94"
+          },
+          {
+            "act": "BNSS",
+            "section": "105"
           },
           {
             "act": "BNSS",
@@ -551,7 +685,7 @@
           },
           {
             "act": "BNSS",
-            "section": "105"
+            "section": "103"
           },
           {
             "act": "BNS",
@@ -559,15 +693,7 @@
           },
           {
             "act": "BNSS",
-            "section": "3"
-          },
-          {
-            "act": "BNSS",
             "section": "100"
-          },
-          {
-            "act": "BNSS",
-            "section": "103"
           }
         ],
         "token_estimate": 1448,
@@ -584,6 +710,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           101,
           106
@@ -609,6 +741,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           107,
           108
@@ -634,6 +772,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           109,
           115
@@ -663,6 +807,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           116,
           117
@@ -688,6 +838,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           118,
           121
@@ -696,27 +852,11 @@
         "cross_act_refs": [
           {
             "act": "BNSS",
-            "section": "90"
-          },
-          {
-            "act": "BNSS",
-            "section": "63"
+            "section": "85"
           },
           {
             "act": "BSA",
             "section": "63"
-          },
-          {
-            "act": "BNSS",
-            "section": "84"
-          },
-          {
-            "act": "BSA",
-            "section": "55"
-          },
-          {
-            "act": "BNSS",
-            "section": "81"
           },
           {
             "act": "BNSS",
@@ -724,7 +864,11 @@
           },
           {
             "act": "BNSS",
-            "section": "62"
+            "section": "93"
+          },
+          {
+            "act": "BNSS",
+            "section": "84"
           },
           {
             "act": "BNSS",
@@ -732,7 +876,11 @@
           },
           {
             "act": "BNSS",
-            "section": "87"
+            "section": "63"
+          },
+          {
+            "act": "BSA",
+            "section": "55"
           },
           {
             "act": "BNSS",
@@ -740,15 +888,23 @@
           },
           {
             "act": "BNSS",
+            "section": "62"
+          },
+          {
+            "act": "BNSS",
+            "section": "87"
+          },
+          {
+            "act": "BNSS",
+            "section": "90"
+          },
+          {
+            "act": "BNSS",
+            "section": "81"
+          },
+          {
+            "act": "BNSS",
             "section": "73"
-          },
-          {
-            "act": "BNSS",
-            "section": "85"
-          },
-          {
-            "act": "BNSS",
-            "section": "93"
           }
         ],
         "token_estimate": 1632,
@@ -765,6 +921,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           122,
           128
@@ -785,6 +947,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           129,
           129
@@ -805,6 +973,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           130,
           131
@@ -830,6 +1004,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           132,
           133
@@ -850,6 +1030,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           134,
           138
@@ -865,12 +1051,12 @@
             "section": "497"
           },
           {
-            "act": "BNS",
-            "section": "497"
-          },
-          {
             "act": "BNSS",
             "section": "451"
+          },
+          {
+            "act": "BNS",
+            "section": "497"
           }
         ],
         "token_estimate": 1322,
@@ -887,6 +1073,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           139,
           141
@@ -894,24 +1086,24 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNS",
-            "section": "183"
+            "act": "BNSS",
+            "section": "316"
           },
           {
             "act": "BNSS",
-            "section": "14"
+            "section": "3"
           },
           {
             "act": "BNS",
-            "section": "14"
+            "section": "183"
           },
           {
             "act": "BNSS",
             "section": "5"
           },
           {
-            "act": "BNSS",
-            "section": "183"
+            "act": "BSA",
+            "section": "142"
           },
           {
             "act": "BNS",
@@ -919,15 +1111,15 @@
           },
           {
             "act": "BNSS",
-            "section": "3"
+            "section": "183"
+          },
+          {
+            "act": "BNS",
+            "section": "14"
           },
           {
             "act": "BNSS",
-            "section": "316"
-          },
-          {
-            "act": "BSA",
-            "section": "142"
+            "section": "14"
           }
         ],
         "token_estimate": 952,
@@ -944,6 +1136,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           142,
           143
@@ -973,6 +1171,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           144,
           145
@@ -998,6 +1202,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           146,
           146
@@ -1023,6 +1233,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           147,
           147
@@ -1048,6 +1264,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           148,
           148
@@ -1055,12 +1277,12 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNSS",
-            "section": "223"
-          },
-          {
             "act": "BNS",
             "section": "172"
+          },
+          {
+            "act": "BNSS",
+            "section": "223"
           }
         ],
         "token_estimate": 262,
@@ -1077,6 +1299,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           149,
           150
@@ -1084,12 +1312,12 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNS",
-            "section": "70"
-          },
-          {
             "act": "BNSS",
             "section": "64"
+          },
+          {
+            "act": "BNS",
+            "section": "70"
           }
         ],
         "token_estimate": 512,
@@ -1106,6 +1334,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           151,
           152
@@ -1126,6 +1360,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           153,
           156
@@ -1151,6 +1391,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           157,
           158
@@ -1158,11 +1404,11 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNSS",
+            "act": "BNS",
             "section": "152"
           },
           {
-            "act": "BNS",
+            "act": "BNSS",
             "section": "152"
           }
         ],
@@ -1180,6 +1426,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           159,
           159
@@ -1205,6 +1457,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           160,
           162
@@ -1213,19 +1471,19 @@
         "cross_act_refs": [
           {
             "act": "BNSS",
-            "section": "2"
-          },
-          {
-            "act": "BNSS",
-            "section": "86"
-          },
-          {
-            "act": "BNSS",
             "section": "27"
           },
           {
             "act": "BNSS",
             "section": "4"
+          },
+          {
+            "act": "BNSS",
+            "section": "2"
+          },
+          {
+            "act": "BNSS",
+            "section": "86"
           }
         ],
         "token_estimate": 848,
@@ -1242,6 +1500,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           163,
           163
@@ -1267,6 +1531,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           164,
           201
@@ -1274,28 +1544,16 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNSS",
-            "section": "94"
-          },
-          {
-            "act": "BNSS",
-            "section": "522"
-          },
-          {
-            "act": "BNS",
-            "section": "35"
-          },
-          {
             "act": "BNS",
             "section": "394"
           },
           {
-            "act": "BNSS",
+            "act": "BNS",
             "section": "35"
           },
           {
             "act": "BNSS",
-            "section": "478"
+            "section": "94"
           },
           {
             "act": "BNSS",
@@ -1303,7 +1561,19 @@
           },
           {
             "act": "BNSS",
+            "section": "478"
+          },
+          {
+            "act": "BNSS",
             "section": "388"
+          },
+          {
+            "act": "BNSS",
+            "section": "35"
+          },
+          {
+            "act": "BNSS",
+            "section": "522"
           }
         ],
         "token_estimate": 8215,
@@ -1320,12 +1590,26 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           202,
           215
         ],
         "internal_refs": [],
         "cross_act_refs": [
+          {
+            "act": "BNSS",
+            "section": "175"
+          },
+          {
+            "act": "BNSS",
+            "section": "173"
+          },
           {
             "act": "BNSS",
             "section": "223"
@@ -1336,23 +1620,15 @@
           },
           {
             "act": "BNSS",
-            "section": "173"
-          },
-          {
-            "act": "BNSS",
-            "section": "175"
-          },
-          {
-            "act": "BNSS",
-            "section": "210"
-          },
-          {
-            "act": "BNSS",
             "section": "232"
           },
           {
             "act": "BNSS",
             "section": "230"
+          },
+          {
+            "act": "BNSS",
+            "section": "210"
           }
         ],
         "token_estimate": 5178,
@@ -1369,6 +1645,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           216,
           222
@@ -1377,11 +1659,55 @@
         "cross_act_refs": [
           {
             "act": "BNSS",
-            "section": "79"
+            "section": "65"
+          },
+          {
+            "act": "BNSS",
+            "section": "70"
+          },
+          {
+            "act": "BNSS",
+            "section": "67"
+          },
+          {
+            "act": "BNSS",
+            "section": "264"
+          },
+          {
+            "act": "BNSS",
+            "section": "71"
+          },
+          {
+            "act": "BNSS",
+            "section": "124"
+          },
+          {
+            "act": "BNSS",
+            "section": "77"
+          },
+          {
+            "act": "BNSS",
+            "section": "68"
+          },
+          {
+            "act": "BNSS",
+            "section": "75"
+          },
+          {
+            "act": "BNSS",
+            "section": "69"
           },
           {
             "act": "BNSS",
             "section": "64"
+          },
+          {
+            "act": "BNSS",
+            "section": "66"
+          },
+          {
+            "act": "BNSS",
+            "section": "76"
           },
           {
             "act": "BNSS",
@@ -1393,59 +1719,15 @@
           },
           {
             "act": "BNSS",
+            "section": "79"
+          },
+          {
+            "act": "BNSS",
             "section": "185"
           },
           {
             "act": "BNSS",
-            "section": "76"
-          },
-          {
-            "act": "BNSS",
             "section": "74"
-          },
-          {
-            "act": "BNSS",
-            "section": "68"
-          },
-          {
-            "act": "BNSS",
-            "section": "71"
-          },
-          {
-            "act": "BNSS",
-            "section": "75"
-          },
-          {
-            "act": "BNSS",
-            "section": "77"
-          },
-          {
-            "act": "BNSS",
-            "section": "65"
-          },
-          {
-            "act": "BNSS",
-            "section": "124"
-          },
-          {
-            "act": "BNSS",
-            "section": "264"
-          },
-          {
-            "act": "BNSS",
-            "section": "66"
-          },
-          {
-            "act": "BNSS",
-            "section": "70"
-          },
-          {
-            "act": "BNSS",
-            "section": "69"
-          },
-          {
-            "act": "BNSS",
-            "section": "67"
           }
         ],
         "token_estimate": 2599,
@@ -1462,6 +1744,12 @@
       "children": [],
       "metadata": {
         "act_code": "SOP",
+        "corpus_type": "sop",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2023-01-01",
+        "supersedes": [],
+        "interpreted_by": [],
         "page_range": [
           223,
           237
@@ -1469,8 +1757,28 @@
         "internal_refs": [],
         "cross_act_refs": [
           {
-            "act": "BNS",
-            "section": "70"
+            "act": "BNSS",
+            "section": "65"
+          },
+          {
+            "act": "BNSS",
+            "section": "173"
+          },
+          {
+            "act": "BNSS",
+            "section": "175"
+          },
+          {
+            "act": "BNSS",
+            "section": "385"
+          },
+          {
+            "act": "BNSS",
+            "section": "116"
+          },
+          {
+            "act": "BNSS",
+            "section": "232"
           },
           {
             "act": "BNSS",
@@ -1482,39 +1790,19 @@
           },
           {
             "act": "BNSS",
-            "section": "152"
-          },
-          {
-            "act": "BNSS",
-            "section": "175"
-          },
-          {
-            "act": "BNSS",
-            "section": "116"
-          },
-          {
-            "act": "BNSS",
-            "section": "173"
-          },
-          {
-            "act": "BNSS",
-            "section": "385"
-          },
-          {
-            "act": "BNSS",
-            "section": "65"
-          },
-          {
-            "act": "BNSS",
-            "section": "232"
-          },
-          {
-            "act": "BNSS",
             "section": "193"
           },
           {
             "act": "BNSS",
+            "section": "152"
+          },
+          {
+            "act": "BNSS",
             "section": "230"
+          },
+          {
+            "act": "BNS",
+            "section": "70"
           }
         ],
         "token_estimate": 6501,
@@ -1524,6 +1812,12 @@
   ],
   "metadata": {
     "act_code": "SOP",
+    "corpus_type": "sop",
+    "jurisdiction": "national",
+    "status": "in_force",
+    "enactment_date": "2023-01-01",
+    "supersedes": [],
+    "interpreted_by": [],
     "page_range": [
       1,
       238

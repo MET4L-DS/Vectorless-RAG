@@ -3,6 +3,50 @@ import json
 import hashlib
 import pandas as pd
 
+# ---------------------------------------------------------------------------
+# Statute metadata registry
+# Populated here for existing acts; Bucket 2 will extend this for new acts.
+# ---------------------------------------------------------------------------
+_STATUTE_METADATA: dict[str, dict] = {
+    # Original corpora
+    "BNS":   {"jurisdiction": "national", "status": "in_force", "enactment_date": "2024-07-01", "corpus_type": "statute"},
+    "BNSS":  {"jurisdiction": "national", "status": "in_force", "enactment_date": "2024-07-01", "corpus_type": "statute"},
+    "BSA":   {"jurisdiction": "national", "status": "in_force", "enactment_date": "2024-07-01", "corpus_type": "statute"},
+    "SOP":   {"jurisdiction": "national", "status": "in_force", "enactment_date": "2023-01-01", "corpus_type": "sop"},
+    # Phase 9 — Corpus expansion
+    "IT":    {"jurisdiction": "national", "status": "in_force", "enactment_date": "2000-10-17", "corpus_type": "statute"},
+    "JJA":   {"jurisdiction": "national", "status": "in_force", "enactment_date": "2016-01-15", "corpus_type": "statute"},
+    "POCSO": {"jurisdiction": "national", "status": "in_force", "enactment_date": "2012-11-14", "corpus_type": "statute"},
+    "NDPS":  {"jurisdiction": "national", "status": "in_force", "enactment_date": "1985-09-16", "corpus_type": "statute"},
+    "PCA":   {"jurisdiction": "national", "status": "in_force", "enactment_date": "1988-09-09", "corpus_type": "statute"},
+}
+
+# Full titles for index.json generation (keyed by act_code)
+ACT_FULL_TITLES: dict[str, str] = {
+    "BNS":   "BHARATIYA NYAYA SANHITA, 2023",
+    "BNSS":  "BHARATIYA NAGARIK SURAKSHA SANHITA, 2023",
+    "BSA":   "BHARATIYA SAKSHYA ADHINIYAM, 2023",
+    "SOP":   "Telangana Police Standard Operating Procedures",
+    "IT":    "THE INFORMATION TECHNOLOGY ACT, 2000",
+    "JJA":   "THE JUVENILE JUSTICE (CARE AND PROTECTION OF CHILDREN) ACT, 2015",
+    "POCSO": "THE PROTECTION OF CHILDREN FROM SEXUAL OFFENCES ACT, 2012",
+    "NDPS":  "THE NARCOTIC DRUGS AND PSYCHOTROPIC SUBSTANCES ACT, 1985",
+    "PCA":   "THE PREVENTION OF CORRUPTION ACT, 1988",
+}
+
+# Reference page counts per act (used for index.json metadata)
+ACT_PAGE_COUNTS: dict[str, int] = {
+    "BNS":   112,
+    "BNSS":  279,
+    "BSA":   54,
+    "SOP":   238,
+    "IT":    41,
+    "JJA":   48,
+    "POCSO": 17,
+    "NDPS":  54,
+    "PCA":   20,
+}
+
 def process_xrefs(xref_str, current_act):
     """
     Process cross_references JSON string from Phase 1.
@@ -33,7 +77,8 @@ def process_xrefs(xref_str, current_act):
 
 def build_unsummarized_trees(output_dir="output"):
     """
-    Loads Parquet files and constructs the unsummarized tree structures for BNS, BNSS, and BSA.
+    Loads Parquet files and constructs the unsummarized tree structures for all acts present
+    in the Parquet output (BNS, BNSS, BSA, SOP, and any new acts added in Bucket 2).
     Returns a dict mapping act_code -> root_node_dict.
     """
     toc_path = os.path.join(output_dir, "toc_df.parquet")
@@ -51,9 +96,12 @@ def build_unsummarized_trees(output_dir="output"):
     print("Concatenating section line contents...")
     section_texts = line_df.groupby("section_id")["text"].apply(lambda lines: " ".join(lines)).to_dict()
 
-    acts = ["BNS", "BNSS", "BSA"]
-    if "SOP" in toc_df["act_code"].values:
-        acts.append("SOP")
+    # Auto-discover all acts present in the Parquet — no hardcoded list needed.
+    # Known acts are ordered first so BNS/BNSS/BSA/SOP always appear before extension acts.
+    _KNOWN_ORDER = ["BNS", "BNSS", "BSA", "SOP"]
+    discovered = list(toc_df["act_code"].unique())
+    acts = [a for a in _KNOWN_ORDER if a in discovered] + \
+           [a for a in discovered if a not in _KNOWN_ORDER]
     trees = {}
 
     for act in acts:
@@ -80,6 +128,14 @@ def build_unsummarized_trees(output_dir="output"):
             
             token_est = len(content) // 4 if content else 0
             
+            # Retrieve static corpus metadata for this act (falls back to safe defaults)
+            act_meta = _STATUTE_METADATA.get(act, {
+                "jurisdiction": "national",
+                "status": "in_force",
+                "enactment_date": None,
+                "corpus_type": "statute"
+            })
+
             node = {
                 "node_id": node_id,
                 "level": level,
@@ -90,6 +146,12 @@ def build_unsummarized_trees(output_dir="output"):
                 "children": [],
                 "metadata": {
                     "act_code": act,
+                    "corpus_type": act_meta["corpus_type"],
+                    "jurisdiction": act_meta["jurisdiction"],
+                    "status": act_meta["status"],
+                    "enactment_date": act_meta["enactment_date"],
+                    "supersedes": [],       # Populated in Phase 11 for IPC→BNS / CrPC→BNSS transitions
+                    "interpreted_by": [],   # Populated in Phase 10 when case law nodes are added
                     "page_range": [int(row["start_page"]), int(row["end_page"])],
                     "internal_refs": internal_refs,
                     "cross_act_refs": cross_act_refs,
@@ -138,6 +200,7 @@ def build_unsummarized_trees(output_dir="output"):
                     if section_num:
                         internal_refs.append(f"S{section_num}")
                         
+                    bnss_meta = _STATUTE_METADATA.get("BNSS", {})
                     row_node = {
                         "node_id": row_id,
                         "level": 2,
@@ -148,6 +211,12 @@ def build_unsummarized_trees(output_dir="output"):
                         "children": [],
                         "metadata": {
                             "act_code": "BNSS",
+                            "corpus_type": bnss_meta.get("corpus_type", "statute"),
+                            "jurisdiction": bnss_meta.get("jurisdiction", "national"),
+                            "status": bnss_meta.get("status", "in_force"),
+                            "enactment_date": bnss_meta.get("enactment_date"),
+                            "supersedes": [],
+                            "interpreted_by": [],
                             "page_range": [int(row["page_no"]), int(row["page_no"])],
                             "internal_refs": internal_refs,
                             "cross_act_refs": [],

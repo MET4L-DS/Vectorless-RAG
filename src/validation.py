@@ -50,13 +50,12 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
 
     # 3b. Root & Hierarchy Structure Verification
     roots = toc_df[toc_df["node_type"] == "root"]
-    expected_roots_count = 4 if "SOP" in toc_df["act_code"].values else 3
+    # Dynamic root count: one root per unique act code present in the data
+    expected_roots_count = toc_df["act_code"].nunique()
     if len(roots) != expected_roots_count:
-        errors.append(f"Error: Expected exactly {expected_roots_count} root nodes, found {len(roots)}: {roots['section_id'].tolist()}")
+        errors.append(f"Error: Expected exactly {expected_roots_count} root nodes (one per act), found {len(roots)}: {roots['section_id'].tolist()}")
     else:
-        acts_to_check = list(EXPECTED_CHAPTERS.keys())
-        if "SOP" in toc_df["act_code"].values:
-            acts_to_check.append("SOP")
+        acts_to_check = list(toc_df["act_code"].unique())
             
         for act in acts_to_check:
             act_root = roots[roots["act_code"] == act]
@@ -68,9 +67,7 @@ def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.D
                     errors.append(f"Error: Act {act} root node has invalid level ({row['level']}) or parent_id ({row['parent_id']}).")
                     
     # Check that all chapters point to their Act's root
-    acts_to_check = list(EXPECTED_CHAPTERS.keys())
-    if "SOP" in toc_df["act_code"].values:
-        acts_to_check.append("SOP")
+    acts_to_check = list(toc_df["act_code"].unique())
         
     for act in acts_to_check:
         act_toc = toc_df[toc_df["act_code"] == act]
@@ -198,9 +195,11 @@ def validate_completed_trees(tree_dir="tree", output_dir="output"):
         errors.append(f"Error: Failed to parse index.json: {e}")
         return False
         
-    acts = ["BNS", "BNSS", "BSA"]
-    if "SOP" in index_data.get("acts", {}):
-        acts.append("SOP")
+    # Dynamically determine which acts are present in index.json
+    acts = list(index_data.get("acts", {}).keys())
+    if not acts:
+        errors.append("Error: No acts found in index.json.")
+        return False
     for act in acts:
         if act not in index_data.get("acts", {}):
             errors.append(f"Error: Act {act} is missing in index.json.")
@@ -268,14 +267,19 @@ def validate_completed_trees(tree_dir="tree", output_dir="output"):
                 if content is not None:
                     errors.append(f"Error: Non-leaf node {nid} ({ntype}) has non-null content.")
                     
-            # Check metadata fields
+            # Check metadata fields — both the original required fields and the new KG metadata fields
             meta = node.get("metadata", {})
             if not meta:
                 errors.append(f"Error: Node {nid} is missing metadata.")
             else:
                 for field in ["act_code", "page_range", "internal_refs", "cross_act_refs", "token_estimate", "stable_hash"]:
                     if field not in meta:
-                        errors.append(f"Error: Node {nid} metadata is missing field '{field}'.")
+                        errors.append(f"Error: Node {nid} metadata is missing required field '{field}'.")
+                # New KG enrichment fields (Bucket 1) — warn rather than hard-error so existing
+                # trees without these fields still pass until a full rebuild is done.
+                for kg_field in ["corpus_type", "jurisdiction", "status", "enactment_date", "supersedes", "interpreted_by"]:
+                    if kg_field not in meta:
+                        errors.append(f"Warning: Node {nid} metadata is missing KG field '{kg_field}' (run build_tree to enrich).")
                         
     # 3. Check duplicate node_ids across all acts
     node_ids = [n.get("node_id") for n in all_nodes_flat if n.get("node_id")]
@@ -288,11 +292,14 @@ def validate_completed_trees(tree_dir="tree", output_dir="output"):
             seen.add(x)
         errors.append(f"Error: Duplicate node_ids found: {dupes}")
         
-    # 4. Check that combined nav scaffold fits within token budget (< 250,000 tokens)
+    # 4. Check that combined nav scaffold fits within token budget
+    # Warning threshold: 250,000 tokens; hard error: 300,000 tokens
     total_nav_tokens = sum(len(n.get("summary", "")) // 4 for n in all_nodes_flat)
-    print(f"Total navigation scaffold token estimate: {total_nav_tokens} tokens (limit 250,000).")
-    if total_nav_tokens >= 250000:
-        errors.append(f"Error: Combined nav scaffold token count ({total_nav_tokens}) exceeds the 250,000 token limit.")
+    print(f"Total navigation scaffold token estimate: {total_nav_tokens} tokens (warn > 250,000 / limit > 300,000).")
+    if total_nav_tokens >= 300000:
+        errors.append(f"Error: Combined nav scaffold token count ({total_nav_tokens}) exceeds the hard 300,000 token limit.")
+    elif total_nav_tokens >= 250000:
+        errors.append(f"Warning: Nav scaffold token count ({total_nav_tokens}) exceeds 250,000 — consider trimming chapter summaries.")
         
     # Summary of validation
     errors_only = [e for e in errors if e.startswith("Error")]

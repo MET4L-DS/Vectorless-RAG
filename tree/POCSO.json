@@ -1,0 +1,1416 @@
+{
+  "node_id": "POCSO_root",
+  "level": 0,
+  "node_type": "root",
+  "title": "THE PROTECTION OF CHILDREN FROM SEXUAL OFFENCES ACT, 2012",
+  "summary": "The Protection of Children from Sexual Offences (POCSO) Act, 2012, establishes a comprehensive national legal framework addressing sexual offences, including penetrative sexual assault, sexual harassment, and the exploitation of children for pornographic purposes. The Act is structured to criminalize both substantive offences—categorized by standard and aggravated circumstances—and the abetment or attempted commission of such acts, prescribing a graduated scale of punishments ranging from imprisonment to the death penalty. It implements specialized, victim-centric procedural mandates, including mandatory reporting requirements, gender-sensitive medical protocols, and streamlined evidentiary standards for recording statements. Furthermore, the Act empowers Special Courts to conduct time-bound, *in camera* proceedings, introduces rebuttable legal presumptions that shift the burden of proof to the accused, and maintains an overriding effect over inconsistent provisions in the Indian Penal Code and the Information Technology Act.",
+  "content": null,
+  "children": [
+    {
+      "node_id": "POCSO_front_matter",
+      "level": 1,
+      "node_type": "front_matter",
+      "title": "Front Matter (Arrangement of Sections & Preamble)",
+      "summary": "No text was provided for the specified section (\"Front Matter (Arrangement of Sections & Preamble)\"). Consequently, a summary cannot be generated as the instructions prohibit adding interpretation or inference beyond the stated text.",
+      "content": null,
+      "children": [],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          1,
+          2
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "258a5ee0062599c800672017230fa41ab980573f"
+      }
+    },
+    {
+      "node_id": "POCSO_CI",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER I: P RELIMINARY",
+      "summary": "Chapter I of the Protection of Children from Sexual Offences (POCSO) Act, 2012, establishes the Act's short title, commencement, and jurisdiction extending to the whole of India. This preliminary chapter provides the essential legal framework by detailing critical statutory definitions, specifically defining key offences such as penetrative sexual assault and aggravated penetrative sexual assault to ensure precise legal interpretation and enforcement.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S1",
+          "level": 2,
+          "node_type": "section",
+          "title": "1. Short title, extent and commencement",
+          "summary": "This Act is titled the Protection of Children from Sexual Offences Act, 2012, and extends to the whole of India. It shall come into force on such date as the Central Government may, by notification in the Official Gazette, appoint.",
+          "content": "1. Short title, extent and commencement .— ( 1 ) This Act may be called the Protection of Children from Sexual Offences Act, 2012. (2) It extends to the whole of India, 1 ***. (3) It shall come into force on such date 2 as the Central Government may, by notification in the Official Gazette, appoint.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              3,
+              3
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 75,
+            "stable_hash": "08868004c7f1ad2b81a06f31606de167682f0256"
+          }
+        },
+        {
+          "node_id": "POCSO_S2",
+          "level": 2,
+          "node_type": "section",
+          "title": "2. Definitions",
+          "summary": "Summary of Section 2: 2. Definitions .— ( 1) In this Act, unless the context otherwise requires, — (a) “aggravated penetrative sexual assault” has the same meaning as assigned to it in section 5; (b) “a...",
+          "content": "2. Definitions .— ( 1) In this Act, unless the context otherwise requires, — (a) “aggravated penetrative sexual assault” has the same meaning as assigned to it in section 5; (b) “aggravated sexual assault” has the same meaning as assigned to it in section 9; (c) “armed forces or security forces” means armed forces of the Union or security forces or police forces, as specified in the Schedule; (d) “child” means any person below the age of eighteen years; 1. The words “except the State of Jammu and Kashmir” omitted by Act 34 of 2019, s. 95 and the Fifth Schedule (w.e.f. 31-10-2019). 2. 14th November, 2012, vide notification No. S.O. 2705 (E), dated 9th November, 2012, see Gazette of India Extraordinary, Part II, sec. 3( ii ). 1 [( da ) “child pornography” means any visual depiction of sexually explicit conduct involving a child which include photograph, video, digital or computer generated image indistinguishable from an actual child and image created, adapted, or modified, but appear to depict a child;] (e) “domestic relationship” shall have the same meaning as assigned to it in clause ( f ) of section 2 of the Protection of Women from Domestic Violence Act, 2005 (43 of 2005); (f) “penetrative sexual assault” has the same meaning as assigned to it in section 3; (g) “prescribed” means prescribed by rules made under this Act; (h) “religious institution” shall have the same meaning as assigned to it in the Religious Institutions (Prevention of Misuse) Act, 1988 (41 of 1988). (i) “sexual assault” has the same meaning as assigned to it in section 7; (j) “sexual harassment” has the same meaning as assigned to it in section 11; (k) “shared household” means a household where the person charged with the offence lives or has lived at any time in a domestic relationship with the child; (l) “Special Court” means a court designated as such under section 28; (m) “Special Public Prosecutor” means a Public Prosecutor appointed under section 32. (2) The words and expressions used herein and not defined but defined in the Indian Penal Code (45 of 1860), the Code of Criminal Procedure, 1973 (2 of 1974), 2 [the Juvenile Justice (Care and Protection of Children) Act, 2015 (2 of 2016)] and the Information Technology Act, 2000 (21 of 2000) shall have the meanings respectively assigned to them in the said Codes or the Acts. A .— P ENETRATIVE SEXUAL ASSAULT AND PUNISHMENT THEREFOR",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              3,
+              3
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 599,
+            "stable_hash": "241687744bbbbd259ec77214018e44f2ca1d74cd"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          3,
+          3
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "8aaf551689c859fee64fe4d0509008dba5ac9d44"
+      }
+    },
+    {
+      "node_id": "POCSO_CII",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER II: S EXUAL OFFENCES AGAINST CHILDREN",
+      "summary": "Chapter II establishes the legal framework for sexual offences against children, categorizing them into penetrative sexual assault, sexual assault, and sexual harassment. The chapter distinguishes between standard offences and \"aggravated\" versions, which are elevated by circumstances such as the perpetrator's position of trust, authority, or familial relationship, as well as the use of weapons, gang involvement, or causing grievous hurt. Legal subject matter encompasses the precise definitions of these sexual acts and prescribes a graduated scale of punishments ranging from imprisonment and compensatory fines for rehabilitation to life imprisonment for the remainder of natural life or death.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S3",
+          "level": 2,
+          "node_type": "section",
+          "title": "3. Penetrative sexual assault",
+          "summary": "Under Section 3, “penetrative sexual assault” is committed if a person penetrates his penis, to any extent, into the vagina, mouth, urethra, or anus of a child, or makes the child to do so with him or any other person. The offence also includes inserting, to any extent, any object or a part of the body, not being the penis, into the vagina, urethra, or anus of the child, or making the child to do so with him or any other person. Additionally, it encompasses manipulating any part of the body of the child to cause penetration into the vagina, urethra, anus, or any part of the body, or making the child to do so with him or any other person, and applying the mouth to the penis, vagina, anus, or urethra of the child or making the child to do so to such person or any other person.",
+          "content": "3. Penetrative sexual assault .— A person is said to commit “penetrative sexual assault” if— ( a ) he penetrates his penis, to any extent, into the vagina, mouth, urethra or anus of a child or makes the child to do so with him or any other person; or ( b ) he inserts, to any extent, any object or a part of the body, not being the penis, into the vagina, the urethra or anus of the child or makes the child to do so with him or any other person; or ( c ) he manipulates any part of the body of the child so as to cause penetration into the vagina, urethra, anus or any part of body of the child or makes the child to do so with him or any other person; or ( d ) he applies his mouth to the penis, vagina, anus, urethra of the child or makes the child to do so to such person or any other person.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              4,
+              4
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 199,
+            "stable_hash": "29543a49a7aa47c845f7faaa51c0e7cda6faefef"
+          }
+        },
+        {
+          "node_id": "POCSO_S4",
+          "level": 2,
+          "node_type": "section",
+          "title": "4. Punishment for penetrative sexual assault",
+          "summary": "Whoever commits penetrative sexual assault shall be punished with imprisonment of either description for a term not less than ten years, which may extend to imprisonment for life, and shall be liable to fine. For penetrative sexual assault on a child below sixteen years of age, the punishment is imprisonment for a term not less than twenty years, which may extend to imprisonment for life—defined as imprisonment for the remainder of natural life of that person—and liability to fine. Under sub-section (3), the fine imposed under sub-section (1) shall be just and reasonable and paid to the victim to meet medical expenses and rehabilitation.",
+          "content": "4. Punishment for penetrative sexual assault. — 3 [( 1 )] Whoever commits penetrative sexual assault shall be punished with imprisonment of either description  for a term which shall not be less than 4 [ten years] but which may extend to imprisonment for life, and shall also be liable to fine. 5 [( 2 ) Whoever commits penetrative sexual assault on a child below sixteen years of age shall be punished with imprisonment for a term which shall not be less than twenty years, but which may extend to imprisonment for life, which shall mean imprisonment for the remainder of natural life of that person and shall also be liable to fine. ( 3 ) The fine imposed under sub-section ( 1 ) shall be just and reasonable and paid to the victim to meet the medical expenses and rehabilitation of such victim.] 1. Ins. by Act 25 of 2019, s. 2 (w.e.f. 16-08-2019). 2. Subs. by s. 2, ibid ., for “the Juvenile Justice (Care and Protection of Children) Act, 2000 (56 of 2000)” (w.e.f. 16-08-2019). 3. Section 4 renumbered as section 4( 1 ) thereof by s. 3, ibid (w.e.f. 16-08-2019). 4. Subs. by s. 3, ibid ., for “seven years” (w.e.f. 16-08-2019).",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              4,
+              4
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 283,
+            "stable_hash": "a6db558bb235d789c4f5500b6333720ffa536854"
+          }
+        },
+        {
+          "node_id": "POCSO_S5",
+          "level": 2,
+          "node_type": "section",
+          "title": "5. Ins. by s. 3, ibid . (w.e.f. 16",
+          "summary": "Aggravated penetrative sexual assault is committed by specific actors, including police officers, members of armed or security forces, public servants, management or staff of jails, remand homes, protection homes, observation homes, places of custody/care/protection, hospitals, educational or religious institutions, or those in a position of trust or authority. Per the Explanation, the offence includes gang penetrative sexual assault (where one or more persons act in furtherance of common intention), use of deadly weapons, fire, heated or corrosive substances, causing grievous hurt, injury to sexual organs, physical/mental incapacitation (as defined under clause (l) of section 2 of the Mental Health Act, 1987), pregnancy, HIV/life-threatening infection, death, taking advantage of disability, repeated assault, assault on a child below twelve years, assault by a relative (via blood, adoption, marriage, guardianship, foster care, domestic relationship, or shared household), assault during communal/sectarian violence or natural calamity, previous convictions under this Act or any other law for sexual offences, or making a child strip or parade naked. Section 6 prescribes punishment of rigorous imprisonment for a term which shall not be less than twenty years, but which may extend to imprisonment for life (imprisonment for the remainder of natural life of that person), and fine, or death, where the fine shall be just and reasonable and paid to the victim to meet the medical expenses and rehabilitation of such victim.",
+          "content": "5. Ins. by s. 3, ibid . (w.e.f. 16-08-2019). B.—A GGRAVATED PENETRATIVE SEXUAL ASSAULT AND PUNISHMENT THEREFOR 5. Aggravated penetrative sexual assault .— ( a ) Whoever, being a police officer, commits penetrative sexual assault on a child — ( i ) within the limits of the police station or premises at which he is appointed; or ( ii ) in the premises of any station house, whether or not situated in the police station, to which he is appointed; or ( iii ) in the course of his duties or otherwise; or ( iv ) where he is known as, or identified as, a police officer; or ( b ) whoever being a member of the armed forces or security forces commits penetrative sexual assault on a child — ( i ) within the limits of the area to which the person is deployed; or ( ii ) in any areas under the command of the forces or armed forces; or ( iii ) in the course of his duties or otherwise; or ( iv ) where the said person is known or identified as a member of the security or armed forces; or ( c ) whoever being a public servant commits penetrative sexual assault on a child; or ( d ) whoever being on the management or on the staff of a jail, remand home, protection home, observation home, or other place of custody or care and protection established by or under any law for the time being in force, commits penetrative sexual assault on a child, being inmate of such jail, remand home, protection home, observation home, or other place of custody or care and protection; or ( e ) whoever being on the management or staff of a hospital, whether Government or private, commits penetrative sexual assault on a child in that hospital; or ( f ) whoever being on the management or staff of an educational institution or religious institution, commits penetrative sexual assault on a child in that institution; or ( g ) whoever commits gang penetrative sexual assault on a child. Explanation. —When a child is subjected to sexual assault by one or more persons of a group in furtherance of their common intention, each of such persons shall be deemed to have committed gang penetrative sexual assault within the meaning of this clause and each of such person shall be liable for that act in the same manner as if it were done by him alone; or ( h ) whoever commits penetrative sexual assault on a child using deadly weapons, fire, heated substance or corrosive substance; or ( i ) whoever commits penetrative sexual assault causing grievous hurt or causing bodily harm and injury or injury to the sexual organs of the child; or ( j ) whoever commits penetrative sexual assault on a child, which— ( i ) physically incapacitates the child or causes the child to become mentally ill as defined under clause ( l ) of section 2 of the Mental Health Act, 1987 (14 of 1987) or causes impairment of any kind so as to render the child unable to perform regular tasks, temporarily or permanently; 1 *** ( ii ) in the case of female child, makes the child pregnant as a consequence of sexual assault; ( iii ) inflicts the child with Human Immunodeficiency Virus or any other life threatening disease or Infection which may either temporarily or permanently impair the child by rendering him physically incapacitated, or mentally ill to perform regular tasks; 1 *** 2 [( iv ) causes death of the child; or] 1. The word “or” omitted by Act 25 of 2019, s. 4 (w.e.f. 16-08-2019). 2. Ins. by s. 4, ibid (w.e.f. 16-08-2019). ( k ) whoever, taking advantage of a child's mental or physical disability, commits penetrative sexual assault on the child; or ( l ) whoever commits penetrative sexual assault on the child more than once or repeatedly; or ( m ) whoever commits penetrative sexual assault on a child below twelve years; or ( n ) whoever being a relative of the child through blood or adoption or marriage or guardianship or in foster care or having a domestic relationship with a parent of the child or who is living in the same or shared household with the child, commits penetrative sexual assault on such child; or ( o ) whoever being, in the ownership, or management, or staff, of any institution providing services to the child, commits penetrative sexual assault on the child; or ( p ) whoever being in a position of trust or authority of a child commits penetrative sexual assault on the child in an institution or home of the child or anywhere else; or ( q ) whoever commits penetrative sexual assault on a child knowing the child is pregnant; or ( r ) whoever commits penetrative sexual assault on a child and attempts to murder the child; or ( s ) whoever commits penetrative sexual assault on a child in the course of 1 [communal or sectarian violence or during any natural calamity or in similar situations]; or ( t ) whoever commits penetrative sexual assault on a child and who has been previously convicted of having committed any offence under this Act or any sexual offence punishable under any other law for the time being in force; or ( u ) whoever commits penetrative sexual assault on a child and makes the child to strip or parade naked in public, is said to commit aggravated penetrative sexual assault. 2 [6. Punishment for aggravated penetrative sexual assault .—( 1 ) Whoever commits aggravated penetrative sexual assault shall be punished with rigorous imprisonment for a term which shall not be less than twenty years, but which may extend to imprisonment for life, which shall mean imprisonment for the remainder of natural life of that person and shall also be liable to fine, or with death. ( 2 ) The fine imposed under sub-section ( 1 ) shall be just and reasonable and paid to the victim to meet the medical expenses and rehabilitation of such victim.] C. —S EXUAL ASSAULT AND PUNISHMENT THEREFOR",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              4,
+              5
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 1427,
+            "stable_hash": "1c8b42be7a86d9b7c2b10bece30aefe4bc662fef"
+          }
+        },
+        {
+          "node_id": "POCSO_S7",
+          "level": 2,
+          "node_type": "section",
+          "title": "7. Sexual assault",
+          "summary": "Section 7 defines \"sexual assault\" as any act committed with sexual intent involving physical contact without penetration. This encompasses touching the vagina, penis, anus or breast of the child, or making the child touch the vagina, penis, anus or breast of such person or any other person.",
+          "content": "7. Sexual assault. —Whoever, with sexual intent touches the vagina, penis, anus or breast of the child or makes the child touch the vagina, penis, anus or breast of such person or any other person, or does any other act with sexual intent which involves physical contact without penetration is said to commit sexual assault.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              6,
+              6
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 81,
+            "stable_hash": "c12b35876fbd8840ad9f8db6df17c28f08c7467d"
+          }
+        },
+        {
+          "node_id": "POCSO_S8",
+          "level": 2,
+          "node_type": "section",
+          "title": "8. Punishment for sexual assault",
+          "summary": "Whoever commits sexual assault shall be punished with imprisonment of either description for a term which shall not be less than three years but which may extend to five years. The offender shall also be liable to fine. This section contains no Provisos, Exceptions, or Explanations.",
+          "content": "8. Punishment for sexual assault. —Whoever, commits sexual assault, shall be punished with imprisonment of either description for a term which shall not be less than three years but which may extend to five years, and shall also be liable to fine. D. —A GGRAVATED SEXUAL ASSAULT AND PUNISHMENT THEREFOR",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              6,
+              6
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 75,
+            "stable_hash": "faffc00353cc4f717e84773474272801cad75626"
+          }
+        },
+        {
+          "node_id": "POCSO_S9",
+          "level": 2,
+          "node_type": "section",
+          "title": "9. Aggravated sexual assault",
+          "summary": "Section 9 defines \"aggravated sexual assault\" as sexual assault on a child committed by a police officer, member of armed or security forces, public servant, or management/staff of jails, remand homes, protection homes, observation homes, hospitals (Government or private), educational or religious institutions, or institutions providing services. It encompasses assaults committed by relatives (blood, adoption, marriage, guardianship, foster care), those in domestic relationships with parents or shared households, persons in positions of trust or authority, or offenders using deadly weapons, fire, heated or corrosive substances, causing grievous hurt, injury to sexual organs, physical incapacitation, mental illness (as defined under clause (l) of section 2 of the Mental Health Act, 1987), or infecting the child with Human Immunodeficiency Virus or other life-threatening diseases. The offence further includes assault on children below twelve years, pregnant children, repeat offenders, previously convicted persons, acts during communal or sectarian violence, natural calamities or similar situations, attempted murder, forcing the child to strip or parade naked in public, or inducing/administering drugs, hormones, or chemical substances for early sexual maturity. An Explanation specifies that \"gang sexual assault\" occurs when one or more persons act in furtherance of their common intention, deeming each person liable as if the act were done by him alone.",
+          "content": "9. Aggravated sexual assault. —( a ) Whoever, being a police officer, commits sexual assault on a child— ( i ) within the limits of the police station or premises where he is appointed; or ( ii ) in the premises of any station house whether or not situated in the police station to which he is appointed; or ( iii ) in the course of his duties or otherwise; or 1. Subs. by Act 25 of 2019, s. 4, for “communal or sectarian violence” (w.e.f. 16-08-2019). 2. Subs. by s. 5, ibid ., for section 6 (w.e.f. 16-08-2019). ( iv ) where he is known as, or identified as a police officer; or ( b ) whoever, being a member of the armed forces or security forces, commits sexual assault on a child— ( i ) within the limits of the area to which the person is deployed; or ( ii ) in any areas under the command of the security or armed forces; or ( iii ) in the course of his duties or otherwise; or ( iv ) where he is known or identified as a member of the security or armed forces; or ( c ) whoever being a public servant commits sexual assault on a child; or ( d ) whoever being on the management or on the staff of a jail, or remand home or protection home or observation home, or other place of custody or care and protection established by or under any law for the time being in force commits sexual assault on a child being inmate of such jail or remand home or protection home or observation home or other place of custody or care and protection; or ( e ) whoever being on the management or staff of a hospital, whether Government or private, commits sexual assault on a child in that hospital; or ( f ) whoever being on the management or staff of an educational institution or religious institution, commits sexual assault on a child in that institution; or ( g ) whoever commits gang sexual assault on a child. Explanation . —when a child is subjected to sexual assault by one or more persons of a group in furtherance of their common intention, each of such persons shall be deemed to have committed gang sexual assault within the meaning of this clause and each of such person shall be liable for that act in the same manner as if it were done by him alone; or ( h ) whoever commits sexual assault on a child using deadly weapons, fire, heated substance or corrosive substance; or ( i ) whoever commits sexual assault causing grievous hurt or causing bodily harm and injury or injury to the sexual organs of the child; or ( j ) whoever commits sexual assault on a child, which— ( i ) physically incapacitates the child or causes the child to become mentally ill as defined under clause ( l ) of section 2of the Mental Health Act, 1987 (14 of 1987) or causes impairment of any kind so as to render the child unable to perform regular tasks, temporarily or permanently; or ( ii ) inflicts the child with Human Immunodeficiency Virus or any other life threatening disease or infection which may either temporarily or permanently impair the child by rendering him physically incapacitated, or mentally ill to perform regular tasks; or ( k ) whoever, taking advantage of a child’s mental or physical disability, commits sexual assault on the child; or ( l ) whoever commits sexual assault on the child more than once or repeatedly; or ( m ) whoever commits sexual assault on a child below twelve years; or ( n ) whoever, being a relative of the child through blood or adoption or marriage or guardianship or in foster care, or having domestic relationship with a parent of the child, or who is living in the same or shared household with the child, commits sexual assault on such child; or ( o ) whoever, being in the ownership or management or staff, of any institution providing services to the child, commits sexual assault on the child in such institution; or ( p ) whoever, being in a position of trust or authority of a child, commits sexual assault on the child in an institution or home of the child or anywhere else; or ( q ) whoever commits sexual assault on a child knowing the child is pregnant; or ( r ) whoever commits sexual assault on a child and attempts to murder the child; or ( s ) whoever commits sexual assault on a child in the course of 1 [ communal or sectarian violence or during any natural calamity or in any similar situations]; or ( t ) whoever commits sexual assault on a child and who has been previously convicted of having committed any offence under this Act or any sexual offence punishable under any other law for the time being in force; or ( u ) whoever commits sexual assault on a child and makes the child to strip or parade naked in public; 2 [( v ) whoever persuades, induces, entices or coerces a child to get administered or administers or direct anyone to administer, help in getting administered any drug or hormone or any chemical substance, to a child with the intent that such child attains early sexual maturity,] is said to commit aggravated sexual assault.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              6,
+              7
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 1225,
+            "stable_hash": "b9ce65996d9cba9437ec48ffb11eb84595e70c2a"
+          }
+        },
+        {
+          "node_id": "POCSO_S10",
+          "level": 2,
+          "node_type": "section",
+          "title": "10. Punishment for aggravated sexual assault",
+          "summary": "Section 10 stipulates that whoever commits aggravated sexual assault shall be punished with imprisonment of either description for a term which shall not be less than five years but which may extend to seven years. The offender shall also be liable to fine. This section contains no Provisos, Exceptions, or Explanations.",
+          "content": "10. Punishment for aggravated sexual assault. —Whoever, commits aggravated sexual assault shall be punished with imprisonment of either description for a term which shall not be less than five years but which may extend to seven years, and shall also be liable to fine. E.—S EXUAL HARASSMENT AND PUNISHMENT THEREFOR",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              8,
+              8
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 78,
+            "stable_hash": "feebbf3c7841553f48c0cb47ec16bdb6fb5f0a16"
+          }
+        },
+        {
+          "node_id": "POCSO_S11",
+          "level": 2,
+          "node_type": "section",
+          "title": "11. Sexual harassment",
+          "summary": "A person commits sexual harassment upon a child with sexual intent by uttering any word or making any sound, gesture, or exhibiting any object or part of body to be heard or seen by the child; making a child exhibit his body or any part of his body; or showing any object to a child in any form or media for pornographic purposes. The offence also includes repeatedly or constantly following, watching, or contacting a child directly or through electronic, digital, or any other means; threatening to use, in any form of media, a real or fabricated depiction through electronic, film, digital, or any other mode, of any part of the body of the child or the involvement of the child in a sexual act; or enticing a child for pornographic purposes or giving gratification therefor. The Explanation stipulates that any question which involves “sexual intent” shall be a question of fact.",
+          "content": "11. Sexual harassment. —A person is said to commit sexual harassment upon a child when such person with sexual intent,— ( i ) utters any word or makes any sound, or makes any gesture or exhibits any object or part of body with the intention that such word or sound shall be heard, or such gesture or object or part of body shall be seen by the child; or ( ii ) makes a child exhibit his body or any part of his body so as it is seen by such person or any other person; or ( iii ) shows any object to a child in any form or media for pornographic purposes; or ( iv ) repeatedly or constantly follows or watches or contacts a child either directly or through electronic, digital or any other means; or ( v ) threatens to use, in any form of media, a real or fabricated depiction through electronic, film or digital or any other mode, of any part of the body of the child or the involvement of the child in a sexual act; or ( vi ) entices a child for pornographic purposes or gives gratification therefor. Explanation .—Any question which involves “sexual intent” shall be a question of fact.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              8,
+              8
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 272,
+            "stable_hash": "9442e0dc9cc2c088b72549f7b174e65d0d5d2e86"
+          }
+        },
+        {
+          "node_id": "POCSO_S12",
+          "level": 2,
+          "node_type": "section",
+          "title": "12. Punishment for sexual harassment",
+          "summary": "Section 12 prescribes the punishment for whoever commits sexual harassment upon a child. The offender shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine.",
+          "content": "12. Punishment for sexual harassment. —Whoever, commits sexual harassment upon a child shall be punished with imprisonment of either description for a term which may extend to three years and shall also be liable to fine.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              8,
+              8
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 55,
+            "stable_hash": "cdd0021796dba185bdad1c7c2ddf50cf9f2b33d7"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          4,
+          7
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "d70ca01f04aa6ebb1aae5f1c2909687380e53bbf"
+      }
+    },
+    {
+      "node_id": "POCSO_CIII",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER III: U SING CHILD FOR PORNOGRAPHIC PURPOSES AND PUNISHMENT THEREFOR",
+      "summary": "Chapter III criminalizes the use of children for pornographic purposes, encompassing the production, facilitation, transmission, and distribution of child pornography across all electronic, printed, or digital media for sexual gratification. It mandates stringent punishments, including mandatory minimum imprisonment and cumulative penalties for co-occurring sexual offences under the POCSO Act. Additionally, the chapter penalizes the storage, possession, and commercial propagation of such material, establishing a legal framework to combat the creation and dissemination of child sexual abuse material.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S13",
+          "level": 2,
+          "node_type": "section",
+          "title": "13. Use of child for pornographic purposes",
+          "summary": "Section 13 defines using a child in any media (television, internet, electronic, or printed) for sexual gratification—including representation of sexual organs, real or simulated sexual acts, or indecent or obscene representation—with the Explanation clarifying \"use a child\" includes preparation, production, offering, transmitting, publishing, facilitation, and distribution. Section 14 mandates punishment for such use as imprisonment for a term which shall not be less than five years and a fine, or for second or subsequent conviction, imprisonment for a term which shall not be less than seven years and a fine, in addition to punishments under sections 4, 6, 8, and 10 if the person directly participates in offences under sections 3, 5, 7, or 9. Section 15(1) penalizes storage or possession with intention to share or transmit without deleting, destroying, or reporting with a fine not less than five thousand rupees (second/subsequent: fine not less than ten thousand rupees). Section 15(2-3) penalizes transmitting, propagating, displaying, or distributing (except for reporting or use as evidence in court) with imprisonment of either description which may extend to three years, fine, or both, and commercial purpose storage with first conviction imprisonment of either description which shall not be less than three years which may extend to five years, or fine, or both, and second/subsequent conviction imprisonment of either description which shall not be less than five years which may extend to seven years and a fine.",
+          "content": "13. Use of child for pornographic purposes. —Whoever, uses a child in any form of media (including programme or advertisement telecast by television channels or internet or any other electronic form or printed form, whether or not such programme or advertisement is intended for personal use or for distribution), for the purposes of sexual gratification, which includes— ( a ) representation of the sexual organs of a child; ( b ) usage of a child engaged in real or simulated sexual acts (with or without penetration); ( c ) the indecent or obscene representation of a child, shall be guilty of the offence of using a child for pornographic purposes. 1. Subs. by Act 25 of 2019, s. 6, for “communal or sectarian violence” (w.e.f.  16-08-2019). 2. Ins. by s. 6, ibid . (w.e.f. 16-08-2019). Explanation .—For the purposes of this section, the expression ‘‘use a child’’ shall include involving a child through any medium like print, electronic, computer or any other technology for preparation, production, offering, transmitting, publishing, facilitation and distribution of the pornographic material. 1 [ 14. Punishment for using child for pornographic purposes .—( 1 ) Whoever uses a child or children for pornographic purposes shall be punished with imprisonment for a term which shall not be less than five years and shall also be liable to fine and in the event of second or subsequent conviction with imprisonment for a term which shall not be less than seven years and also be liable to fine. ( 2 ) Whoever using a child or children for pornographic purposes under sub-section ( 1 ), commits an offence referred to in section 3 or section 5 or section 7 or section 9 by directly participating in such pornographic acts, shall be punished for the said offences also under section 4, section 6, section 8 and section 10, respectively, in addition to the punishment provided in sub-section ( 1 ).] 2 [15. Punishment for storage of pornographic material involving child .—( 1 ) Any person, who stores or possesses pornographic material in any form involving a child, but fails to delete or destroy or report the same to the designated authority, as may be prescribed, with an intention to share or transmit child pornography, shall be liable to fine not less than five thousand rupees and in the event of second or subsequent offence, with fine which shall not be less than ten thousand rupees. ( 2 ) Any person, who stores or possesses pornographic material in any form involving a child for transmitting or propagating or displaying or distributing in any manner at any time except for the purpose of reporting, as may be prescribed, or for use as evidence in court, shall be punished with imprisonment of either description which may extend to three years, or with fine, or with both. ( 3 ) Any person, who stores or possesses pornographic material in any form involving a child for commercial purpose shall be punished on the first conviction with imprisonment of either description which shall not be less than three years which may extend to five years, or with fine, or with both and in the event of second or subsequent conviction, with imprisonment of either description which shall not be less than five years which may extend to seven years and shall also be liable to fine.]",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              8,
+              8
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 822,
+            "stable_hash": "52349d4b77e3ce08a45563679e3894273c3f9c76"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          8,
+          8
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "800124d9373a2814381f023b9684577c91b80b90"
+      }
+    },
+    {
+      "node_id": "POCSO_CIV",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER IV: A BETMENT OF AND ATTEMPT TO COMMIT AN OFFENCE",
+      "summary": "Chapter IV establishes the criminal liability for **abetment** and **attempt** regarding offences under the Act, defining **abetment** through **instigation**, **conspiracy**, or **intentional aiding**—specifically including the **harbouring** or **transporting** of a child via **coercion**, **fraud**, **deception**, or **abuse of power**. The legal framework prescribes stringent penalties, mandating that an **abetter** face the same punishment as the principal offence if committed in consequence of the abetment, while setting the punishment for an **attempt** at up to **one-half of the longest term of imprisonment** or a fine.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S16",
+          "level": 2,
+          "node_type": "section",
+          "title": "16. Abetment of an offence",
+          "summary": "Section 16 defines abetment of an offence as instigating any person to commit the offence, engaging in a conspiracy with one or more persons where an act or illegal omission occurs in pursuance of that conspiracy, or intentionally aiding the offence via any act or illegal omission. Explanation I clarifies that instigation includes voluntarily causing or procuring a thing to be done through wilful misrepresentation or wilful concealment of a material fact the person is bound to disclose. Explanation II defines aiding as facilitating the commission of an act prior to or at the time of commission, while Explanation III specifies that aiding includes employing, harbouring, receiving, or transporting a child—via threat, force, coercion, abduction, fraud, deception, abuse of power or position, vulnerability, or payments/benefits to achieve the consent of a person having control over another—for the purpose of any offence under this Act.",
+          "content": "16. Abetment of an offence. —A person abets an offence, who— First .—Instigates any person to do that offence; or Secondly .— Engages with one or more other person or persons in any conspiracy for the doing of that offence, if an act or illegal omission takes place in pursuance of that conspiracy, and in order to the doing of that offence; or Thirdly .—Intentionally aids, by any act or illegal omission, the doing of that offence. Explanation I .—A person who, by wilful misrepresentation, or by wilful concealment of a material fact, which he is bound to disclose, voluntarily causes or procures, or attempts to cause or procure a thing to be done, is said to instigate the doing of that offence. Explanation II .—Whoever, either prior to or at the time of commission of an act, does anything in order to facilitate the commission of that act, and thereby facilitates the commission thereof, is said to aid the doing of that act. Explanation III .—Whoever employ, harbours, receives or transports a child, by means of threat or use of force or other forms of coercion, abduction, fraud, deception, abuse of power or of a position, vulnerability or the giving or receiving of payments or benefits to achieve the consent of a person having control over another person, for the purpose of any offence under this Act, is said to aid the doing of that act. 1. Subs. by Act 25 of 2019, s. 7, for section 14 (w.e.f. 16-08-2019). 2. Subs. by s. 8, ibid ., for section 15 (w.e.f. 16-08-2019).",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              9,
+              9
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 371,
+            "stable_hash": "f336dc51a3e12473c7e82b4a695c582891b7a0ad"
+          }
+        },
+        {
+          "node_id": "POCSO_S17",
+          "level": 2,
+          "node_type": "section",
+          "title": "17. Punishment for abetment",
+          "summary": "Whoever abets any offence under this Act shall be punished with the punishment provided for that offence, provided the act abetted is committed in consequence of the abetment. The section includes an Explanation specifying that an act or offence is committed in consequence of abetment when it is committed through instigation, in pursuance of the conspiracy, or with the aid which constitutes the abetment.",
+          "content": "17. Punishment for abetment. —Whoever abets any offence under this Act, if the act abetted is committed in consequence of the abetment, shall be punished with punishment provided for that offence. Explanation. — An act or offence is said to be committed in consequence of abetment, when it is committed in consequence of the instigation, or in pursuance of the conspiracy or with the aid, which constitutes the abetment.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              10,
+              10
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 105,
+            "stable_hash": "fa6a9d9e8d9e73d95e34c1a4b47b536725108d35"
+          }
+        },
+        {
+          "node_id": "POCSO_S18",
+          "level": 2,
+          "node_type": "section",
+          "title": "18. Punishment for attempt to commit an offence",
+          "summary": "Section 18 prescribes punishment for whoever attempts to commit any offence punishable under this Act, or attempts to cause such an offence to be committed, and does any act towards the commission of the offence. The penalty shall be imprisonment of any description provided for the offence for a term which may extend to one half of the imprisonment for life or, as the case may be, one-half of the longest term of imprisonment provided for that offence. Alternatively, the punishment may be a fine or both.",
+          "content": "18. Punishment for attempt to commit an offence. —Whoever attempts to commit any offence punishable under this Act or to cause such an offence to be committed, and in such attempt, does any act towards the commission of the offence, shall be punished with imprisonment of any description provided for the offence, for a term which may extend to one half of the imprisonment for life or, as the case may be, one-half of the longest term of imprisonment provided for that offence or with fineor with both.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              10,
+              10
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 125,
+            "stable_hash": "79185ca7551c4fd3c0c545bba1c984ce28c742df"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          9,
+          9
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "41320a7aeec72223e68fff3b7aa0c4faefe166b5"
+      }
+    },
+    {
+      "node_id": "POCSO_CV",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER V: P ROCEDURE FOR REPORTING OF CASES",
+      "summary": "Chapter V establishes a mandatory legal framework for the reporting of POCSO offences, requiring all persons—including specialized entities like media, hospitals, and studios—to notify the Special Juvenile Police Unit or local police, with subsequent reporting to the Child Welfare Committee and Special Courts. It prescribes criminal penalties for the failure to report or record offences and the filing of malicious false complaints, while providing statutory immunity for good-faith reporting and exempting children from liability for failure to report or false accusations. Furthermore, the chapter strictly mandates the protection of a child's privacy by prohibiting the media from disclosing the victim's identity, under penalty of imprisonment and joint liability for facility owners.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S19",
+          "level": 2,
+          "node_type": "section",
+          "title": "19. Reporting of offences",
+          "summary": "Notwithstanding the Code of Criminal Procedure, 1973, any person (including the child) with apprehension or knowledge of an offence shall inform the Special Juvenile Police Unit or local police, with reports being ascribed an entry number, recorded in writing, read over to the informant, and entered in a book. For child informants, reports must be in simple language or via a prescribed translator/interpreter, and if the child needs care and protection, the police must record reasons in writing and arrange for a shelter home or nearest hospital within twenty-four hours. The Special Juvenile Police Unit or local police must, without unnecessary delay but within twenty-four hours, report the matter and any care and protection steps to the Child Welfare Committee and the Special Court or Court of Session. A provision further ensures that no person shall incur any liability, whether civil or criminal, for giving information in good faith.",
+          "content": "19. Reporting of offences. — ( 1 ) Notwithstanding anything contained in the Code of Criminal Procedure, 1973 (2 of1974)any person(including the child), who has apprehension that an offence under this Act is likely to be committed or has knowledge that such an offence has been committed, he shall provide such information to,— ( a ) the Special Juvenile Police Unit; or ( b ) the local police. ( 2 ) Every report given under sub-section ( 1 ) shall be— ( a ) ascribed an entry number and recorded in writing; ( b ) be read over to the informant; ( c ) shall be entered in a book to be kept by the Police Unit. ( 3 ) Where the report under sub-section ( 1 ) is given by a child, the same shall be recorded under sub-section ( 2 ) in a simple language so that the child understands contents being recorded. ( 4 ) In case contents are being recorded in the language not understood by the child or wherever it is deemed necessary, a translator or an interpreter, having such qualifications, experience and on payment of such fees as may be prescribed, shall be provided to the child if he fails to understand the same. ( 5 ) Where the Special Juvenile Police Unit or local police is satisfied that the child against whom an offence has been committed is in need of care and protection, then, it shall, after recording the reasons in writing, make immediate arrangement to give him such care and protection including admitting the child into shelter home or to the nearest hospital within twenty-four hours of the report, as may be prescribed. ( 6 ) The Special Juvenile Police Unit or local police shall, without unnecessary delay but within a period of twenty-four hours, report the matter to the Child Welfare Committee and the Special Court or where no Special Court has been designated, to the Court of Session, including need of the child for care and protection and steps taken in this regard. ( 7 ) No person shall incur any liability, whether civil or criminal, for giving the information in good faith for the purpose of sub-section ( 1 ).",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              10,
+              10
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 511,
+            "stable_hash": "ba15110bf93977f582541179539972363136eaa4"
+          }
+        },
+        {
+          "node_id": "POCSO_S20",
+          "level": 2,
+          "node_type": "section",
+          "title": "20. Obligation of media, studio and photographic facilities to report cases",
+          "summary": "Any personnel of the media or hotel or lodge or hospital or club or studio or photographic facilities, by whatever name called and irrespective of the number of persons employed therein, shall, on coming across any material or object which is sexually exploitative of the child, provide such information to the Special Juvenile Police Unit, or to the local police, as the case may be. This obligation covers material that is pornographic, sexually-related, or making obscene representation of a child or children through the use of any medium.",
+          "content": "20. Obligation of media, studio and photographic facilities to report cases. —Any personnel of the media or hotel or lodge or hospital or club or studio or photographic facilities, by whatever name called, irrespective of the number of persons employed therein, shall, on coming across any material or object which is sexually exploitative of the child (including pornographic, sexually-related or making obscene representation of a child or children) through the use of any medium, shall provide such information to the Special Juvenile Police Unit, or to the local police, as the case may be.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              10,
+              10
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 148,
+            "stable_hash": "b43acac3c1da52e6f6e5d0501990fc2a52a4e8e5"
+          }
+        },
+        {
+          "node_id": "POCSO_S21",
+          "level": 2,
+          "node_type": "section",
+          "title": "21. Punishment for failure to report or record a case",
+          "summary": "Section 21(1) mandates that any person failing to report the commission of an offence under sub-section (1) of section 19 or section 20, or failing to record such offence under sub-section (2) of section 19, shall be punished with imprisonment of either description which may extend to six months or with fine or with both. Under Section 21(2), any person in-charge of any company or an institution who fails to report the commission of an offence under sub-section (1) of section 19 in respect of a subordinate under his control shall be punished with imprisonment for a term which may extend to one year and with fine. Section 21(3) provides a specific carve-out stating that the provisions of sub-section (1) shall not apply to a child.",
+          "content": "21. Punishment for failure to report or record a case. — ( 1 ) Any person, who fails to report the commission of an offence under sub-section ( 1 ) of section 19 or section 20 or who fails to record such offence under sub-section ( 2 ) of section 19 shall be punished with imprisonment of either description which may extend to six months or with fine or with both. ( 2 ) Any person, being in-charge of any company or an institution (by whatever name called) who fails to report the commission of an offence under sub-section ( 1 ) of section 19 in respect of a subordinate under his control, shall be punished with imprisonment for a term which may extend to one year and with fine. ( 3 ) The provisions of sub-section ( 1 ) shall not apply to a child under this Act.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              10,
+              10
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 192,
+            "stable_hash": "3351687d679e04ec6f2b462c99740738be69ecfd"
+          }
+        },
+        {
+          "node_id": "POCSO_S22",
+          "level": 2,
+          "node_type": "section",
+          "title": "22. Punishment for false complaint or false information",
+          "summary": "Any person making a false complaint or providing false information regarding offences under sections 3, 5, 7 and section 9, solely with the intention to humiliate, extort or threaten or defame, shall be punished with imprisonment for a term which may extend to six months or with fine or with both. An exception is provided where no punishment shall be imposed on a child for making a false complaint or providing false information. Whoever, not being a child, makes a false complaint or provides false information against a child, knowing it to be false and thereby victimizing such child in any of the offences under this Act, shall be punished with imprisonment which may extend to one year or with fine or with both.",
+          "content": "22. Punishment for false complaint or false information. —( 1 ) Any person, who makes false complaint or provides false information against any person, in respect of an offence committed under sections 3, 5, 7 and section 9, solely with the intention to humiliate, extort or threaten or defame him, shall be punished with imprisonment for a term which may extend to six months or with fine or with both. ( 2 ) Where a false complaint has been made or false information has been provided by a child, no punishment shall be imposed on such child. ( 3 ) Whoever, not being a child, makes a false complaint or provides false information against a child, knowing it to be false, thereby victimizing such child in any of the offences under this Act, shall be punished with imprisonment, which may extend to one year or with fine or with both.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              11,
+              11
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 209,
+            "stable_hash": "a2788e122e65bce3b79095bdeb40978152748852"
+          }
+        },
+        {
+          "node_id": "POCSO_S23",
+          "level": 2,
+          "node_type": "section",
+          "title": "23. Procedure for media",
+          "summary": "Section 23 prohibits any person from making reports or presenting comments on a child via media, studio, or photographic facilities without complete and authentic information that may lower reputation or infringe privacy, and forbids disclosing a child's identity, including name, address, photograph, family details, school, neighbourhood, or any other particulars. A proviso allows the Special Court, competent to try the case, to permit such disclosure if in the interest of the child, provided reasons are recorded in writing. The publisher or owner of the media, studio, or photographic facilities shall be jointly and severally liable for the acts and omissions of his employee. Any person contravening sub-section (1) or (2) shall be liable to be punished with imprisonment of either description for a period which shall not be less than six months but which may extend to one year or with fine or with both.",
+          "content": "23. Procedure for media. —( 1 ) No person shall make any report or present comments on any child from any form of media or studio or photographic facilities without having complete and authentic information, which may have the effect of lowering his reputation or infringing upon his privacy. ( 2 ) No reports in any media shall disclose, the identity of a child including his name, address, photograph, family details, school, neighbourhood or any other particulars which may lead to disclosure of identity of the child: Provided that for reasons to be recorded in writing, the Special Court, competent to try the case under the Act, may permit such disclosure, if in its opinion such disclosure is in the interest of the child. ( 3 ) The publisher or owner of the media or studio or photographic facilities shall be jointly and severally liable for the acts and omissions of his employee. ( 4 ) Any person who contravenes the provisions of sub-section ( 1 ) or sub-section ( 2 ) shall be liable to be punished with imprisonment of either description for a period which shall not be less than six months but which may extend to one year or with fine or with both.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              11,
+              11
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 291,
+            "stable_hash": "51fad5b1524844299c2b2f49919d26019d68a3e8"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          10,
+          10
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "95241eb7b6c35b0f1388320861a3ea56cde15f0b"
+      }
+    },
+    {
+      "node_id": "POCSO_CVI",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER VI: P ROCEDURES FOR RECORDING STATEMENT OF THE CHILD",
+      "summary": "Chapter VI prescribes specialized procedural mandates for the recording of statements and the conduct of medical examinations for child victims to ensure victim-centric evidentiary standards. It requires that statements be recorded verbatim by female police officers or Magistrates—ideally via audio-video electronic means and at the child's residence—while ensuring the presence of trusted persons, special educators, or translators and maintaining strict identity protection. Furthermore, it governs medical examination protocols under the CrPC, emphasizing gender-sensitive care through woman doctors and prohibiting contact between the child and the accused.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S24",
+          "level": 2,
+          "node_type": "section",
+          "title": "24. Recording of statement of a child",
+          "summary": "The statement of the child shall be recorded at the residence of the child, a place where he usually resides, or at the place of his choice, as far as practicable by a woman police officer not below the rank of sub-inspector who shall not be in uniform. The police officer making the investigation must ensure that at no point of time the child come in the contact in any way with the accused, and no child shall be detained in the police station in the night for any reason. Furthermore, the police officer shall ensure the identity of the child is protected from the public media, unless otherwise directed by the Special Court in the interest of the child.",
+          "content": "24. Recording of statement of a child. —( 1 ) The statement of the child shall be recorded at the residence of the child or at a place where he usually resides or at the place of his choice and as far as practicable by a woman police officer not below the rank of sub-inspector. ( 2 ) The police officer while recording the statement of the child shall not be in uniform. ( 3 ) The police officer making the investigation, shall, while examining the child, ensure that at no point of time the child come in the contact in any way with the accused. ( 4 ) No child shall be detained in the police station in the night for any reason. ( 5 ) The police officer shall ensure that the identity of the child is protected from the public media, unless otherwise directed by the Special Court in the interest of the child.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              11,
+              11
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 203,
+            "stable_hash": "2a00b12c465b7824848a867dc521260c8a48b54d"
+          }
+        },
+        {
+          "node_id": "POCSO_S25",
+          "level": 2,
+          "node_type": "section",
+          "title": "25. Recording of statement of a child by Magistrate",
+          "summary": "When a child's statement is recorded under section 164 of the Code of Criminal Procedure, 1973, the Magistrate shall, notwithstanding anything contained in the Code, record the statement as spoken by the child. A proviso stipulates that the provisions in the first proviso to sub-section (1) of section 164 of the Code permitting the presence of the advocate of the accused shall not apply. Upon the police filing a final report under section 173 of the Code, the Magistrate shall provide to the child and his parents or his representative a copy of the document specified under section 207 of the Code.",
+          "content": "25. Recording of statement of a child by Magistrate. —( 1 ) If the statement of the child is being recorded under section 164 of the Code of Criminal Procedure, 1973 (2 of 1974)(herein referred to as the Code), the Magistrate recording such statement shall, notwithstanding anything contained therein, record the statement as spoken by the child: Provided that the provisions contained in the first proviso to sub-section ( 1 ) of section 164 of the Code shall, so far it permits the presence of the advocate of the accused shall not apply in this case. ( 2 ) The Magistrate shall provide to the child and his parents or his representative, a copy of the document specified under section 207 of the Code, upon the final report being filed by the police under section 173 of that Code.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              11,
+              11
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 196,
+            "stable_hash": "ba1e4d45a28da3120c869ab80092107344f2e6dd"
+          }
+        },
+        {
+          "node_id": "POCSO_S26",
+          "level": 2,
+          "node_type": "section",
+          "title": "26. Additional provisions regarding statement to be recorded",
+          "summary": "The Magistrate or police officer shall record the statement as spoken by the child in the presence of parents or any other person in whom the child has trust or confidence. Assistance may be sought from a translator or interpreter, or for a child having a mental or physical disability, from a special educator, a person familiar with the manner of communication of the child, or an expert, provided they meet prescribed qualifications, experience, and fees. Additionally, the Magistrate or police officer shall, wherever possible, ensure the statement is recorded by audio-video electronic means.",
+          "content": "26. Additional provisions regarding statement to be recorded. —( 1 ) The Magistrate or the police officer, as the case may be, shall record the statement as spoken by the child in the presence of the parents of the child or any other person in whom the child has trust or confidence. ( 2 ) Wherever necessary, the Magistrate or the police officer, as the case may be, may take the assistance of a translator or an interpreter, having such qualifications, experience and on payment of such fees as may be prescribed, while recording the statement of the child. ( 3 ) The Magistrate or the police officer, as the case may be, may, in the case of a child having a mental or physical disability, seek the assistance of a special educator or any person familiar with the manner of communication of the child or an expert in that field, having such qualifications, experience and on payment of such fees as may be prescribed, to record the statement of the child. ( 4 ) Wherever possible, the Magistrate or the police officer, as the case may be, shall ensure that the statement of the child is also recorded by audio-video electronic means.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              12,
+              12
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 283,
+            "stable_hash": "7ebc4ab8a388823139f1a32c808c8589a1f9a2d2"
+          }
+        },
+        {
+          "node_id": "POCSO_S27",
+          "level": 2,
+          "node_type": "section",
+          "title": "27. Medical examination of a child",
+          "summary": "The medical examination of a child in respect of any offence under this Act shall be conducted in accordance with section 164A of the Code of Criminal Procedure, 1973 (2 of 1973), notwithstanding that a First Information Report or complaint has not been registered. If the victim is a girl child, the examination shall be conducted by a woman doctor in the presence of the parent or any other person in whom the child reposes trust or confidence. Where the parent or person referred to in sub-section (3) cannot be present, the medical examination shall be conducted in the presence of a woman nominated by the head of the medical institution.",
+          "content": "27. Medical examination of a child. — ( 1 ) The medical examination of a child in respect of whom any offence has been committed under this Act, shall, notwithstanding that a First Information Report or complaint has not been registered for the offences under this Act, be conducted in accordance with section 164A of the Code of Criminal Procedure, 1973 (2 of 1973). ( 2 ) In case the victim is a girl child, the medical examination shall be conducted by a woman doctor. ( 3 ) The medical examination shall be conducted in the presence of the parent of the child or any other person in whom the child reposes trust or confidence. ( 4 ) Where, in case the parent of the child or other person referred to in sub-section (3) cannot be present, for any reason, during the medical examination of the child, the medical examination shall be conducted in the presence of a woman nominated by the head of the medical institution.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              12,
+              12
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 230,
+            "stable_hash": "752b01b0be09c126488a2a908b7eab0775c33f5c"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          11,
+          11
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "3ce8ba54b807b9868f8e29575f6dca446a2f6d52"
+      }
+    },
+    {
+      "node_id": "POCSO_CVII",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER VII: S PECIAL COURTS",
+      "summary": "Chapter VII establishes the framework for Special Courts, designated as Courts of Session, to adjudicate POCSO offences and Section 67B of the Information Technology Act regarding child pornography. It introduces critical rebuttable legal presumptions regarding the commission of specific offences (Sections 3, 5, 7, and 9) and the existence of a \"culpable mental state,\" shifting the burden of proof to the accused. Procedurally, the chapter mandates the appointment of Special Public Prosecutors and aligns trial protocols with the Code of Criminal Procedure, 1973.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S28",
+          "level": 2,
+          "node_type": "section",
+          "title": "28. Designation of Special Courts",
+          "summary": "The State Government, in consultation with the Chief Justice of the High Court, shall designate via notification in the Official Gazette a Court of Session for each district as a Special Court to try offences under the Act, with a Proviso that any Court of Session notified as a children’s court under the Commissions for Protection of Child Rights Act, 2005 (4 of 2006) or a Special Court under other laws shall be deemed a Special Court. The Special Court shall also try offences with which the accused may, under the Code of Criminal Procedure, 1973 (2 of 1974), be charged at the same trial. Notwithstanding the Information Technology Act, 2000 (21 of 2000), the Special Court shall have jurisdiction to try offences under section 67B of that Act relating to the publication or transmission of sexually explicit material depicting children or facilitating online child abuse.",
+          "content": "28. Designation of Special Courts. —( 1 ) For the purposes of providing a speedy trial, the State Government shall in consultation with the Chief Justice of the High Court, by notification in the Official Gazette, designate for each district, a Court of Session to be a Special Court to try the offences under the Act: Provided that if a Court of Session is notified as a children’s court under the Commissions for Protection of Child Rights Act, 2005 (4 of 2006)or a Special Court designated for similar purposes under any other law for the time being in force, then, such court shall be deemed to be a Special Court under this section. ( 2 ) While trying an offence under this Act, a Special Court shall also try an offence [other than the offence referred to in sub-section ( 1 )], with which the accused may, under the Code of Criminal Procedure, 1973 (2 of 1974) be charged at the same trial. ( 3 ) The Special Court constituted under this Act, notwithstanding anything in the Information Technology Act, 2000 (21 of 2000)shall have jurisdiction to try offences under section 67B of that Act in so far as it relates to publication or transmission of sexually explicit material depicting children in any act, or conduct or manner or facilitates abuse of children online.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              12,
+              12
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 318,
+            "stable_hash": "25b04027413f5faa1880acdf8c1bdf27d1ce6614"
+          }
+        },
+        {
+          "node_id": "POCSO_S29",
+          "level": 2,
+          "node_type": "section",
+          "title": "29. Presumption as to certain offences",
+          "summary": "Under Section 29, where a person is prosecuted for committing, abetting, or attempting to commit any offence under sections 3, 5, 7 and section 9 of this Act, the Special Court shall presume that such person has committed, abetted, or attempted to commit the offence. This presumption applies unless the contrary is proved.",
+          "content": "29. Presumption as to certain offences. —Where a person is prosecuted for committing or abetting or attempting to commit any offence under sections 3, 5, 7 and section 9 of this Act, the Special Court shall presume, that such person has committed or abetted or attempted to commit the offence, as the case may be unless the contrary is proved.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              12,
+              12
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 85,
+            "stable_hash": "6a0cb0645e5f1ca905ad335eb2218e2a312ee518"
+          }
+        },
+        {
+          "node_id": "POCSO_S30",
+          "level": 2,
+          "node_type": "section",
+          "title": "30. Presumption of culpable mental state",
+          "summary": "In any prosecution for an offence under this Act requiring a \"culpable mental state,\" the Special Court shall presume the existence of such state, while allowing the accused to prove the absence of such state as a defence. A fact is considered proved only when the Special Court believes it to exist \"beyond reasonable doubt\" and not merely by a \"preponderance of probability.\" The Explanation clarifies that \"culpable mental state\" includes intention, motive, knowledge of a fact, and the belief in, or reason to believe, a fact.",
+          "content": "30. Presumption of culpable mental state. — ( 1 ) In any prosecution for any offence under this Act which requires a culpable mental state on the part of the accused, the Special Court shall presume the existence of such mental state but it shall be a defence for the accused to prove the fact that he had no such mental state with respect to the act charged as an offence in that prosecution. ( 2 ) For the purposes of this section, a fact is said to be proved only when the Special Court believes it to exist beyond reasonable doubt and not merely when its existence is established by a preponderance of probability. Explanation .—In this section, “culpable mental state” includes intention, motive, knowledge of a fact and the belief in, or reason to believe, a fact.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              12,
+              12
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 192,
+            "stable_hash": "7aa8bef0ad6d7cf9f76c74328e69c50d1be13221"
+          }
+        },
+        {
+          "node_id": "POCSO_S31",
+          "level": 2,
+          "node_type": "section",
+          "title": "31. Application of Code of Criminal Procedure, 1973 to proceedings before a Special Court",
+          "summary": "Save as otherwise provided in this Act, the provisions of the Code of Criminal Procedure, 1973 (2 of 1974), including the provisions as to bail and bonds, shall apply to the proceedings before a Special Court. For the purposes of these provisions, the Special Court shall be deemed to be a court of Sessions. Furthermore, the person conducting a prosecution before a Special Court shall be deemed to be a Public Prosecutor.",
+          "content": "31. Application of Code of Criminal Procedure, 1973 to proceedings before a Special Court. — Save as otherwise provided in this Act, the provisions of the Code of Criminal Procedure, 1973 (2 of 1974)(including the provisions as to bail and bonds)shall apply to the proceedings before a Special Court and for the purposes of the said provisions, the Special Court shall be deemed to be a court of Sessions and the person conducting a prosecution before a Special Court, shall be deemed to be a Public Prosecutor.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              13,
+              13
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 127,
+            "stable_hash": "7911d3e6260f72a3bdc8744e2089cedd8307e472"
+          }
+        },
+        {
+          "node_id": "POCSO_S32",
+          "level": 2,
+          "node_type": "section",
+          "title": "32. Special Public Prosecutors",
+          "summary": "The State Government shall, by notification in the Official Gazette, appoint a Special Public Prosecutor for every Special Court for conducting cases only under the provisions of this Act. Eligibility for appointment requires the person to have been in practice for not less than seven years as an advocate. Such appointees are deemed to be Public Prosecutors within the meaning of clause (u) of section 2 of the Code of Criminal Procedure, 1973 (2 of 1974), and provisions of that Code shall have effect accordingly.",
+          "content": "32. Special Public Prosecutors. — ( 1 ) The State Government shall, by notification in the Official Gazette, appoint a Special Public Prosecutor for every Special Court for conducting cases only under the provisions of this Act. ( 2 ) A person shall be eligible to be appointed as a Special Public Prosecutor under sub-section ( 1 ) only if he had been in practice for not less than seven years as an advocate. ( 3 ) Every person appointed as a Special Public Prosecutor under this section shall be deemed to be a Public Prosecutor within the meaning of clause ( u ) of section 2 of the Code of Criminal Procedure, 1973 (2 of 1974)and provision of that Code shall have effect accordingly.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              13,
+              13
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 172,
+            "stable_hash": "42dfb630bcb7d3bcd49b716b7f68f22968f8f26e"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          12,
+          12
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "2b4afb1ca591075b19f49918d63df441dedc0909"
+      }
+    },
+    {
+      "node_id": "POCSO_CVIII",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER VIII: P ROCEDURE AND POWERS OF S PECIAL C OURTS AND RECORDING OF EVIDENCE",
+      "summary": "Chapter VIII establishes the procedural framework and powers of Special Courts, exercising Court of Session authority under the CrPC to ensure child-friendly, time-bound trials and the disposal of cases within one year. It prioritizes the child's dignity through *in camera* proceedings, strict non-disclosure of identity, and protection from exposure to the accused via video conferencing or single visibility mirrors. Additionally, the chapter mandates age determination under the Juvenile Justice Act and provides for specialized assistance from interpreters, translators, or special educators during the recording of evidence.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S33",
+          "level": 2,
+          "node_type": "section",
+          "title": "33. Procedure and powers of Special Court",
+          "summary": "The Special Court may take cognizance of any offence without commitment via a complaint or police report, exercising all powers of a Court of Session and following the procedure of the Code of Criminal Procedure, 1973 (2 of 1974). To maintain the dignity of the child and a child-friendly atmosphere, the court may permit frequent breaks, allow the presence of a trusted family member, guardian, friend, or relative, prevent repeated testimony, prohibit aggressive questioning or character assassination, and require the Special Public Prosecutor or counsel for the accused to communicate questions for examination-in-chief, cross-examination, or re-examination to the court for posing to the child. The court shall prevent disclosure of the child's identity—defined in the Explanation to include family, school, relatives, neighbourhood, or revealing information—subject to a Proviso allowing disclosure for recorded written reasons if in the child's interest, and may direct prescribed compensation for physical or mental trauma or immediate rehabilitation.",
+          "content": "33. Procedure and powers of Special Court. —( 1 ) A Special Court may take cognizance of any offence, without the accused being committed to it for trial, upon receiving a complaint of facts which constitute such offence, or upon a police report of such facts. ( 2 ) The Special Public Prosecutor, or as the case may be, the counsel appearing for the accused shall, while recording the examination-in-chief, cross-examination or re-examination of the child, communicate the questions to be put to the child to the Special Court which shall in turn put those questions to the child. ( 3 ) The Special Court may, if it considers necessary, permit frequent breaks for the child during the trial. ( 4 ) The Special Court shall create a child-friendly atmosphere by allowing a family member, a guardian, a friend or a relative, in whom the child has trust or confidence, to be present in the court. ( 5 ) The Special Court shall ensure that the child is not called repeatedly to testify in the court. ( 6 ) The Special Court shall not permit aggressive questioning or character assassination of the child and ensure that dignity of the child is maintained at all times during the trial. ( 7 ) The Special Court shall ensure that the identity of the child is not disclosed at any time during the course of investigation or trial: Provided that for reasons to be recorded in writing, the Special Court may permit such disclosure, if in its opinion such disclosure is in the interest of the child. Explanation .—For the purposes of this sub-section, the identity of the child shall include the identity of the child's family, school, relatives, neighbourhood or any other information by which the identity of the child may be revealed. ( 8 ) In appropriate cases, the Special Court may, in addition to the punishment, direct payment of such compensation as may be prescribed to the child for any physical or mental trauma caused to him or for immediate rehabilitation of such child. ( 9 ) Subject to the provisions of this Act, a Special Court shall, for the purpose of the trial of any offence under this Act, have all the powers of a Court of Session and shall try such offence as if it were a Court of Session, and as far as may be, in accordance with the procedure specified in the Code of Criminal Procedure, 1973 (2 of 1974) for trial before a Court of Session.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              13,
+              13
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 589,
+            "stable_hash": "e2c705a7ed69be27f2967b5a4e411dad639cceea"
+          }
+        },
+        {
+          "node_id": "POCSO_S34",
+          "level": 2,
+          "node_type": "section",
+          "title": "34. Procedure in case of commission of offence by child and determination of age by Special Court",
+          "summary": "Where any offence under this Act is committed by a child, such child shall be dealt with under the provisions of the Juvenile Justice (Care and Protection of Children) Act, 2015 (2 of 2016). If any question arises in any proceeding before the Special Court regarding whether a person is a child, the Special Court shall determine the age after satisfying itself and recording its reasons in writing. No order made by the Special Court shall be deemed invalid merely by any subsequent proof that the age determined under sub-section (2) was not the correct age of that person.",
+          "content": "34. Procedure in case of commission of offence by child and determination of age by Special Court. —( 1 ) Where any offence under this Act is committed by a child, such child shall be dealt with under the provisions of 1 [the Juvenile Justice (Care and Protection of Children) Act, 2015 (2 of 2016)]. ( 2 ) If any question arises in any proceeding before the Special Court whether a person is a child or not, such question shall be determined by the Special Court after satisfying itself about the age of such person and it shall record in writing its reasons for such determination. ( 3 ) No order made by the Special Court shall be deemed to be invalid merely by any subsequent proof that the age of a personas determined by it under sub-section ( 2 ) was not the correct age of that person.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              14,
+              14
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 198,
+            "stable_hash": "720058b0203adcbf66212a757af9a3c454d7c2b5"
+          }
+        },
+        {
+          "node_id": "POCSO_S35",
+          "level": 2,
+          "node_type": "section",
+          "title": "35. Period for recording of evidence of child and disposal of case",
+          "summary": "Evidence of the child shall be recorded within a period of thirty days of the Special Court taking cognizance of the offence, with any reasons for delay recorded by the Special Court. The Special Court shall complete the trial, as far as possible, within a period of one year from the date of taking cognizance of the offence.",
+          "content": "35. Period for recording of evidence of child and disposal of case. — ( 1 ) The evidence of the child shall be recorded within a period of thirty days of the Special Court taking cognizance of the offence and reasons for delay, if any, shall be recorded by the Special Court. ( 2 ) The Special Court shall complete the trial, as far as possible, within a period of one year from the date of taking cognizance of the offence.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              14,
+              14
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 106,
+            "stable_hash": "06ea02dc38b4becc6b1b7b74dd1f5b6e3214c414"
+          }
+        },
+        {
+          "node_id": "POCSO_S36",
+          "level": 2,
+          "node_type": "section",
+          "title": "36. Child not to see accused at the time of testifying",
+          "summary": "Under Section 36(1), the Special Court shall ensure that the child is not exposed in any way to the accused at the time of recording of the evidence, while simultaneously ensuring that the accused is in a position to hear the statement of the child and communicate with his advocate. For the purposes of sub-section (1), the Special Court may record the statement of a child through video conferencing or by utilising single visibility mirrors, curtains, or any other device.",
+          "content": "36. Child not to see accused at the time of testifying. —( 1 ) The Special Court shall ensure that the child is not exposed in anyway to the accused at the time of recording of the evidence, while at the same time ensuring that the accused is in a position to hear the statement of the child and communicate with his advocate. ( 2 ) For the purposes of sub-section ( 1 ), the Special Court may record the statement of a child through video conferencing or by utilising single visibility mirrors or curtains or any other device.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              14,
+              14
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 131,
+            "stable_hash": "8d9e95929ddab4e12102bd8039e16d3d0545f1e3"
+          }
+        },
+        {
+          "node_id": "POCSO_S37",
+          "level": 2,
+          "node_type": "section",
+          "title": "37. Trials to be conducted in camera",
+          "summary": "The Special Court shall try cases in camera in the presence of the parents of the child or any other person in whom the child has trust or confidence. A Proviso specifies that where the Special Court is of the opinion that the child needs to be examined at a place other than the court, it shall proceed to issue a commission in accordance with the provisions of section 284 of the Code of Criminal Procedure, 1973 (2 of 1974).",
+          "content": "37. Trials to be conducted in camera . —The Special Court shall try cases in camera and in the presence of the parents of the child or any other person in whom the child has trust or confidence: Provided that where the Special Court is of the opinion that the child needs to be examined at a place other than the court, it shall proceed to issue a commission in accordance with the provisions of section 284 of the Code of Criminal Procedure, 1973 (2 of 1974).",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              14,
+              14
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 115,
+            "stable_hash": "dbc143c9a8c7700bb0c0dcfc9b675c182184cb28"
+          }
+        },
+        {
+          "node_id": "POCSO_S38",
+          "level": 2,
+          "node_type": "section",
+          "title": "38. Assistance of an interpreter or expert while recording evidence of child",
+          "summary": "Section 38 provides that, wherever necessary, the Court may take the assistance of a translator or interpreter having prescribed qualifications, experience, and fees while recording the evidence of the child. If a child has a mental or physical disability, the Special Court may take the assistance of a special educator, an expert in that field, or any person familiar with the manner of communication of the child, subject to prescribed qualifications, experience, and fees, to record the evidence of the child.",
+          "content": "38. Assistance of an interpreter or expert while recording evidence of child. — ( 1 ) wherever necessary, the Court may take the assistance of a translator or interpreter having such qualifications, experience and on payment of such fees as may be prescribed, while recording the evidence of the child. ( 2 ) If a child has a mental or physical disability, the Special Court may take the assistance of a special educator or any person familiar with the manner of communication of the child or an expert in that field, having such qualifications, experience and on payment of such fees as may be prescribed to record the evidence of the child.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              14,
+              14
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 160,
+            "stable_hash": "cb46ced1d29babaa82269a2a0efcee0ddf434c8a"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          13,
+          13
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "b6d1d9f3e39504f4384a8953180edbb78915fa40"
+      }
+    },
+    {
+      "node_id": "POCSO_CIX",
+      "level": 1,
+      "node_type": "chapter",
+      "title": "CHAPTER IX: M ISCELLANEOUS",
+      "summary": "Chapter IX establishes the supplementary administrative and procedural framework of the Act, guaranteeing children's access to expert assistance and legal counsel, including mandates for the Legal Services Authority. It defines the Act's non-derogatory status and overriding effect over inconsistent laws, stipulating that where offenses overlap with the Indian Penal Code or Information Technology Act, the punishment of the greater degree shall prevail. Furthermore, it mandates public awareness, empowers the NCPCR and SCPCR to monitor implementation, and grants the Central Government rule-making and difficulty-removal authority.",
+      "content": null,
+      "children": [
+        {
+          "node_id": "POCSO_S39",
+          "level": 2,
+          "node_type": "section",
+          "title": "39. Guidelines for child to take assistance of experts, etc",
+          "summary": "Subject to such rules as may be made in this behalf, the State Government shall prepare guidelines for the use of non-governmental organisations, professionals and experts, or persons having knowledge of psychology, social work, physical health, mental health, and child development. These actors are to be associated with the pre-trial and trial stage to assist the child.",
+          "content": "39. Guidelines for child to take assistance of experts, etc. —Subject to such rules as may be made in this behalf, the State Government shall prepare guidelines for use of non-governmental organisations, professionals and experts or persons having knowledge of psychology, social work, physical health, mental health and child development to be associated with the pre-trial and trial stage to assist the child. 1. Subs. by Act 25 of 2019, s. 9, for “the Juvenile Justice (Care and Protection of Children) Act, 2000 (56 of 2000)” (w.e.f. 16- 08-2019).",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              14,
+              14
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 137,
+            "stable_hash": "e2c74dd493086f1f57c0c88f62f5ab42df2b392d"
+          }
+        },
+        {
+          "node_id": "POCSO_S40",
+          "level": 2,
+          "node_type": "section",
+          "title": "40. Right of child to take assistance of legal practitioner",
+          "summary": "Subject to the proviso to section 301 of the Code of Criminal Procedure, 1973 (2 of 1974), the family or the guardian of the child shall be entitled to the assistance of a legal counsel of their choice for any offence under this Act. A proviso stipulates that if the family or the guardian of the child are unable to afford a legal counsel, the Legal Services Authority shall provide a lawyer to them.",
+          "content": "40. Right of child to take assistance of legal practitioner. —Subject to the proviso to section 301 of the Code of Criminal Procedure, 1973 (2 of 1974)the family or the guardian of the child shall be entitled to the assistance of a legal counsel of their choice for any offence under this Act: Provided that if the family or the guardian of the child are unable to afford a legal counsel, the Legal Services Authority shall provide a lawyer to them.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              15,
+              15
+            ],
+            "internal_refs": [
+              "S301"
+            ],
+            "cross_act_refs": [],
+            "token_estimate": 112,
+            "stable_hash": "3cb2582ed4a60ca7a0a68a84929f892fe9db1169"
+          }
+        },
+        {
+          "node_id": "POCSO_S41",
+          "level": 2,
+          "node_type": "section",
+          "title": "41. Provisions of sections 3 to 13 not to apply in certain cases",
+          "summary": "Section 41 stipulates that provisions of sections 3 to 13 (both inclusive) shall not apply to the medical examination or medical treatment of a child when undertaken with the consent of his parents or guardian. Under Section 42, where an act or omission constitutes an offence punishable under this Act and also under sections 166A, 354A, 354B, 354C, 354D, 370, 370A, 375, 376, 376A, 376AB, 376B, 376C, 376D, 376DA, 376DB, 376E, section 509 of the Indian Penal Code, or section 67B of the Information Technology Act, 2000 (21 of 2000), the offender shall be liable to punishment under this Act or the Indian Penal Code as provides for punishment which is greater in degree. Furthermore, the Arunachal Pradesh Amendment of section 42 substitutes the applicable Indian Penal Code sections to include 166A, 354A, 354B, 354C, 354D, 370, 370A, 375, 376, 376A, 376AA, 376C, 376D, 376DA, 376E, or section 509.",
+          "content": "41.Provisions of sections 3 to 13 not to apply in certain cases. —The provisions of sections 3 to 13 (both inclusive) shall not apply in case of medical examination or medical treatment of a child when such medical examination or medical treatment is undertaken with the consent of his parents or guardian. 1 [42. Alternate punishment. —Where an act or omission constitutes an offence punishable under this Act and also under sections 166A, 354A, 354B, 354C, 354D, 370, 370A, 375, 376, 2 [376A, 376AB, 376B, 376C, 376D, 376DA, 376DB], 3 [376E, section 509 of the Indian Penal Code or section 67B of the Information Technology Act, 2000 (21 of 2000)], then, notwithstanding anything contained in any law for the time being in force, the offender found guilty of such offence shall be liable to punishment only under this Act or under the Indian Penal Code as provides for punishment which is greater in degree. STATE AMENDMENT Arunachal Pradesh Amendment of section 42. —In section 42 of the Protection of Children Act, 2012 for the words figures and letters sections 166A, 354A, 354B, 354C, 354D, 370, 370A, 375, 376, 376A, 376C, 376D, 376E or section 509 of the Indian Penal Code the words figures and letters sections 166A 354A, 354B, 354C, 354D, 370, 370A, 375, 376, 376A, 376AA, 376C, 376D, 376DA, 376E or section 509 of the Indian Penal Code shall be substituted. [ Vide Arunachal Pradesh Act 3 of 2019, s. 26]",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              15,
+              15
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 353,
+            "stable_hash": "4afe48e82addf6eba03841203c3f5982b9048a5b"
+          }
+        },
+        {
+          "node_id": "POCSO_S42A",
+          "level": 2,
+          "node_type": "section",
+          "title": "42A. Act not in derogation of any other law",
+          "summary": "The provisions of this Act shall be in addition to and not in derogation of the provisions of any other law for the time being in force. In case of any inconsistency, the provisions of this Act shall have overriding effect on the provisions of any such law to the extent of the inconsistency.",
+          "content": "42A. Act not in derogation of any other law. —The provisions of this Act shall be in addition to and not in derogation of the provisions of any other law for the time being in force and, in case of any inconsistency, the provisions of this Act shall have overriding effect on the provisions of any such law to the extent of the inconsistency.]",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              15,
+              15
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 85,
+            "stable_hash": "387b07624942955ab125066c22b98ca0162c2537"
+          }
+        },
+        {
+          "node_id": "POCSO_S43",
+          "level": 2,
+          "node_type": "section",
+          "title": "43. Public awareness about Act",
+          "summary": "Summary of Section 43: 43. Public awareness about Act. —The Central Government and every State Government, shall take all measures to ensure that— ( a ) the provisions of this Act are given wide publicit...",
+          "content": "43. Public awareness about Act. —The Central Government and every State Government, shall take all measures to ensure that— ( a ) the provisions of this Act are given wide publicity through media including the television, radio and the print media at regular intervals to make the general public, children as well as their parents and guardians aware of the provisions of this Act; ( b ) the officers of the Central Government and the State Governments and other concerned persons (including the police officers) are imparted periodic training on the matters relating to the implementation of the provisions of the Act.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              15,
+              15
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 154,
+            "stable_hash": "834bef6dbbfbb0b1d2b94a63a137d86d3149484b"
+          }
+        },
+        {
+          "node_id": "POCSO_S44",
+          "level": 2,
+          "node_type": "section",
+          "title": "44. Monitoring of implementation of Act",
+          "summary": "The National Commission for Protection of Child Rights (constituted under section 3) and the State Commission for Protection of Child Rights (constituted under section 17) of the Commissions for Protection of Child Rights Act, 2005 (4 of 2006) shall monitor the implementation of the provisions of this Act in the prescribed manner. While inquiring into any matter relating to any offence under this Act, these Commissions shall have the same powers as are vested in them under the Commissions for Protection of Child Rights Act, 2005 (4 of 2006). Additionally, they shall include their activities under this section in the annual report referred to in section 16 of the Commissions for Protection of Child Rights Act, 2005 (4 of 2006).",
+          "content": "44. Monitoring of implementation of Act. —( 1 ) The National Commission for Protection of Child Rights constituted under section 3, or as the case may be, the State Commission for Protection of Child Rights constituted under section 17, of the Commissions for Protection of Child Rights Act, 2005 (4 of 2006) shall, in addition to the functions assigned to them under that Act, also monitor the implementation of the provisions of this Act in such manner as may be prescribed. ( 2 ) The National Commission or, as the case may be, the State Commission, referred to in sub-section ( 1 ), shall, while inquiring into any matter relating to any offence under this Act, have the same powers as are vested in it under the Commissions for Protection of Child Rights Act, 2005 (4 of 2006). ( 3 ) The National Commission or, as the case may be, the State Commission, referred to in sub-section ( 1 ), shall, also include, its activities under this section, in the annual report referred to in section 16 of the Commissions for Protection of Child Rights Act, 2005 (4 of 2006). 1. Subs. by Act 13 of 2013, s. 29, for s. 42 (w.e.f. 3-2-2013). 2. Subs. by Act 22 of 2018, s. 25, for “376A, 376C, 376D” (w.e.f. 21-4-2018). 3. Subs. by Act 25 of 2019, s. 10, for “376E or section 509 of the Indian Penal Code (45 of 1860)” (w.e.f. 16-08-2019).",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              15,
+              15
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 332,
+            "stable_hash": "6ddd786f8f8bc778520a58dec8b1f7eeba610315"
+          }
+        },
+        {
+          "node_id": "POCSO_S45",
+          "level": 2,
+          "node_type": "section",
+          "title": "45. Power to make rules",
+          "summary": "The Central Government may, by notification in the Official Gazette, make rules for carrying out the purposes of this Act, including, without prejudice to the generality of its powers, the manner of deleting, destroying, or reporting pornographic material involving a child to the designated authority under sub-section (1) of section 15 and under sub-section (2) of section 15; qualifications, experience, and fees for a translator, interpreter, special educator, person familiar with the manner of communication of the child, or an expert under sub-section (4) of section 19, sub-sections (2) and (3) of section 26, and section 38; care, protection, and emergency medical treatment under sub-section (5) of section 19; payment of compensation under sub-section (8) of section 33; and periodic monitoring under sub-section (1) of section 44. Every rule must be laid before each House of Parliament for a total period of thirty days, and if both Houses agree to modifications or annulment, the rule shall thereafter have effect only in such modified form or be of no effect, subject to the proviso that any such modification or annulment shall be without prejudice to the validity of anything previously done under that rule.",
+          "content": "45. Power to make rules. — ( 1 ) The Central Government may, by notification in the Official Gazette, make rules for carrying out the purposes of this Act. ( 2 ) In particular, and without prejudice to the generality of the foregoing powers, such rules may provide for all or any of the following matters, namely:— 1 [( a ) the manner of deleting or destroying or reporting about pornographic material in any form involving a child to the designated authority under sub-section ( 1 ) of section 15; ( aa ) the manner of reporting about pornographic material in any form involving a child under sub-section ( 2 ) of section 15;] 2 [( ab )] the qualifications and experience of, and the fees payable to, a translator or an interpreter, a special educator or any person familiar with the manner of communication of the child or an expert in that field, under sub-section ( 4 ) of section 19; sub-sections( 2 ) and ( 3 ) of section 26 and section 38; ( b ) care and protection and emergency medical treatment of the child under sub-section ( 5 ) of section 19; ( c ) the payment of compensation under sub-section ( 8 ) of section 33; ( d ) the manner of periodic monitoring of the provisions of the Act under sub-section ( 1 ) of section44. ( 3 ) Every rule made under this section shall be laid, as soon as may be after it is made, before each House of Parliament, while it is in session, for a total period of thirty days which may be comprised in one session or in two or more successive sessions, and if, before the expiry of the session immediately following the session or the successive sessions aforesaid, both Houses agree in making any modification in the rule or both Houses agree that the rule should not be made, the rule shall thereafter have effect only in such modified form or be of no effect, as the case may be; so, however, that any such modification or annulment shall be without prejudice to the validity of anything previously done under that rule.",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              16,
+              16
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 491,
+            "stable_hash": "8a51a36e276e3fc0d573b74c5fee2a298f83e968"
+          }
+        },
+        {
+          "node_id": "POCSO_S46",
+          "level": 2,
+          "node_type": "section",
+          "title": "46. Power to remove difficulties",
+          "summary": "Section 46 permits the Central Government to, by order published in the Official Gazette, make provisions not inconsistent with the Act to remove difficulties in giving effect to its provisions, subject to a Proviso that no order shall be made after the expiry of the period of two years from the commencement of this Act. Every order made under this section shall be laid, as soon as may be after it is made, before each House of Parliament. The Schedule enumerates Armed Forces and Security Forces constituted under various statutes, including The Air Force Act, 1950, The Army Act, 1950, and The State police forces.",
+          "content": "46. Power to remove difficulties. —( 1 ) If any difficulty arises in giving effect to the provisions of this Act, the Central Government may, by order published in the Official Gazette, make such provisions not inconsistent with the provisions of this Act as may appear to it to be necessary or expedient for removal of the difficulty: Provided that no order shall be made under this section after the expiry of the period of two years from the commencement of this Act. ( 2 ) Every order made under this section shall be laid, as soon as may be after it is made, before each House of Parliament. 1. Ins. by Act 25 of 2019, s. 11 (w.e.f. 16-08-2019). 2. Clause ( a ) re-lettered as clause ( ab ) thereof by Act 25 of 2019, s. 11 (w.e.f. 16-08-2019). THE SCHEDULE [ See section 2( c )] A RMED FORCES AND SECURITY FORCES CONSTITUTED UNDER ( a ) The Air Force Act, 1950 (45 of 1950); ( b ) The Army Act, 1950 (46 of 1950); ( c ) The Assam Rifles Act, 2006 (47 of 2006); ( d ) The Bombay Home Guard Act, 1947 (3 of 1947); ( e ) The Border Security Force Act, 1968 (47 of 1968); ( f ) The Central Industrial Security Force Act, 1968 (50 of 1968); ( g ) The Central Reserve Police Force Act, 1949 (66 of 1949); ( h ) The Coast Guard Act, 1978 (30 of 1978); ( i ) The Delhi Special Police Establishment Act, 1946 (25 of 1946); ( j ) The Indo-Tibetan Border Police Force Act, 1992 (35 of 1992); ( k ) The Navy Act, 1957 (62 of 1957); ( l ) The National Investigation Agency Act, 2008 (34 of 2008); ( m ) The National Security Guard Act, 1986 (47 of 1986); ( n ) The Railway Protection Force Act, 1957 (23 of 1957); ( o ) The Sashastra Seema Bal Act, 2007 (53 of 2007); ( p ) The Special Protection Group Act, 1988 (34 of 1988); ( q ) The Territorial Army Act, 1948 (56 of 1948); ( r ) The State police forces (including armed constabulary) constituted under the State laws to aid the civil powers of the State and empowered to employ force during internal disturbances or otherwise including armed forces as defined in clause ( a ) of section 2 of the Armed Forces (Special Powers) Act, 1958 (28 of 1958). ____________",
+          "children": [],
+          "metadata": {
+            "act_code": "POCSO",
+            "corpus_type": "statute",
+            "jurisdiction": "national",
+            "status": "in_force",
+            "enactment_date": "2012-11-14",
+            "supersedes": [],
+            "interpreted_by": [],
+            "page_range": [
+              16,
+              17
+            ],
+            "internal_refs": [],
+            "cross_act_refs": [],
+            "token_estimate": 527,
+            "stable_hash": "080865e8c62d155f238eaec1efe40ff49a615620"
+          }
+        }
+      ],
+      "metadata": {
+        "act_code": "POCSO",
+        "corpus_type": "statute",
+        "jurisdiction": "national",
+        "status": "in_force",
+        "enactment_date": "2012-11-14",
+        "supersedes": [],
+        "interpreted_by": [],
+        "page_range": [
+          14,
+          17
+        ],
+        "internal_refs": [],
+        "cross_act_refs": [],
+        "token_estimate": 0,
+        "stable_hash": "d52227c64289ddb82cb06e6acfd609d6864f5f6b"
+      }
+    }
+  ],
+  "metadata": {
+    "act_code": "POCSO",
+    "corpus_type": "statute",
+    "jurisdiction": "national",
+    "status": "in_force",
+    "enactment_date": "2012-11-14",
+    "supersedes": [],
+    "interpreted_by": [],
+    "page_range": [
+      1,
+      17
+    ],
+    "internal_refs": [],
+    "cross_act_refs": [],
+    "token_estimate": 0,
+    "stable_hash": "5a2a9740a27b825516b7c2cd588124f0838bf8b3"
+  }
+}

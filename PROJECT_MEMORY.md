@@ -11,13 +11,13 @@
 ## 🏗️ System Architecture & Stack
 
 - **Backend:** Python 3.10+ / FastAPI (served via `uvicorn src.api.main:app`)
-- **Agent Framework:** LangGraph `create_react_agent` + 3 tools (search_statutes, search_police_sop, enrich_with_cross_references)
+- **Agent Framework:** LangGraph `create_react_agent` + 4 tools (search_statutes, search_police_sop, enrich_with_cross_references, find_case_law_for_section)
 - **LLM Platform:**
   - **Summarization (tree build):** Google Gemma API — round-robin `models/gemma-4-26b-a4b-it` + `models/gemma-4-31b-it` (rate-limited to 10 RPM each via async leaky bucket)
   - **Retrieval / Agent:** `models/gemini-3.1-flash-lite` (hardcoded in `src/react_agent/agent.py`)
   - **Deterministic pipeline:** round-robin pool of all 3 models (configured in `src/retriever/client.py`)
 - **Indexing:**
-  - `tree/*.json` — per-act hierarchical tree files (BNS.json, BNSS.json, BSA.json, SOP.json)
+  - `tree/*.json` — per-act hierarchical tree files (BNS, BNSS, BSA, SOP + 5 new: IT, JJA, POCSO, NDPS, PCA)
   - `tree/index.json` — corpus registry loaded by `CorpusIndex`
   - `tree/bm25_index/` — pre-tokenized BM25s sparse index
   - `tree/summary_cache.json` — persistent LLM summarization cache (avoids repeat calls)
@@ -73,13 +73,10 @@
 - [x] **Phase 7 — Frontend:** Next.js client with reasoning accordion, citation panels, suggested questions, action items.
 - [x] **Phase 8 — Deployment:** HF Spaces deployment via `deploy.py`. Frontend on Vercel.
 
+- [x] **Phase 9 — Corpus Expansion (5 new acts):** Added IT Act, JJ Act, POCSO, NDPS, and PCA. All 9 acts are ingested, trees constructed, validated, and verified through retriever and ReAct agent loops.
+
 ### 🔄 In Progress
-- [/] **Phase 9 — Corpus Expansion (5 new acts):** Adding IT Act, JJ Act, POCSO, NDPS, PoC Act.
-  - Bucket 1: Metadata enrichment of existing statute nodes
-  - Bucket 2: Generic parser for new act PDFs
-  - Bucket 3: Tree integration + BM25 re-indexing
-  - Bucket 4: `search_statutes` tool expansion + `find_case_law_for_section` scaffold
-  - Bucket 5: Validation + benchmark across all 8 corpora
+*None*
 
 ### 📋 Upcoming
 - [ ] **Phase 10 — Case Law Nodes:** `JudgementParser` + `INTERPRETS/CITES` relationship edges
@@ -94,18 +91,20 @@
 |---|---|
 | `src/parser.py` | BNS/BNSS/BSA PDF → Parquet dataframes |
 | `src/sop_parser.py` | SOP PDF → Parquet dataframes |
-| `src/tree_builder.py` | Parquet → unsummarized JSON tree |
+| `src/generic_parser.py` | **[Phase 9]** Configurable parser for new acts; driven by ActAdapter |
+| `src/act_adapters/__init__.py` | **[Phase 9]** ActAdapter configs for IT, JJA, POCSO, NDPS, PCA |
+| `src/tree_builder.py` | Parquet → unsummarized JSON tree (has `_STATUTE_METADATA` registry) |
 | `src/summarizer.py` | Async Gemma summarization + cache |
 | `src/build_tree.py` | Orchestrates build + validation pipeline |
-| `src/validation.py` | Structural correctness checks |
+| `src/validation.py` | Structural correctness checks (dynamic, works for any N acts) |
 | `src/retriever/corpus_index.py` | In-memory node map loaded from `tree/*.json` |
 | `src/retriever/tree_navigator.py` | Guided 2-level chapter → section traversal |
 | `src/retriever/bm25_index.py` | BM25s sparse keyword search |
 | `src/retriever/cross_ref_linker.py` | Programmatic citation graph resolver |
 | `src/retriever/client.py` | Rate-limited round-robin Gemini/Gemma pool |
 | `src/retriever/graph.py` | Deterministic LangGraph state machine |
-| `src/react_agent/agent.py` | ReAct agent (Gemini Flash-Lite) |
-| `src/react_agent/tools.py` | 3 LangChain tools for the ReAct agent |
+| `src/react_agent/agent.py` | ReAct agent (Gemini Flash-Lite), 4 tools, 8-act system prompt |
+| `src/react_agent/tools.py` | 4 LangChain tools: search_statutes, search_police_sop, enrich_with_cross_references, find_case_law_for_section |
 | `src/api/main.py` | FastAPI lifespan + Postgres pool + CORS |
 | `src/api/routes.py` | SSE streaming, history, session, chat management |
 | `src/api/auth.py` | Supabase JWKS JWT verification |

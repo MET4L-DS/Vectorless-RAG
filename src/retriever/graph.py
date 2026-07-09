@@ -38,29 +38,40 @@ async def analyse_intent_node(state: AgentState) -> dict:
     
     # 1. Fast Keyword Heuristic
     targets = set()
-    heuristic_matched = False
-    if any(k in query_lower for k in ["bns", "punishment", "murder", "theft", "rape", "offence"]):
+    if any(k in query_lower for k in ["bns", "punishment", "murder", "theft", "rape", "offence", "robbery"]):
         targets.add("BNS")
-        heuristic_matched = True
     if any(k in query_lower for k in ["bnss", "procedure", "warrant", "arrest", "fir", "bail", "court", "magistrate"]):
         targets.add("BNSS")
-        heuristic_matched = True
     if any(k in query_lower for k in ["bsa", "evidence", "witness", "testimony", "document"]):
         targets.add("BSA")
-        heuristic_matched = True
     if any(k in query_lower for k in ["sop", "police", "officer", "station", "diary", "investigate"]):
         targets.add("SOP")
-        heuristic_matched = True
+    if any(k in query_lower for k in ["it act", "information technology", "hacking", "cyber", "electronic record", "digital signature"]):
+        targets.add("IT")
+    if any(k in query_lower for k in ["jja", "juvenile", "child welfare", "board", "conflict with law", "minor"]):
+        # 'minor' can also apply to POCSO or BNS, but let's heuristically check both
+        targets.add("JJA")
+    if any(k in query_lower for k in ["pocso", "sexual offence", "child sexual", "penetrative"]):
+        targets.add("POCSO")
+    if any(k in query_lower for k in ["ndps", "drug", "narcotic", "psychotropic", "substance", "trafficking"]):
+        targets.add("NDPS")
+    if any(k in query_lower for k in ["pca", "corruption", "bribe", "public servant", "gratification", "sanction"]):
+        targets.add("PCA")
         
     if not targets:
         # Fallback to LLM if ambiguous
         prompt = f"""You are a legal intent classifier.
 User Query: "{query}"
 Classify which of these Indian legal documents might contain the answer:
-- BNS (Bharatiya Nyaya Sanhita - Criminal Code / Offences / Punishments)
-- BNSS (Bharatiya Nagarik Suraksha Sanhita - Criminal Procedure / Arrest / Trial)
-- BSA (Bharatiya Sakshya Adhiniyam - Evidence Act)
+- BNS (Bharatiya Nyaya Sanhita — Criminal Code / Offences / Punishments)
+- BNSS (Bharatiya Nagarik Suraksha Sanhita — Criminal Procedure / Arrest / Trial)
+- BSA (Bharatiya Sakshya Adhiniyam — Evidence Act)
 - SOP (Police Standard Operating Procedures)
+- IT (Information Technology Act — Cyber crimes, digital evidence, data protection)
+- JJA (Juvenile Justice Act — Juvenile offenders, child welfare, adoption)
+- POCSO (Protection of Children from Sexual Offences Act — Child sexual offences)
+- NDPS (Narcotic Drugs and Psychotropic Substances Act — Narcotics, bail)
+- PCA (Prevention of Corruption Act — Bribery, public servant corruption)
 """
         try:
             result: IntentClassification = await call_model_structured(prompt, IntentClassification)
@@ -68,13 +79,13 @@ Classify which of these Indian legal documents might contain the answer:
             print(f"[Router] Query was ambiguous. LLM Classifier selected: {list(targets)} (Reason: {result.reasoning})")
         except Exception as e:
             print(f"[Router] Error in LLM intent classification: {e}. Falling back to searching all.")
-            targets = {"BNS", "BNSS", "BSA", "SOP"}
+            targets = {"BNS", "BNSS", "BSA", "SOP", "IT", "JJA", "POCSO", "NDPS", "PCA"}
     else:
         print(f"[Router] Query matched keyword heuristics. Target corpora: {list(targets)}")
         
     # If still nothing, search all
     if not targets:
-        targets = {"BNS", "BNSS", "BSA", "SOP"}
+        targets = {"BNS", "BNSS", "BSA", "SOP", "IT", "JJA", "POCSO", "NDPS", "PCA"}
         
     return {"target_corpora": list(targets)}
 
@@ -85,7 +96,6 @@ async def bm25_search_node(state: AgentState) -> dict:
     hits = _bm25_index.search(state["query"], _corpus_index, top_k=20, act_filter=state["target_corpora"])
     print(f"[DEBUG] bm25_search_node: Found {len(hits)} hits")
     return {"bm25_hits": hits}
-    return {"bm25_hits": hits}
 
 async def navigate_statutes_node(state: AgentState) -> dict:
     if not _tree_navigator:
@@ -93,7 +103,7 @@ async def navigate_statutes_node(state: AgentState) -> dict:
         
     hits = []
     targets = state["target_corpora"]
-    statutes = [t for t in targets if t in ["BNS", "BNSS", "BSA"]]
+    statutes = [t for t in targets if t in ["BNS", "BNSS", "BSA", "IT", "JJA", "POCSO", "NDPS", "PCA"]]
     
     for stat in statutes:
         stat_hits = await _tree_navigator.navigate(state["query"], stat, top_chapters=2, top_sections=3)

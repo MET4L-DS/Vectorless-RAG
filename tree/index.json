@@ -1,6 +1,6 @@
 {
-  "corpus": "Bharatiya Nyaya Sanhita Corpus",
-  "generated_at": "2026-07-02T17:40:40Z",
+  "corpus": "Indian Legal Corpus — Vectorless RAG",
+  "generated_at": "2026-07-09T19:11:38Z",
   "acts": {
     "BNS": {
       "path": "tree/BNS.json",
@@ -23,10 +23,45 @@
       "total_pages": 54,
       "summary": "The Bharatiya Sakshya Adhiniyam, 2023, establishes the comprehensive legal framework for the admissibility, relevancy, and proof of evidence in judicial proceedings and Courts-martial, effectively repealing the Indian Evidence Act, 1872. The Act delineates the standards for oral and documentary evidence, with a modernized emphasis on the authentication, certification, and integrity of electronic and digital records. It codifies essential legal doctrines, including the relevancy of facts in issue, the burden of proof, various judicial presumptions—particularly regarding criminal liability under the Bharatiya Nyaya Sanhita—and the doctrine of estoppel. Furthermore, the Act regulates witness competency, testimonial privileges, and the procedural protocols for examination, ensuring systemic integration with the Bharatiya Nyaya Sanhita and the Bharatiya Nagarik Suraksha Sanhita."
     },
+    "IT": {
+      "path": "tree/IT.json",
+      "full_title": "THE INFORMATION TECHNOLOGY ACT, 2000",
+      "total_sections": 109,
+      "total_pages": 41,
+      "summary": "The Information Technology Act establishes an extraterritorial legal framework that grants functional equivalence to electronic records and signatures, facilitating electronic governance, digital contracts, and the legal validity of electronic transactions. It regulates the technical infrastructure of digital commerce by overseeing the licensing of Certifying Authorities, mandating security protocols for asymmetric cryptography, and defining the statutory duties of subscribers regarding private key management. The Act imposes a dual liability regime, prescribing civil compensation for unauthorized access and data negligence via Adjudicating Officers, while defining a criminal framework for offences such as identity theft, cyber terrorism, and tampering with computer source documents. This structure is supported by a specialized adjudicatory and evidentiary system involving the TDSAT appellate mechanism, the appointment of Examiners of Electronic Evidence, and the authority of the Central Government to intercept or block information to safeguard national sovereignty."
+    },
+    "JJA": {
+      "path": "tree/JJA.json",
+      "full_title": "THE JUVENILE JUSTICE (CARE AND PROTECTION OF CHILDREN) ACT, 2015",
+      "total_sections": 111,
+      "total_pages": 48,
+      "summary": "The Juvenile Justice (Care and Protection of Children) Act, 2015, establishes a comprehensive national framework for the apprehension, prosecution, rehabilitation, and adoption of \"children in conflict with law\" (CICL) and \"children in need of care and protection\" (CNCP). The Act's structure centers on specialized institutional machinery, utilizing the Juvenile Justice Board (JJB) for reformative judicial proceedings and the Child Welfare Committee (CWC) for quasi-judicial care and protection mandates. It integrates a tiered classification of offences (petty, serious, and heinous) with rigorous statutory protocols for adoption via the Central Adoption Resource Authority (CARA) and social re-integration through a network of regulated child care institutions. Governed by the paramount principle of the \"best interest of the child,\" the legislation prohibits capital punishment for minors while implementing a strict penal framework to criminalize child abuse, exploitation, and institutional negligence."
+    },
+    "NDPS": {
+      "path": "tree/NDPS.json",
+      "full_title": "THE NARCOTIC DRUGS AND PSYCHOTROPIC SUBSTANCES ACT, 1985",
+      "total_sections": 140,
+      "total_pages": 54,
+      "summary": "The Narcotic Drugs and Psychotropic Substances (NDPS) Act, 1985, establishes a comprehensive regulatory and penal regime designed to combat illicit traffic while ensuring the availability of controlled substances for medical and scientific purposes. The Act's structure progresses from jurisdictional definitions and administrative governance—including the National Fund for Control of Drug Abuse—to a stringent framework of prohibitions and tiered sanctions based on small, intermediate, and commercial quantities. Central to its legal system are specialized enforcement mechanisms, such as the presumption of a culpable mental state, stringent bail restrictions, and the jurisdiction of Special Courts and Appellate Tribunals for the freezing and forfeiture of illegally acquired property. Procedural rigor is maintained through statutory powers of search, seizure, and arrest, integrated with \"good faith\" immunities and alignment with international conventions and the Customs Act."
+    },
+    "PCA": {
+      "path": "tree/PCA.json",
+      "full_title": "THE PREVENTION OF CORRUPTION ACT, 1988",
+      "total_sections": 35,
+      "total_pages": 20,
+      "summary": "The Prevention of Corruption Act establishes a comprehensive jurisdictional framework covering the whole of India and its citizens abroad, defining foundational legal parameters such as \"public servant,\" \"public duty,\" and \"undue advantage.\" The Act’s structure facilitates specialized adjudication through the appointment of Special Judges for expedited trials and prescribes a rigorous penal regime addressing individual bribery, criminal misconduct, illicit enrichment, and corporate criminal liability. Investigative processes are strictly regulated, mandating specific police ranks and prior government approval under Section 17A, while providing robust mechanisms for the seizure, attachment, and forfeiture of assets derived from corruption. Finally, the Act integrates with the Code of Criminal Procedure, 1973, by establishing mandatory requirements for the sanction of prosecution and delineating the appellate and revisionary jurisdictions of the High Courts."
+    },
+    "POCSO": {
+      "path": "tree/POCSO.json",
+      "full_title": "THE PROTECTION OF CHILDREN FROM SEXUAL OFFENCES ACT, 2012",
+      "total_sections": 43,
+      "total_pages": 17,
+      "summary": "The Protection of Children from Sexual Offences (POCSO) Act, 2012, establishes a comprehensive national legal framework addressing sexual offences, including penetrative sexual assault, sexual harassment, and the exploitation of children for pornographic purposes. The Act is structured to criminalize both substantive offences—categorized by standard and aggravated circumstances—and the abetment or attempted commission of such acts, prescribing a graduated scale of punishments ranging from imprisonment to the death penalty. It implements specialized, victim-centric procedural mandates, including mandatory reporting requirements, gender-sensitive medical protocols, and streamlined evidentiary standards for recording statements. Furthermore, the Act empowers Special Courts to conduct time-bound, *in camera* proceedings, introduces rebuttable legal presumptions that shift the burden of proof to the accused, and maintains an overriding effect over inconsistent provisions in the Indian Penal Code and the Information Technology Act."
+    },
     "SOP": {
       "path": "tree/SOP.json",
       "full_title": "Telangana Police Standard Operating Procedures",
-      "total_sections": 47,
+      "total_sections": 0,
       "total_pages": 238,
       "summary": "This manual establishes the comprehensive operational framework for the Telangana Police under the BNSS, BNS, and BSA 2023, governing the end-to-end criminal justice process from complaint receipt to trial. Key procedural workflows include the registration of oral, electronic, and Zero FIRs, strict arrest protocols requiring DSP authorization for infirm or elderly persons, and the restricted application of handcuffs limited to grave offenses. A central operational pillar is the integration of Audio-Video Electronic Means (AVEM) and forensic-grade digital evidence collection, utilizing HASH values (MD5, SHA) and BSA-compliant certifications to ensure the integrity of searches, seizures, and statements. Furthermore, the guidelines mandate rigorous timelines for investigation progress reports, medical examinations for victims, and the electronic submission of charge sheets to enhance judicial efficiency and transparency."
     }

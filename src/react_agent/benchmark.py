@@ -16,9 +16,20 @@ from src.retriever import client
 console = Console()
 
 TEST_QUERIES = [
+    # Original regression queries
     "What is the punishment for robbery?",
     "What if the robber is a minor?",
-    "Can you repeat the rule for the maximum detention time?"
+    "Can you repeat the rule for the maximum detention time?",
+    # Phase 9 — New acts (single-act)
+    "What are the punishments for hacking and computer-related offences under the IT Act?",
+    "What is cyber terrorism under Indian law and what is the punishment?",
+    "What are the bail conditions for offences under the NDPS Act?",
+    "What constitutes criminal misconduct by a public servant under the Prevention of Corruption Act?",
+    "What is aggravated penetrative sexual assault under POCSO and what is the punishment?",
+    "What is the procedure for a child in conflict with law before the Juvenile Justice Board?",
+    # Phase 9 — Cross-act queries
+    "A minor was caught with drugs. Which acts apply and what is the procedure?",
+    "A public servant accepted a bribe to drop a cybercrime case. What are the charges?",
 ]
 
 async def run_benchmark():

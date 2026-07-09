@@ -16,14 +16,13 @@ Standard RAG architectures split documents into flat text blocks based on fixed 
 
 ```mermaid
 flowchart TD
-    subgraph Parsing_Pipeline [1. Layout-Aware Ingestion]
-        BNS_PDF[BNS PDF] -->|parser.py| Parquet[Unified Parquet Dataframes]
-        BNSS_PDF[BNSS PDF] -->|parser.py| Parquet
-        BSA_PDF[BSA PDF] -->|parser.py| Parquet
+    subgraph Ingestion [1. Layout-Aware Ingestion Pipeline]
+        Original_PDFs[BNS, BNSS, BSA PDFs] -->|parser.py| Parquet[Unified Parquet Dataframes]
         SOP_PDF[Police SOP PDF] -->|sop_parser.py| Parquet
+        New_PDFs[IT, JJA, POCSO, NDPS, PCA PDFs] -->|generic_parser.py + act_adapters| Parquet
     end
 
-    subgraph Indexing [2. Structural Tree & Lexical Index]
+    subgraph Indexing [2. Hierarchical Tree & BM25 Index]
         Parquet -->|tree_builder.py| JSONTree[Consolidated index.json tree]
         Parquet -->|bm25s| BM25Index[Pre-tokenized Lexical Index]
         JSONTree -->|build_tree.py| LLMSummaries[Gemini Bottom-Up Chapter Summaries]
@@ -42,10 +41,12 @@ flowchart TD
         ToolsSelection -->|Call| search_statutes[search_statutes tool]
         ToolsSelection -->|Call| search_police_sop[search_police_sop tool]
         ToolsSelection -->|Call| enrich_cross_refs[enrich_with_cross_references tool]
+        ToolsSelection -->|Call| find_case_law[find_case_law_for_section tool]
         
         search_statutes -->|Hierarchical Traversal / Lexical Filter| JSONTree & BM25Index
         search_police_sop -->|SOP coordinate search| JSONTree
         enrich_cross_refs -->|Programmatic Link Resolver| JSONTree
+        find_case_law -->|Case Law precedent lookup| JSONTree
     end
 ```
 
@@ -53,19 +54,25 @@ flowchart TD
 
 ## 2. Layout-Aware Parsing & Ingestion
 
-The ingestion pipeline (implemented in `src/parser.py` and `src/sop_parser.py`) processes raw legal PDFs and constructs structured dataframes.
+The ingestion pipeline (implemented in `src/parser.py`, `src/sop_parser.py`, and `src/generic_parser.py`) processes raw legal PDFs and constructs structured dataframes.
 
-### 2.1 Coordinate-based Layout Pruning
+### 2.1 Configurable Generic Parsing (Phase 9 Expansion)
+To parse 5 new statutory Acts (IT Act 2000, JJ Act 2015, POCSO 2012, NDPS Act 1985, and Prevention of Corruption Act 1988) without duplicate code, the system introduces a **Generic Act Parser** driven by per-act layout adapter configurations (`src/act_adapters/__init__.py`):
+- **Arabic and Roman Chapter Numbers**: The IT Act utilizes Arabic numerals (`CHAPTER 1`) in its body but Roman numerals in its TOC. An extended chapter regex `CHAPTER\s+([IVXLCDM\d]+[A-Z]?)$` is configured to correctly group both formats.
+- **Hyphenated Section Numbers**: The NDPS Act utilizes hyphenated numbering for sub-chapters (e.g. `68-I.`, `68-O.`). The section regex is extended to `^(\d{1,3}(?:[A-Z]|-[A-Z])?)` to capture hyphenated sections as leaf nodes rather than treating them as standard paragraphs.
+- **Dynamic Preamble Offsets**: Each act configuration defines its own `body_start_page` (0-indexed) to skip front-matter Arrangement of Sections tables and prevent duplicate matches during physical line coordinate grouping.
+
+### 2.2 Coordinate-based Layout Pruning
 Unlike linear PDF readers, PyMuPDF parses page dictionaries to extract text lines alongside font flags and bounding coordinates:
 - **Header & Footer Stripping**: Lines with vertical coordinates $y < 50$ or $y > 750$ are stripped dynamically, preventing page numbers and running headers from polluting the text.
 - **Section Heading Lookahead**: Section numbers (e.g., *"35."*) often sit on their own line. The parser performs lookahead checks on succeeding lines to reconstruct complete headings and avoid orphaned headings.
 - **Sequential Validation (`src/validation.py`)**: A contiguity validator asserts that section IDs increase monotonically ($S_1 \rightarrow S_2 \rightarrow S_3$) to ensure no sections were dropped or malformed.
 
-### 2.2 Heuristic Repairs & Typos
+### 2.3 Heuristic Repairs & Typos
 - **Chapter V Injection in BNSS**: The source BNSS PDF contains a structural error where Chapter V ("ARREST OF PERSONS") at Section 35 was omitted from the Table of Contents. The parser uses a regular expression heuristic to inject the parent Chapter V node at Section 35, establishing proper hierarchical linking.
-- **Act Root Nodes**: The parser injects a Level 0 root node (`BNS_root`, `BNSS_root`, `BSA_root`) for each Act. Front Matter and Chapters are linked directly to their respective root node (`parent_id = f"{act}_root"`).
+- **Act Root Nodes**: The parser injects a Level 0 root node (e.g., `BNS_root`, `IT_root`) for each Act. Front Matter and Chapters are linked directly to their respective root node (`parent_id = f"{act}_root"`).
 
-### 2.3 Table Parsing (First Schedule of BNSS)
+### 2.4 Table Parsing (First Schedule of BNSS)
 The classification table in the First Schedule of BNSS contains detailed columns (offence, bailable, cognizable, triable court). The parser isolates coordinates for columns and cells, merges borderless rows that wrap across multiple pages, and injects `act_code = "BNSS"` to avoid schema ambiguity when combined.
 
 ---
@@ -96,10 +103,10 @@ Built using a custom LangGraph state machine, this workflow enforces a structure
 - **`verify_groundedness`**: A dedicated LLM verification node compares claims against retrieved context, returning a boolean check. Fails result in a retrieval refinement loop.
 
 ### 4.2 Autonomous ReAct Agent Loop
-A dynamic agent loop compiled using `create_react_agent` and bound to a Pydantic structured output model. The agent has access to three search tools:
+A dynamic agent loop compiled using `create_react_agent` and bound to a Pydantic structured output model. The agent has access to four search tools:
 
 #### 1. `search_statutes(statute_code, query, method)`
-- **Parameters**: `statute_code` (BNS, BNSS, or BSA), `query` (search text), `method` (hybrid, tree, or bm25).
+- **Parameters**: `statute_code` (BNS, BNSS, BSA, IT, JJA, POCSO, NDPS, or PCA), `query` (search text), `method` (hybrid, tree, or bm25).
 - **Behavior**: Retrieves statutory sections using guided chapter/section selection and BM25 token matching.
 
 #### 2. `search_police_sop(query)`
@@ -107,8 +114,12 @@ A dynamic agent loop compiled using `create_react_agent` and bound to a Pydantic
 - **Behavior**: Queries the structured police operations manual.
 
 #### 3. `enrich_with_cross_references(section_id)`
-- **Parameters**: `section_id` (e.g., `'BNSS_S35'`).
+- **Parameters**: `section_id` (e.g., `'BNSS_S35'`, `'IT_S66'`).
 - **Behavior**: Programmatically crawls the index for cross-referenced sections linked to the target section, returning their raw contents.
+
+#### 4. `find_case_law_for_section(section_id)`
+- **Parameters**: `section_id` (e.g., `'NDPS_S37'`).
+- **Behavior**: [Phase 10 Scaffold] Looks up associated judicial precedents in the `interpreted_by` node metadata to prepare for the case law precedents corpus integration.
 
 ---
 
@@ -168,13 +179,13 @@ To bypass Windows command-line globbing limits and avoid git binary rejections, 
 
 ## 7. Pipeline Performance Evaluation
 
-Below is a benchmark summary comparing the deterministic pipeline and ReAct agent:
+Below is a benchmark summary comparing the deterministic pipeline and ReAct agent on a selection of original BNS/BNSS/BSA queries and the new Phase 9 corpora (IT, JJA, POCSO, NDPS, PCA):
 
 | Metric / Dimension | Deterministic Pipeline | ReAct Agent Pipeline |
 | :--- | :--- | :--- |
 | **Model Platform** | Round-Robin Model Pool (`models/gemini-3.1-flash-lite`, `models/gemma-4-26b-a4b-it`, `models/gemma-4-31b-it` in `client.py`) | Google Gemini (`models/gemini-3.1-flash-lite` in `agent.py`) |
-| **Simple Queries** | Fast, high consistency, moderate latency. | Slightly higher initial latency due to tool choice step. |
-| **Complex/Multi-Act Queries** | May fail to retrieve cross-act provisions if heuristic routing misclassifies primary intent. | Excellent. Dynamically runs multiple searches to merge BNS, BNSS, and SOP context. |
-| **Average Latency** | 4-8 seconds. | 8-15 seconds (varies based on reasoning steps). |
-| **LLM Call Overhead** | Fixed (approx. 4 calls per query). | Variable (1-3 reasoning steps + tool loops). |
-| **Groundedness** | High (enforced by separate LLM verifier). | High (inherent to tool observation constraints). |
+| **Simple Queries** | Fast, high consistency, low latency (~200ms - 500ms). | Moderate latency (~1s - 3s) due to reasoning steps. |
+| **Complex/Multi-Act Queries** | Can struggle to merge context if intent routing misclassifies primary acts. | Excellent. Iteratively invokes multiple searches (e.g., child + drugs -> JJA search + NDPS search) and merges results. |
+| **Average Latency** | 3 - 6 seconds. | 8 - 15 seconds (depends on number of tool loops). |
+| **LLM Call Overhead** | Fixed (approx 3-4 calls per query). | Dynamic (1-4 reasoning steps + tool invocation loops). |
+| **Groundedness** | High (enforced by separate LLM verifier node). | High (inherent to tool observation constraints). |

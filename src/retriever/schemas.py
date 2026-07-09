@@ -2,8 +2,8 @@ from pydantic import BaseModel, Field
 from typing import Literal, List, Optional
 
 class IntentClassification(BaseModel):
-    target_corpora: List[Literal["BNS", "BNSS", "BSA", "SOP"]] = Field(
-        description="List of Indian legal documents containing potential answers (BNS, BNSS, BSA, SOP)"
+    target_corpora: List[Literal["BNS", "BNSS", "BSA", "SOP", "IT", "JJA", "POCSO", "NDPS", "PCA"]] = Field(
+        description="List of Indian legal documents containing potential answers (BNS, BNSS, BSA, SOP, IT, JJA, POCSO, NDPS, PCA)"
     )
     reasoning: str = Field(description="Brief reasoning for choosing these target corpora")
 

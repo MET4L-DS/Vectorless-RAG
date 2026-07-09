@@ -4,7 +4,7 @@ import time
 import asyncio
 import pandas as pd
 
-from src.tree_builder import build_unsummarized_trees
+from src.tree_builder import build_unsummarized_trees, ACT_FULL_TITLES, ACT_PAGE_COUNTS
 from src.summarizer import (
     run_summarization_pipeline,
     new_calls_count,
@@ -46,72 +46,53 @@ def main():
             json.dump(root_node, f, indent=2, ensure_ascii=False)
         print(f"  Saved tree for {act} to {act_file}")
 
-    # 4. Save corpus index file (index.json)
+    # 4. Save corpus index file (index.json) — dynamically built from all acts in trees
     print("Step 4: Creating corpus index.json...")
     index_file = os.path.join(tree_dir, "index.json")
     index_data = {
-        "corpus": "Bharatiya Nyaya Sanhita Corpus",
+        "corpus": "Indian Legal Corpus — Vectorless RAG",
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "acts": {
-            "BNS": {
-                "path": "tree/BNS.json",
-                "full_title": "BHARATIYA NYAYA SANHITA, 2023",
-                "total_sections": 358,
-                "total_pages": 112,
-                "summary": trees["BNS"]["summary"]
-            },
-            "BNSS": {
-                "path": "tree/BNSS.json",
-                "full_title": "BHARATIYA NAGARIK SURAKSHA SANHITA, 2023",
-                "total_sections": 531,
-                "total_pages": 279,
-                "summary": trees["BNSS"]["summary"]
-            },
-            "BSA": {
-                "path": "tree/BSA.json",
-                "full_title": "BHARATIYA SAKSHYA ADHINIYAM, 2023",
-                "total_sections": 170,
-                "total_pages": 54,
-                "summary": trees["BSA"]["summary"]
-            }
-        }
+        "acts": {}
     }
-    if "SOP" in trees:
-        index_data["acts"]["SOP"] = {
-            "path": "tree/SOP.json",
-            "full_title": "Telangana Police Standard Operating Procedures",
-            "total_sections": len([c for c in trees["SOP"]["children"] if c["node_type"] != "front_matter"]),
-            "total_pages": 238,
-            "summary": trees["SOP"]["summary"]
+    for act_code, root_node in trees.items():
+        # Count leaf sections (node_type == 'section') for metadata
+        section_count = 0
+        def _count_sections(node):
+            nonlocal section_count
+            if node.get("node_type") == "section":
+                section_count += 1
+            for child in node.get("children", []):
+                _count_sections(child)
+        _count_sections(root_node)
+
+        index_data["acts"][act_code] = {
+            "path":           f"tree/{act_code}.json",
+            "full_title":     ACT_FULL_TITLES.get(act_code, act_code),
+            "total_sections": section_count,
+            "total_pages":    ACT_PAGE_COUNTS.get(act_code, 0),
+            "summary":        root_node.get("summary", ""),
         }
+        # Reset for next act
+        section_count = 0
     with open(index_file, "w", encoding="utf-8") as f:
         json.dump(index_data, f, indent=2, ensure_ascii=False)
-    print(f"  Saved index.json to {index_file}")
+    print(f"  Saved index.json to {index_file} ({len(index_data['acts'])} acts)")
 
     # 5. Save fixed regression spot check list
     print("Step 5: Writing spot check registration list...")
     spot_check_file = os.path.join(tree_dir, "spot_check_ids.json")
     spot_check_ids = [
-        "BNS_S101",
-        "BNS_S63",
-        "BNSS_S193",
-        "BNS_S356",
-        "BSA_S57",
-        "BNS_S1",
-        "BNS_S2",
-        "BNS_S4",
-        "BNS_S85",
-        "BNS_S143",
-        "BNSS_S35",
-        "BNSS_S63",
-        "BNSS_S173",
-        "BNSS_S210",
-        "BNSS_S359",
-        "BNSS_S531",
-        "BSA_S1",
-        "BSA_S2",
-        "BSA_S24",
-        "BSA_S104"
+        # Original regression IDs
+        "BNS_S101", "BNS_S63", "BNSS_S193", "BNS_S356", "BSA_S57",
+        "BNS_S1",   "BNS_S2",  "BNS_S4",   "BNS_S85",  "BNS_S143",
+        "BNSS_S35", "BNSS_S63","BNSS_S173","BNSS_S210","BNSS_S359","BNSS_S531",
+        "BSA_S1",   "BSA_S2",  "BSA_S24",  "BSA_S104",
+        # Phase 9 — New act spot checks
+        "IT_S66",   "IT_S66F", "IT_S43",   "IT_S79",
+        "JJA_S4",   "JJA_S12", "JJA_S15",  "JJA_S56",
+        "POCSO_S3", "POCSO_S5","POCSO_S19","POCSO_S28",
+        "NDPS_S15", "NDPS_S27","NDPS_S37", "NDPS_S68A",
+        "PCA_S7",   "PCA_S13", "PCA_S17",  "PCA_S19",
     ]
     with open(spot_check_file, "w", encoding="utf-8") as f:
         json.dump(spot_check_ids, f, indent=2)
