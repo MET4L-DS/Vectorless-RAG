@@ -238,6 +238,8 @@ class GenericPDFParser:
 
             for l_idx, line in enumerate(cleaned_lines):
                 text = line["text"]
+                # Clean footnote marker prefix like "1 [" or "2 [" from the start of the line
+                text = re.sub(r"^\d+\s*\[", "", text.strip())
                 assigned_section_id = front_matter_id
 
                 if is_body_page:

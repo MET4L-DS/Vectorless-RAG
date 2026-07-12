@@ -2,11 +2,16 @@ import pandas as pd
 import re
 import json
 
-# Expected chapter counts for the three Acts
+# Expected chapter counts for all statutory Acts
 EXPECTED_CHAPTERS = {
     "BNS": 20,    # Chapters I to XX
     "BNSS": 39,   # Chapters I to XXXIX (with Chapter V injected)
-    "BSA": 12     # Chapters I to XII
+    "BSA": 12,    # Chapters I to XII
+    "IT": 13,     # Chapters I to XIII
+    "JJA": 10,    # Chapters I to X
+    "POCSO": 9,   # Chapters I to IX
+    "NDPS": 8,    # Chapters I to VI (including IIA, VA suffixes)
+    "PCA": 5      # Chapters I to V
 }
 
 def validate_datasets(page_df: pd.DataFrame, line_df: pd.DataFrame, toc_df: pd.DataFrame, schedule_df: pd.DataFrame):

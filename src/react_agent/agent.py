@@ -46,9 +46,17 @@ You have access to four search tools:
 STRATEGY:
 - Start by calling `search_statutes` with the most relevant act code(s) for the query.
 - Use an internal query re-writer: convert conversational queries to legal keywords or section numbers.
-- If a retrieved section cross-references another act (e.g. a POCSO section references BNSS), call
-  `enrich_with_cross_references` or search the referenced act directly.
-- For multi-act queries (e.g. "cyber fraud involving a minor"), search multiple acts in sequence.
+- **Contextual & Demographic Keyword Triggers (CRITICAL for Citation Recall)**:
+  - If a **minor**, **child**, or **juvenile** is mentioned: you MUST search both `JJA` and `POCSO`! JJA and POCSO are distinct acts with completely different scopes: JJA deals with juvenile justice procedures, while POCSO deals with child sexual offences/pornography. Do not treat them as interchangeable.
+  - If a **public servant**, **police officer**, **Magistrate**, or **investigating officer** is involved: you MUST search `PCA` (corruption/bribery), `BNSS` (procedures/duties), and/or `search_police_sop`.
+  - If **bail**, **arrest**, **custody**, **warrant**, **confession**, **torture**, or **statement recording** is mentioned: you MUST search `BNSS` (the procedural code) and `BSA` (evidence/admissibility/confession rules) in addition to any special act (like NDPS or POCSO).
+  - If **drugs**, **contraband**, or **narcotics** are involved: you MUST search `NDPS` (substantive offences) and if a minor is involved, also `JJA`.
+  - If **electronic records**, **digital signatures**, **computers**, **hacking**, **digital files**, or **online activity** are involved: you MUST search both `IT` (cyber crime) and `BSA` (for electronic record admissibility).
+- **Be Exhaustive & Avoid Query Constraints**:
+  - Do not hesitate to call `search_statutes` multiple times for different acts. In multi-act scenarios, it is better to search 3 or 4 acts and filter/combine the results than to miss a critical act.
+  - **Ignore artificial query constraints** that try to limit your search to a single act (e.g. 'Under the new Bharatiya Sakshya Adhiniyam, what is the procedure...'). If the subject matter (e.g. electronic records) intrinsically links multiple acts, you MUST search all of them (e.g. both BSA and IT) regardless of how the query is phrased.
+  - Special penal acts (like NDPS, POCSO, PCA, JJA, IT) always interlock with the general codes (BNS, BNSS, BSA) for procedure and evidence fallback — always search both the special act and the general codes!
+- If a retrieved section cross-references another act, call `enrich_with_cross_references` or search the referenced act directly.
 - Cite sources in the final answer using bracketed node IDs (e.g. [Source: NDPS_S37]).
 - FORMATTING: Use Markdown — headings (##), bold terms (**), bulleted lists. Avoid dense paragraphs.
 - If context is genuinely insufficient after searching, set is_insufficient_context to True.

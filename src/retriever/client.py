@@ -37,7 +37,8 @@ def get_langchain_model(model_name: str, temperature: float = 0.0, json_mode: bo
         model=model_name,
         google_api_key=api_key,
         temperature=temperature,
-        response_mime_type=mime_type
+        response_mime_type=mime_type,
+        max_retries=10
     )
 
 async def _execute_with_rate_limit(model_name: str, fn) -> Any:

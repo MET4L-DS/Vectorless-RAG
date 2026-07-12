@@ -73,7 +73,7 @@
 - [x] **Phase 7 — Frontend:** Next.js client with reasoning accordion, citation panels, suggested questions, action items.
 - [x] **Phase 8 — Deployment:** HF Spaces deployment via `deploy.py`. Frontend on Vercel.
 
-- [x] **Phase 9 — Corpus Expansion (5 new acts):** Added IT Act, JJ Act, POCSO, NDPS, and PCA. All 9 acts are ingested, trees constructed, validated, and verified through retriever and ReAct agent loops.
+- [x] **Phase 9.5 — ReAct Agent Accuracy Benchmark & Optimization:** Created 15-case golden dataset from Deep Research. Evaluated agent, identified cross-act routing and citation traversal issues, and optimized the agent system prompt with strict demographic and contextual keyword triggers, fallback procedural search rules, and multi-act exhaustiveness. Re-ran the benchmark: **Citation Recall increased to 86.7% (13/15)** and **Substantive Completeness increased to 53.3% (8/15)**.
 
 ### 🔄 In Progress
 *None*
