@@ -55,5 +55,5 @@ class GeneratedAnswer(BaseModel):
     )
     action_items: List[str] = Field(
         default_factory=list,
-        description="List of tasks or follow-up actions identified for the user (e.g., 'File an FIR', 'Consult a lawyer'). Leave empty if not applicable or not necessary for the query."
+        description="List of tasks or follow-up actions identified for the user (e.g., 'File an FIR', 'Consult a lawyer'). ONLY populate this if the user's question is a 1st person query, scenario, or specific request for advice. MUST leave empty if the question is just a general informational query."
     )

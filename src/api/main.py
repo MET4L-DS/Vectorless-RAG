@@ -1,5 +1,6 @@
 import os
 import sys
+# reload trigger 2
 import asyncio
 from contextlib import asynccontextmanager
 from dotenv import load_dotenv
@@ -28,7 +29,15 @@ async def lifespan(app: FastAPI):
     async with AsyncConnectionPool(
         conninfo=database_url,
         max_size=10,
-        kwargs={"autocommit": True}
+        max_lifetime=300,  # 5 minutes connection lifetime to refresh before idle timeouts
+        kwargs={
+            "autocommit": True,
+            "prepare_threshold": None,
+            "keepalives": 1,
+            "keepalives_idle": 30,
+            "keepalives_interval": 10,
+            "keepalives_count": 3
+        }
     ) as pool:
         app.state.pool = pool
         checkpointer = AsyncPostgresSaver(pool)

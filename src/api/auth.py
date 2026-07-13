@@ -6,6 +6,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import jwt.algorithms
 import httpx
+import asyncio
 
 # In-memory cache for JWK
 JWKS_CACHE = None
@@ -44,26 +45,45 @@ def get_supabase_project_id() -> str:
             
     raise RuntimeError("Neither SUPABASE_URL nor DATABASE_URL was found or could be parsed to retrieve the Supabase project ID.")
 
+# Global lock to serialize JWK fetches
+JWKS_LOCK = asyncio.Lock()
+
 async def fetch_jwks(force_refresh: bool = False) -> dict:
     global JWKS_CACHE, JWKS_LAST_FETCH
+    
+    # Lock-free fast path check
     now = time.time()
     if not force_refresh and JWKS_CACHE and (now - JWKS_LAST_FETCH) < JWKS_TTL:
         return JWKS_CACHE
     
-    project_id = get_supabase_project_id()
-    jwks_url = f"https://{project_id}.supabase.co/auth/v1/.well-known/jwks.json"
-    
-    import urllib.request
-    import json
-    import asyncio
-    
-    def _fetch():
-        with urllib.request.urlopen(jwks_url, timeout=10.0) as response:
-            return json.loads(response.read().decode())
+    async with JWKS_LOCK:
+        # Re-check inside lock to prevent concurrent requests from double-fetching
+        now = time.time()
+        if not force_refresh and JWKS_CACHE and (now - JWKS_LAST_FETCH) < JWKS_TTL:
+            return JWKS_CACHE
             
-    JWKS_CACHE = await asyncio.to_thread(_fetch)
-    JWKS_LAST_FETCH = now
-    return JWKS_CACHE
+        project_id = get_supabase_project_id()
+        jwks_url = f"https://{project_id}.supabase.co/auth/v1/.well-known/jwks.json"
+        
+        print(f"[auth.py] fetch_jwks: Cache miss or force-refresh. Fetching JWKS from {jwks_url}...")
+        start_time = time.time()
+        
+        try:
+            async with httpx.AsyncClient(timeout=10.0) as client:
+                response = await client.get(jwks_url)
+                response.raise_for_status()
+                JWKS_CACHE = response.json()
+                JWKS_LAST_FETCH = time.time()
+                latency_ms = round((JWKS_LAST_FETCH - start_time) * 1000)
+                print(f"[auth.py] fetch_jwks: Successfully fetched and cached JWKS in {latency_ms}ms")
+                return JWKS_CACHE
+        except Exception as e:
+            print(f"[auth.py] fetch_jwks: Network fetch failed: {type(e).__name__}: {str(e)}")
+            # Fallback to stale cache if available to prevent API blackout
+            if JWKS_CACHE:
+                print("[auth.py] fetch_jwks: Returning stale cached JWKS as fallback due to network failure.")
+                return JWKS_CACHE
+            raise RuntimeError(f"Failed to fetch Supabase JWKS from {jwks_url}: {str(e)}") from e
 
 async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(security)) -> dict:
     """FastAPI security dependency to verify the JWT from Supabase.
