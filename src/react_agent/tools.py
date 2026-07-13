@@ -3,9 +3,20 @@ from typing import Literal, List, Optional
 from langchain_core.tools import tool
 from src.retriever import graph
 from src.retriever.state import RetrievedNode
+from langgraph.config import get_stream_writer
 
 # ContextVar to collect retrieved nodes dynamically across tool executions for CLI/serve metadata
 retrieved_nodes_var = contextvars.ContextVar("retrieved_nodes", default=None)
+
+def emit_status(message: str):
+    """Helper to safely stream custom status updates to LangGraph if running in an execution context."""
+    try:
+        writer = get_stream_writer()
+        writer({"message": message})
+    except Exception:
+        # Failsafe for direct unit testing outside LangGraph context
+        pass
+
 
 def _format_nodes(nodes: List[RetrievedNode]) -> str:
     """Helper to format retrieved nodes for LLM observation."""
@@ -72,6 +83,7 @@ async def search_statutes(
     # 1. Tree Navigation (guided search)
     if method in ["tree", "hybrid"] and graph._tree_navigator:
         try:
+            emit_status(f"🌲 Navigating chapter tree for {statute_code}...")
             tree_nodes = await graph._tree_navigator.navigate(query, statute_code)
             for n in tree_nodes:
                 if n["node_id"] not in seen_ids:
@@ -83,6 +95,7 @@ async def search_statutes(
     # 2. BM25 (keyword search)
     if method in ["bm25", "hybrid"] and graph._bm25_index:
         try:
+            emit_status(f"🔍 Searching {statute_code} BM25 index...")
             bm25_nodes = graph._bm25_index.search(
                 query,
                 graph._corpus_index,
@@ -96,6 +109,7 @@ async def search_statutes(
         except Exception as e:
             print(f"[Tool: search_statutes] BM25 failed: {e}")
 
+    emit_status(f"⚡ Completed search for {statute_code}")
     return _format_nodes(nodes)
 
 @tool
@@ -110,7 +124,9 @@ async def search_police_sop(query: str) -> str:
         return "Error: SOP retriever not initialized."
         
     try:
+        emit_status("📋 Searching Police SOP manual...")
         nodes = await graph._sop_retriever.retrieve(query, top_k=5)
+        emit_status("⚡ Completed SOP search")
         return _format_nodes(nodes)
     except Exception as e:
         return f"Error searching Police SOP: {e}"
@@ -147,7 +163,9 @@ async def enrich_with_cross_references(section_id: str) -> str:
     }
 
     try:
+        emit_status(f"🔗 Resolving cross-references for {section_id}...")
         enriched_nodes = graph._cross_ref_linker.enrich([p_node], max_links_per_node=5)
+        emit_status(f"⚡ Completed cross-reference resolution for {section_id}")
         return _format_nodes(enriched_nodes)
     except Exception as e:
         return f"Error resolving cross references: {e}"

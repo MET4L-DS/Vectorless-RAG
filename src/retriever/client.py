@@ -14,7 +14,7 @@ api_key = os.getenv("GOOGLE_API_KEY")
 MODEL_CONFIGS = {
     # "models/gemma-4-26b-a4b-it": 6.0,
     # "models/gemma-4-31b-it": 6.0,
-    "models/gemini-3.1-flash-lite": 0.5, # Very low delay for flash-lite
+    "models/gemini-3.1-flash-lite": 0.5, # Enforce 12 RPM pacing (1 request per 5.0s)
 }
 
 MODELS = list(MODEL_CONFIGS.keys())
@@ -25,6 +25,7 @@ model_cycle = itertools.cycle(MODELS)
 # Metrics tracking
 new_calls_count = 0
 model_calls_tracker = {m: 0 for m in MODELS}
+call_history = []
 
 def get_langchain_model(model_name: str, temperature: float = 0.0, json_mode: bool = False) -> ChatGoogleGenerativeAI:
     if not api_key:
@@ -41,7 +42,7 @@ def get_langchain_model(model_name: str, temperature: float = 0.0, json_mode: bo
         max_retries=10
     )
 
-async def _execute_with_rate_limit(model_name: str, fn) -> Any:
+async def _execute_with_rate_limit(model_name: str, fn, description: str = "Unknown") -> Any:
     """
     Enforces rate limits using the async leaky bucket slot reservation system
     and executes the LangChain invocation.
@@ -66,6 +67,12 @@ async def _execute_with_rate_limit(model_name: str, fn) -> Any:
     elapsed = asyncio.get_event_loop().time() - start_time
     print(f"[Call] Model: {model_name} (Response time: {elapsed:.2f}s)")
     
+    call_history.append({
+        "model": model_name,
+        "elapsed": elapsed,
+        "description": description
+    })
+    
     model_calls_tracker.setdefault(model_name, 0)
     model_calls_tracker[model_name] += 1
     new_calls_count += 1
@@ -78,12 +85,20 @@ async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool =
     if not model_name:
         model_name = next(model_cycle)
         
+    desc = "Raw Text"
+    if "chapters" in prompt.lower():
+        desc = "Chapter Selection"
+    elif "sections" in prompt.lower():
+        desc = "Section Selection"
+    elif "sop" in prompt.lower():
+        desc = "SOP Selection"
+
     for attempt in range(retries):
         try:
             llm = get_langchain_model(model_name, json_mode=json_mode)
             # ainvoke returns a BaseMessage, content is the text response
             fn = lambda: llm.ainvoke(prompt)
-            response = await _execute_with_rate_limit(model_name, fn)
+            response = await _execute_with_rate_limit(model_name, fn, description=desc)
             
             # Handle list content in newer model output wrappers
             content = response.content
@@ -122,12 +137,20 @@ async def call_model_structured(prompt: str, response_schema: type[BaseModel], m
     if not model_name:
         model_name = next(model_cycle)
         
+    desc = "Structured Request"
+    if "chapters" in prompt.lower():
+        desc = "Chapter Selection"
+    elif "sections" in prompt.lower():
+        desc = "Section Selection"
+    elif "sop" in prompt.lower():
+        desc = "SOP Selection"
+
     for attempt in range(retries):
         try:
             llm = get_langchain_model(model_name)
             structured_llm = llm.with_structured_output(response_schema)
             fn = lambda: structured_llm.ainvoke(prompt)
-            result = await _execute_with_rate_limit(model_name, fn)
+            result = await _execute_with_rate_limit(model_name, fn, description=desc)
             return result
         except Exception as e:
             err_msg = str(e)

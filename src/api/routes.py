@@ -70,33 +70,43 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
     
     try:
         # Stream updates from the agent
-        async for event in agent.astream(
+        async for chunk in agent.astream(
             {"messages": [HumanMessage(content=query)]},
             config=config,
-            stream_mode="updates"
+            stream_mode=["updates", "custom"],
+            version="v2"
         ):
-            for node, update in event.items():
-                if node == "agent":
-                    msgs = update.get("messages", [])
-                    if msgs:
-                        msg = msgs[-1]
-                        content = parse_message_content(msg.content)
-                        if content:
-                            yield f"data: {json.dumps({'type': 'thought', 'content': content.strip()})}\n\n"
-                        
-                        # Stream tool calls if any
-                        if hasattr(msg, "tool_calls") and msg.tool_calls:
-                            for tc in msg.tool_calls:
-                                yield f"data: {json.dumps({'type': 'tool_call', 'name': tc['name'], 'args': tc['args']})}\n\n"
-                                
-                elif node == "tools":
-                    msgs = update.get("messages", [])
-                    if msgs:
-                        msg = msgs[-1]
-                        content = parse_message_content(msg.content)
-                        # Yield truncated observation preview to keep SSE package light
-                        preview = content[:300] + "..." if len(content) > 300 else content
-                        yield f"data: {json.dumps({'type': 'observation', 'content': preview.strip()})}\n\n"
+            chunk_type = chunk.get("type")
+            chunk_data = chunk.get("data")
+            
+            if chunk_type == "custom":
+                msg_text = chunk_data.get("message", "")
+                if msg_text:
+                    yield f"data: {json.dumps({'type': 'status', 'content': msg_text.strip()})}\n\n"
+                    
+            elif chunk_type == "updates" and isinstance(chunk_data, dict):
+                for node, update in chunk_data.items():
+                    if node == "agent":
+                        msgs = update.get("messages", [])
+                        if msgs:
+                            msg = msgs[-1]
+                            content = parse_message_content(msg.content)
+                            if content:
+                                yield f"data: {json.dumps({'type': 'thought', 'content': content.strip()})}\n\n"
+                            
+                            # Stream tool calls if any
+                            if hasattr(msg, "tool_calls") and msg.tool_calls:
+                                for tc in msg.tool_calls:
+                                    yield f"data: {json.dumps({'type': 'tool_call', 'name': tc['name'], 'args': tc['args']})}\n\n"
+                                    
+                    elif node == "tools":
+                        msgs = update.get("messages", [])
+                        if msgs:
+                            msg = msgs[-1]
+                            content = parse_message_content(msg.content)
+                            # Yield truncated observation preview to keep SSE package light
+                            preview = content[:300] + "..." if len(content) > 300 else content
+                            yield f"data: {json.dumps({'type': 'observation', 'content': preview.strip()})}\n\n"
 
         # 3. Retrieve final state to extract the structured answer
         state = await agent.aget_state(config)
