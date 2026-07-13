@@ -39,16 +39,21 @@
 - **[2026-07] `AsyncPostgresSaver` over `AsyncSqliteSaver`:** Chose Supabase Postgres instead of local SQLite for checkpoint persistence so the deployed HF Spaces backend can maintain multi-user session state without local disk dependency.
 - **[2026-07] Gemma for summarization, Gemini for inference:** Gemma 26B/31B models are used only during the offline one-time tree build (slow, 18s–55s per call). Gemini Flash-Lite is used for all live query inference (fast, ~1.3s).
 
+### Database & PgBouncer Compatibility
+- **[2026-07] Switch to Transaction Pooling (Port 6543):** Changed connection string port from `5432` (Session mode) to `6543` (Transaction mode). Session pooling has a strict limit of 15 concurrent clients on Supabase which led to connection exhaustion hangs (`EMAXCONNSESSION`) under parallel request and process-reloading conditions.
+- **[2026-07] Disabling Prepared Statements:** Configured `"prepare_threshold": None` in psycopg3 connection pool `kwargs` to prevent prepared statement and pipeline mode conflicts, which are not supported by PgBouncer in transaction mode.
+- **[2026-07] TCP Keepalives & Lifetime Configuration:** Added TCP keepalive parameters (`keepalives=1`, `keepalives_idle=30`) and `max_lifetime=300` to the pool configuration to prevent PgBouncer/Supabase from silently severing idle sockets and producing stale socket reads (`unexpected eof while reading`).
+
+### Security & Authentication
+- **[2026-07] Locked JWKS Fetching with httpx:** Added an `asyncio.Lock` inside [auth.py](file:///c:/Met4l.DSCode/Projects/Vectorless-RAG/src/api/auth.py) to prevent concurrent guest/user requests from triggering parallel network fetches for Supabase public keys. Refactored the fetcher to use `httpx` instead of `urllib.request` to support async natively, prevent thread pool bottlenecks, and improve network timeout logging.
+
 ### Ingestion Quirks
 - **BNSS Chapter V Injection:** The source PDF is missing Chapter V ("ARREST OF PERSONS") in its TOC. The parser injects it synthetically at Section 35 via regex heuristic.
 - **BNSS First Schedule:** The borderless multi-page offence classification table is parsed using horizontal coordinate thresholds, not text delimiters. Each row becomes a `schedule_row` leaf node.
 - **`SOP` detection in `tree_builder.py`:** The SOP act is auto-detected from Parquet if `"SOP"` appears in `toc_df["act_code"]` — no hardcoded list.
 
-### CLI Execution Quirk
+### CLI & API Execution
 - **`ModuleNotFoundError: No module named 'src'`:** Run ALL CLI scripts with `sys.path` injection. This has already been patched in `src/cli.py`, `src/react_agent/cli_react.py`, and `src/react_agent/benchmark.py`. Do NOT run scripts via `python -m` unless using the `$env:PYTHONPATH="."` prefix.
-- Correct command pattern: `python ./src/react_agent/cli_react.py` (the path injection handles it)
-
-### API Quirks
 - **Thread ID scoping:** All threads are namespaced as `f"{user_sub}:{thread_id}"` in `routes.py`. This prevents cross-user history leakage.
 - **Chat title is set from `GeneratedAnswer.chat_title`:** Only updated on the first turn when the DB shows title is still `"New Legal Chat"`.
 - **CORS:** Origin whitelist is loaded from `ALLOWED_ORIGINS` env var (comma-separated). Falls back to `"*"` if not set.
@@ -62,26 +67,33 @@
 ## 🏁 Progress Checklist
 
 ### ✅ Completed Phases
-- [x] **Phase 1 — Ingestion & Parsing:** `parser.py` parses BNS (358s), BNSS (531s), BSA (170s). `sop_parser.py` parses Police SOP. All validated with zero orphans.
-- [x] **Phase 2 — Tree Construction:** Bottom-up Gemma summarization of 1,582 nodes. Trees stored in `tree/*.json`. Summary cache prevents repeat LLM calls. 191,252 token navigation scaffold.
-- [x] **Phase 3 — LangGraph Retrieval Subsystem:** `TreeNavigator`, `BM25Index`, `SOPRetriever`, `CrossRefLinker`, LangGraph State Machine orchestrator.
-- [x] **Phase 4 — Generator & Groundedness:** Deterministic pipeline with `ContextRouter`, `GeneratorAgent`, `VerifierAgent`. Structured `GeneratedAnswer` Pydantic output.
-- [x] **Phase 4.5 — LangChain Structured Outputs Migration:** All LLM calls use `.with_structured_output()` with Pydantic schemas. Zero fragile JSON parsing.
-- [x] **Phase 4.6 — CLI Aesthetics Upgrade:** Rich-powered terminal UIs for both CLIs.
-- [x] **Phase 5 — ReAct Agent:** `create_react_agent` with 3 tools, streamed Thought→Action→Observation, benchmarked vs. deterministic pipeline.
-- [x] **Phase 6 — FastAPI Production Backend:** SSE streaming, Supabase Postgres checkpointer, JWT auth, session metadata.
-- [x] **Phase 7 — Frontend:** Next.js client with reasoning accordion, citation panels, suggested questions, action items.
+- [x] **Phase 1 — Ingestion & Parsing:** BNS, BNSS, BSA, and Police SOP parsed with zero orphans.
+- [x] **Phase 2 — Tree Construction:** Bottom-up Gemma summarization of 1,582 nodes. Trees stored in `tree/*.json`.
+- [x] **Phase 3 — LangGraph Retrieval Subsystem:** `TreeNavigator`, `BM25Index`, `SOPRetriever`, `CrossRefLinker`.
+- [x] **Phase 4 — Generator & Groundedness:** Deterministic pipeline with `ContextRouter`, `GeneratorAgent`, `VerifierAgent`.
+- [x] **Phase 4.5 — LangChain Structured Outputs Migration:** All LLM calls use `.with_structured_output()` with Pydantic schemas.
+- [x] **Phase 4.6 — CLI Aesthetics Upgrade:** Rich-powered terminal UIs.
+- [x] **Phase 5 — ReAct Agent:** `create_react_agent` with 3 tools.
+- [x] **Phase 6 — FastAPI Production Backend:** SSE streaming, Supabase Postgres checkpointer, JWT auth.
+- [x] **Phase 7 — Frontend:** Next.js client with reasoning accordion, citation panels.
 - [x] **Phase 8 — Deployment:** HF Spaces deployment via `deploy.py`. Frontend on Vercel.
-
-- [x] **Phase 9.5 — ReAct Agent Accuracy Benchmark & Optimization:** Created 15-case golden dataset from Deep Research. Evaluated agent, identified cross-act routing and citation traversal issues, and optimized the agent system prompt with strict demographic and contextual keyword triggers, fallback procedural search rules, and multi-act exhaustiveness. Re-ran the benchmark: **Citation Recall increased to 86.7% (13/15)** and **Substantive Completeness increased to 53.3% (8/15)**.
+- [x] **Phase 9 — Accuracy Benchmark & Optimization:** Created 15-case golden dataset. Optimized agent system prompt with multi-act exhaustiveness. Citation Recall at 86.7%, Substantive Completeness at 53.3%.
+- [x] **Phase 10 — UI Polish, Streaming & Connection Resilience (July 2026):** 
+  - Refactored routes to support granular streaming updates.
+  - Implemented smooth, lock-to-bottom scroll viewports using `MutationObserver` on both the main chat window and internal accordion reasoning logs.
+  - Delayed rendering of supplementary cards (provisions, action items) until the answer typing reveal animation completes.
+  - Enforced 1st-person query gating for Action Items in the Pydantic schema.
+  - Decoupled citation processing on the frontend to render distinct clickable chips for comma-separated outputs.
+  - Added API call count, total run-time, latency, and tok/sec metrics to CLI debuggers.
+  - Resolved `EMAXCONNSESSION` database deadlock and SSL EOF issues by configuring the pooler for PgBouncer transaction mode (port 6543), setting `prepare_threshold=None`, and setting up TCP keepalives.
 
 ### 🔄 In Progress
 *None*
 
 ### 📋 Upcoming
-- [ ] **Phase 10 — Case Law Nodes:** `JudgementParser` + `INTERPRETS/CITES` relationship edges
-- [ ] **Phase 11 — Transitional Law Reasoning:** IPC/CrPC corpus + `AMENDS/REPEALS` edges
-- [ ] **Phase 12 — Knowledge Graph Upgrade (optional at scale):** Neo4j migration if node count exceeds practical in-memory limits
+- [ ] **Phase 11 — Case Law Nodes:** `JudgementParser` + `INTERPRETS/CITES` relationship edges
+- [ ] **Phase 12 — Transitional Law Reasoning:** IPC/CrPC corpus + `AMENDS/REPEALS` edges
+- [ ] **Phase 13 — Knowledge Graph Upgrade (optional at scale):** Neo4j migration if node count exceeds practical in-memory limits
 
 ---
 
@@ -91,8 +103,8 @@
 |---|---|
 | `src/parser.py` | BNS/BNSS/BSA PDF → Parquet dataframes |
 | `src/sop_parser.py` | SOP PDF → Parquet dataframes |
-| `src/generic_parser.py` | **[Phase 9]** Configurable parser for new acts; driven by ActAdapter |
-| `src/act_adapters/__init__.py` | **[Phase 9]** ActAdapter configs for IT, JJA, POCSO, NDPS, PCA |
+| `src/generic_parser.py` | Configurable parser for new acts; driven by ActAdapter |
+| `src/act_adapters/__init__.py` | ActAdapter configs for IT, JJA, POCSO, NDPS, PCA |
 | `src/tree_builder.py` | Parquet → unsummarized JSON tree (has `_STATUTE_METADATA` registry) |
 | `src/summarizer.py` | Async Gemma summarization + cache |
 | `src/build_tree.py` | Orchestrates build + validation pipeline |
@@ -101,13 +113,13 @@
 | `src/retriever/tree_navigator.py` | Guided 2-level chapter → section traversal |
 | `src/retriever/bm25_index.py` | BM25s sparse keyword search |
 | `src/retriever/cross_ref_linker.py` | Programmatic citation graph resolver |
-| `src/retriever/client.py` | Rate-limited round-robin Gemini/Gemma pool |
+| `src/retriever/client.py` | Rate-limited round-robin Gemini/Gemma pool + latency logging |
 | `src/retriever/graph.py` | Deterministic LangGraph state machine |
 | `src/react_agent/agent.py` | ReAct agent (Gemini Flash-Lite), 4 tools, 8-act system prompt |
 | `src/react_agent/tools.py` | 4 LangChain tools: search_statutes, search_police_sop, enrich_with_cross_references, find_case_law_for_section |
-| `src/api/main.py` | FastAPI lifespan + Postgres pool + CORS |
+| `src/api/main.py` | FastAPI lifespan + PgBouncer-compliant Postgres pool + CORS |
 | `src/api/routes.py` | SSE streaming, history, session, chat management |
-| `src/api/auth.py` | Supabase JWKS JWT verification |
+| `src/api/auth.py` | Supabase JWKS JWT verification (safe httpx + lock) |
 | `deploy.py` | HF Spaces upload via `huggingface_hub` SDK |
 | `tree/index.json` | Corpus registry (which acts are indexed) |
 | `tree/summary_cache.json` | Gemma summarization cache |
