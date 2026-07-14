@@ -2,9 +2,9 @@
 
 ## 🚀 Current Mission / Core Objective
 
-**Vectorless-RAG** is a precision legal assistant for Indian Criminal Law. It indexes statutory legal texts (BNS, BNSS, BSA, SOP) into hierarchical JSON trees (Act → Chapter → Section), then resolves user queries via guided LLM tree traversal, BM25 keyword search, and a ReAct agent loop — entirely without vector embeddings — producing grounded, cited Markdown answers.
+**Vectorless-RAG** is a precision legal assistant for Indian Criminal Law. It indexes statutory legal texts (BNS, BNSS, BSA, SOP, and 5 auxiliary acts: IT, JJA, POCSO, NDPS, PCA) into hierarchical JSON trees (Act → Chapter → Section), then resolves user queries via guided LLM tree traversal, BM25 keyword search, and a ReAct agent loop — entirely without vector embeddings — producing grounded, cited Markdown answers.
 
-**Current expansion goal:** Scale the corpus from 3 acts to 8 acts by ingesting IT Act 2000, JJ Act 2015, POCSO 2012, NDPS Act 1985, and Prevention of Corruption Act 1988 from `./source_documents/`.
+**Current expansion goal:** Extend database entity relationships by implementing Case Law nodes (Phase 11) and Transitional Law mapping (Phase 12) between the new statutes and older equivalents (IPC/CrPC).
 
 ---
 
