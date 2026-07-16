@@ -109,6 +109,63 @@ async def search_statutes(
         except Exception as e:
             print(f"[Tool: search_statutes] BM25 failed: {e}")
 
+    # 3. Sibling Hydration (pull in immediate +/- 1 sibling sections)
+    if graph._corpus_index:
+        try:
+            adjacent_nodes = []
+            for node in nodes:
+                node_id = node["node_id"]
+                parent_id = graph._corpus_index._parent_map.get(node_id)
+                if parent_id:
+                    siblings = graph._corpus_index.get_children(parent_id)
+                    idx = -1
+                    for i, sibling in enumerate(siblings):
+                        if sibling["node_id"] == node_id:
+                            idx = i
+                            break
+                    if idx != -1:
+                        # Preceding Sibling
+                        if idx > 0:
+                            prev_sib = siblings[idx - 1]
+                            if prev_sib["node_id"] not in seen_ids:
+                                prev_retrieved: RetrievedNode = {
+                                    "node_id": prev_sib["node_id"],
+                                    "act_code": prev_sib.get("metadata", {}).get("act_code", statute_code),
+                                    "title": prev_sib.get("title", ""),
+                                    "summary": prev_sib.get("summary", ""),
+                                    "content": prev_sib.get("content", ""),
+                                    "score": node.get("score", 1.0),
+                                    "node_type": prev_sib.get("node_type", "section"),
+                                    "page_range": prev_sib.get("metadata", {}).get("page_range", []),
+                                    "cross_act_refs": prev_sib.get("metadata", {}).get("cross_act_refs", []),
+                                    "internal_refs": prev_sib.get("metadata", {}).get("internal_refs", []),
+                                    "retrieval_method": "adjacent_hydration"
+                                }
+                                adjacent_nodes.append(prev_retrieved)
+                                seen_ids.add(prev_sib["node_id"])
+                        # Succeeding Sibling
+                        if idx < len(siblings) - 1:
+                            next_sib = siblings[idx + 1]
+                            if next_sib["node_id"] not in seen_ids:
+                                next_retrieved: RetrievedNode = {
+                                    "node_id": next_sib["node_id"],
+                                    "act_code": next_sib.get("metadata", {}).get("act_code", statute_code),
+                                    "title": next_sib.get("title", ""),
+                                    "summary": next_sib.get("summary", ""),
+                                    "content": next_sib.get("content", ""),
+                                    "score": node.get("score", 1.0),
+                                    "node_type": next_sib.get("node_type", "section"),
+                                    "page_range": next_sib.get("metadata", {}).get("page_range", []),
+                                    "cross_act_refs": next_sib.get("metadata", {}).get("cross_act_refs", []),
+                                    "internal_refs": next_sib.get("metadata", {}).get("internal_refs", []),
+                                    "retrieval_method": "adjacent_hydration"
+                                }
+                                adjacent_nodes.append(next_retrieved)
+                                seen_ids.add(next_sib["node_id"])
+            nodes.extend(adjacent_nodes)
+        except Exception as e:
+            print(f"[Tool: search_statutes] Sibling Hydration failed: {e}")
+
     emit_status(f"⚡ Completed search for {statute_code}")
     return _format_nodes(nodes)
 

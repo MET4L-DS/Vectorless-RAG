@@ -1,12 +1,38 @@
+import re
+from typing import Annotated, TypedDict
+from langchain_core.messages import HumanMessage
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
 from langgraph.prebuilt import create_react_agent
 from src.react_agent.tools import (
     search_statutes,
     search_police_sop,
     enrich_with_cross_references,
     find_case_law_for_section,
+    retrieved_nodes_var,
 )
 from src.retriever.schemas import GeneratedAnswer
 from src.retriever import client
+
+TRIGGER_RULES = [
+    (re.compile(r"\b(minors?|child|children|juveniles?)\b", re.I), {"JJA", "POCSO"}),
+    (re.compile(r"\b(bail|arrests?|custody|warrants?|confessions?|tortures?|statement recordings?)\b", re.I), {"BNSS", "BSA"}),
+    (re.compile(r"\b(electronic records?|digital signatures?|computers?|hackings?|digital files?|online)\b", re.I), {"IT", "BSA"}),
+    (re.compile(r"\b(public servants?|police officers?|magistrates?|investigating officers?)\b", re.I), {"PCA", "BNSS"}),
+    (re.compile(r"\b(drugs?|contraband|narcotics?)\b", re.I), {"NDPS"}),
+]
+
+def required_acts(query: str) -> set[str]:
+    required = set()
+    for pattern, acts in TRIGGER_RULES:
+        if pattern.search(query):
+            required |= acts
+    return required
+
+class AgentState(TypedDict):
+    messages: Annotated[list, add_messages]
+    coverage_retries: int
+    structured_response: GeneratedAnswer
 
 # We only use gemini-3.1-flash-lite since it is fast and efficient.
 llm = client.get_langchain_model("models/gemini-3.1-flash-lite", temperature=0.0)
@@ -64,14 +90,53 @@ STRATEGY:
 
 
 def get_agent(checkpointer=None):
-    """Compiles and returns the LangGraph ReAct agent with an optional state checkpointer."""
-    return create_react_agent(
+    """Compiles and returns the wrapped LangGraph ReAct agent with coverage gate enforcement."""
+    inner_agent = create_react_agent(
         model=llm,
         tools=tools,
         response_format=GeneratedAnswer,
-        prompt=SYSTEM_PROMPT,
-        checkpointer=checkpointer
+        prompt=SYSTEM_PROMPT
     )
+
+    def coverage_gate(state: AgentState):
+        messages = state["messages"]
+        if not messages:
+            return {}
+        query = messages[0].content
+        required = required_acts(query)
+        
+        nodes = retrieved_nodes_var.get() or []
+        searched = {n.get("act_code") for n in nodes if n.get("act_code")}
+        missing = required - searched
+        
+        retries = state.get("coverage_retries", 0)
+        if missing and retries < 2:
+            msg = (
+                f"COVERAGE CHECK FAILED: Based on trigger rules, you were required to search "
+                f"{sorted(missing)} but have not done so. Call search_statutes for each missing "
+                f"act before finalizing your answer."
+            )
+            return {"messages": [HumanMessage(content=msg)], "coverage_retries": retries + 1}
+        return {}
+
+    def should_loop(state: AgentState):
+        messages = state["messages"]
+        if not messages:
+            return END
+        last_msg = messages[-1]
+        if isinstance(last_msg, HumanMessage) and "COVERAGE CHECK FAILED" in last_msg.content:
+            return "run_inner"
+        return END
+
+    builder = StateGraph(AgentState)
+    builder.add_node("run_inner", inner_agent)
+    builder.add_node("coverage_gate", coverage_gate)
+    
+    builder.add_edge(START, "run_inner")
+    builder.add_edge("run_inner", "coverage_gate")
+    builder.add_conditional_edges("coverage_gate", should_loop)
+    
+    return builder.compile(checkpointer=checkpointer)
 
 
 # Default COMPILED_AGENT (without checkpointer) for legacy CLI and benchmark scripts

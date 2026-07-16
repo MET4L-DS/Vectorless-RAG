@@ -43,6 +43,7 @@
 - **[2026-07] Switch to Transaction Pooling (Port 6543):** Changed connection string port from `5432` (Session mode) to `6543` (Transaction mode). Session pooling has a strict limit of 15 concurrent clients on Supabase which led to connection exhaustion hangs (`EMAXCONNSESSION`) under parallel request and process-reloading conditions.
 - **[2026-07] Disabling Prepared Statements:** Configured `"prepare_threshold": None` in psycopg3 connection pool `kwargs` to prevent prepared statement and pipeline mode conflicts, which are not supported by PgBouncer in transaction mode.
 - **[2026-07] TCP Keepalives & Lifetime Configuration:** Added TCP keepalive parameters (`keepalives=1`, `keepalives_idle=30`) and `max_lifetime=300` to the pool configuration to prevent PgBouncer/Supabase from silently severing idle sockets and producing stale socket reads (`unexpected eof while reading`).
+- **[2026-07] Database Connection Pool Validation on Checkout:** Added a `check_db_connection` function executing a simple `SELECT 1` ping query and passed it to `check=check_db_connection` in `AsyncConnectionPool`. This ensures stale database connection pool sockets after periods of container sleep/hibernation are verified and discarded automatically, preventing 500 database errors on wakeup.
 
 ### Security & Authentication
 - **[2026-07] Locked JWKS Fetching with httpx:** Added an `asyncio.Lock` inside [auth.py](file:///c:/Met4l.DSCode/Projects/Vectorless-RAG/src/api/auth.py) to prevent concurrent guest/user requests from triggering parallel network fetches for Supabase public keys. Refactored the fetcher to use `httpx` instead of `urllib.request` to support async natively, prevent thread pool bottlenecks, and improve network timeout logging.
@@ -86,6 +87,7 @@
   - Decoupled citation processing on the frontend to render distinct clickable chips for comma-separated outputs.
   - Added API call count, total run-time, latency, and tok/sec metrics to CLI debuggers.
   - Resolved `EMAXCONNSESSION` database deadlock and SSL EOF issues by configuring the pooler for PgBouncer transaction mode (port 6543), setting `prepare_threshold=None`, and setting up TCP keepalives.
+  - Resolved Hugging Face Space cold-start / sleep failures by implementing backend database connection pool validation (`check=check_db_connection`) on connection checkout, and client-side HTTP request retry loops with exponential backoff on the Next.js frontend (for sessions fetching and history loading) to gracefully await backend container wakeup.
 
 ### 🔄 In Progress
 *None*

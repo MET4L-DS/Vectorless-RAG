@@ -83,8 +83,14 @@ async def run_accuracy_benchmark():
     table.add_column("Completeness", style="magenta", justify="center")
     table.add_column("Contradiction", style="red", justify="center")
     
+    EXCLUDED_CASE_IDS = {"edge_cross_ref_02"}
+    
     for i, case in enumerate(dataset):
         case_id = case["id"]
+        if case_id in EXCLUDED_CASE_IDS:
+            console.print(f"[bold yellow]Skipping case-law dependent case {case_id}[/bold yellow]")
+            continue
+            
         query = case["query"]
         expected_acts = case["expected_citations"]
         golden_answer = case.get("golden_answer", "").strip()

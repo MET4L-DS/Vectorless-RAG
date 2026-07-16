@@ -50,8 +50,12 @@ The addition of **Contextual & Demographic Keyword Triggers** resolved the cross
 ### 2. Legal Detail Completeness
 Allowing the agent to ignore artificial constraints (e.g. searching only BNS when a query says "Under the BNS...") and search both special acts and general procedural codes has doubled the substantive completeness of answers (**53.3%**).
 
+### 3. Judicial Precedents (Missing Corpus Capping Completeness)
+Several evaluation cases (e.g., `edge_cross_ref_02` referencing *Anvar P.V. v. P.K. Basheer* or *Arjun Panditrao Khotkar*) expect judicial precedents. However, the `find_case_law_for_section` tool is currently a Phase 10/11 placeholder scaffold. No prompt optimization or routing logic can close this gap until the case law corpus is actively ingested. This structural missing data caps the agent's current completeness potential around **53.3%** for queries that explicitly depend on case law.
+
 ---
 
 > [!NOTE]
 > Detailed results JSON, including the raw model outputs and Gemma evaluation strings, is available locally at:
 > `tests/benchmark_data/accuracy_results.json`
+

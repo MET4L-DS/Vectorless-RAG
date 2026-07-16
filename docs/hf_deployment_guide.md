@@ -27,3 +27,13 @@ huggingface-cli upload Ayanshu/Legal-Vectorless-RAG-HF . --repo-type space
 3. **Resumable & Fast:** It handles large uploads efficiently without the overhead of Git delta compressions.
 
 You can continue using `git` normally for your own local version control or pushing to GitHub!
+
+---
+
+## 3. Handling Container Sleep & Stale Database Connections
+
+Since free-tier Hugging Face Spaces sleep after 48 hours of inactivity, you should plan for cold starts:
+
+1. **Uptime Warm Pings (Recommended)**: Set up a free service like [UptimeRobot](https://uptimerobot.com/) or [Better Stack Uptime](https://betterstack.com/) to ping the root `/` or `/api/health` endpoint of your Space every 30 minutes. This prevents the Space container from going to sleep.
+2. **Database Connection checkout check**: The backend pool is configured with `check=check_db_connection` in `AsyncConnectionPool` inside `main.py`. This runs a lightweight `SELECT 1` ping query whenever a connection is checked out. If the Space was sleeping and the connection socket died on the Supabase/database side, psycopg will transparently discard the stale connection and open a new one rather than raising a 500 error.
+3. **Frontend Retries**: The Next.js frontend employs retry logic with exponential backoff on primary fetching routes (`/api/chats/sessions` and `/api/chats/{thread_id}/history`) to gracefully handle container wakeup delays if the Space does enter a sleep state.

@@ -19,6 +19,11 @@ from src.api.routes import router as chat_router
 # Load environment variables (such as DATABASE_URL and GOOGLE_API_KEY)
 load_dotenv()
 
+async def check_db_connection(conn):
+    """Verify that the checked-out connection is active."""
+    async with conn.cursor() as cur:
+        await cur.execute("SELECT 1")
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     database_url = os.getenv("DATABASE_URL")
@@ -30,6 +35,7 @@ async def lifespan(app: FastAPI):
         conninfo=database_url,
         max_size=10,
         max_lifetime=300,  # 5 minutes connection lifetime to refresh before idle timeouts
+        check=check_db_connection,
         kwargs={
             "autocommit": True,
             "prepare_threshold": None,
