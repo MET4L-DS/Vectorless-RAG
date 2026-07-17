@@ -82,12 +82,22 @@
 - [x] **Phase 10 — UI Polish, Streaming & Connection Resilience (July 2026):** 
   - Refactored routes to support granular streaming updates.
   - Implemented smooth, lock-to-bottom scroll viewports using `MutationObserver` on both the main chat window and internal accordion reasoning logs.
-  - Delayed rendering of supplementary cards (provisions, action items) until the answer typing reveal animation completes.
-  - Enforced 1st-person query gating for Action Items in the Pydantic schema.
-  - Decoupled citation processing on the frontend to render distinct clickable chips for comma-separated outputs.
-  - Added API call count, total run-time, latency, and tok/sec metrics to CLI debuggers.
-  - Resolved `EMAXCONNSESSION` database deadlock and SSL EOF issues by configuring the pooler for PgBouncer transaction mode (port 6543), setting `prepare_threshold=None`, and setting up TCP keepalives.
-  - Resolved Hugging Face Space cold-start / sleep failures by implementing backend database connection pool validation (`check=check_db_connection`) on connection checkout, and client-side HTTP request retry loops with exponential backoff on the Next.js frontend (for sessions fetching and history loading) to gracefully await backend container wakeup.
+  - [x] Refactored routes to support granular streaming updates.
+  - [x] Implemented smooth, lock-to-bottom scroll viewports using `MutationObserver` on both the main chat window and internal accordion reasoning logs.
+  - [x] Delayed rendering of supplementary cards (provisions, action items) until the answer typing reveal animation completes.
+  - [x] Enforced 1st-person query gating for Action Items in the Pydantic schema.
+  - [x] Decoupled citation processing on the frontend to render distinct clickable chips for comma-separated outputs.
+  - [x] Added API call count, total run-time, latency, and tok/sec metrics to CLI debuggers.
+  - [x] Resolved `EMAXCONNSESSION` database deadlock and SSL EOF issues by configuring the pooler for PgBouncer transaction mode (port 6543), setting `prepare_threshold=None`, and setting up TCP keepalives.
+  - [x] Resolved Hugging Face Space cold-start / sleep failures by implementing backend database connection pool validation (`check=check_db_connection`) on connection checkout, and client-side HTTP request retry loops with exponential backoff on the Next.js frontend (for sessions fetching and history loading) to gracefully await backend container wakeup.
+  - [x] Migrated Server-Sent Events (SSE) streaming endpoint from raw `StreamingResponse` to `sse-starlette`'s `EventSourceResponse` to add standardized headers (`Cache-Control: no-cache`, `X-Accel-Buffering: no`) and automatic 20s keep-alive heartbeats to protect against proxy drops on Hugging Face Spaces.
+  - [x] Refactored frontend SSE consumer transport from Axios `fetch` adapter to native browser `fetch` and `ReadableStream` reader to improve bundle footprint and prevent multibyte chunk-splitting errors.
+  - [x] Cleaned up Python global `ContextVar` (`retrieved_nodes_var`) side-channels in the LangGraph agent by establishing a state-based `retrieved_nodes` channel in `AgentState` and using LangGraph's native `Command` object to return tool output results and graph state updates simultaneously.
+  - [x] Resolved backend concurrency and event loop bottlenecks by refactoring rate-limiting locks to be initialized lazily on-demand inside the active event loop, and wrapping synchronous CPU-bound `bm25s` search queries in `asyncio.to_thread` workers.
+  - [x] Fixed multi-tenant security vulnerability by enforcing JWT authentication in the token verification layer, removing the unsafe shared static `"guest"` namespace fallback for unauthenticated requests.
+  - [x] Optimized server container boot performance by moving blocking in-memory index/tree loader out of the router module import path into FastAPI's native lifespan startup handler.
+  - [x] Cleaned up deprecated `@app.on_event("startup")` hooks in legacy startup scripts in favor of standardized `lifespan` context managers.
+  - [x] Refactored statutory summarizer data pipeline to initialize rate-limiting locks lazily, use Google GenAI's first-class async clients (`client.aio`), and offload disk cache writes (`save_cache()`) to threadpools to prevent blocking event loop execution.
 
 ### 🔄 In Progress
 *None*

@@ -6,7 +6,6 @@ from langchain_core.messages import HumanMessage, AIMessage
 from src.retriever import graph
 from src.retriever.schemas import GeneratedAnswer
 from src.react_agent.agent import COMPILED_AGENT
-from src.react_agent.tools import retrieved_nodes_var
 
 async def generate(
     query: str,
@@ -34,9 +33,9 @@ async def generate(
         
     messages.append(HumanMessage(content=query))
     
-    # 2. Setup ContextVar to collect retrieved nodes during execution
+    # 2. Setup list to collect retrieved nodes during execution
     collected_nodes = []
-    token = retrieved_nodes_var.set(collected_nodes)
+    final_state = None
     
     try:
         # We set a safe recursion limit (10 steps) to prevent runaway loops
@@ -56,8 +55,8 @@ async def generate(
             is_insufficient_context=True
         )
     finally:
-        # Clean up context var
-        retrieved_nodes_var.reset(token)
+        if final_state and isinstance(final_state, dict):
+            collected_nodes = final_state.get("retrieved_nodes") or []
         
     latency = round((time.time() - start_time) * 1000)
     

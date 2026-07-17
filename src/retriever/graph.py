@@ -93,7 +93,7 @@ async def bm25_search_node(state: AgentState) -> dict:
     print(f"[DEBUG] bm25_search_node: _bm25_index={_bm25_index}, target_corpora={state['target_corpora']}")
     if not _bm25_index or not _corpus_index:
         return {"bm25_hits": []}
-    hits = _bm25_index.search(state["query"], _corpus_index, top_k=20, act_filter=state["target_corpora"])
+    hits = await _bm25_index.search(state["query"], _corpus_index, top_k=20, act_filter=state["target_corpora"])
     print(f"[DEBUG] bm25_search_node: Found {len(hits)} hits")
     return {"bm25_hits": hits}
 

@@ -3,14 +3,13 @@ import asyncio
 import time
 from typing import AsyncGenerator
 from fastapi import APIRouter, HTTPException, Request, Depends
-from fastapi.responses import StreamingResponse
+from sse_starlette.sse import EventSourceResponse
 from pydantic import BaseModel, Field
 from langchain_core.messages import HumanMessage, AIMessage, ToolMessage
 
 from src import retriever
 from src.retriever import client
 from src.retriever import graph
-from src.react_agent.tools import retrieved_nodes_var
 from src.retriever.schemas import GeneratedAnswer
 from src.api.auth import verify_jwt, get_supabase_project_id
 from supabase import create_client, Client
@@ -31,9 +30,7 @@ def get_supabase_admin() -> Client:
     return create_client(supabase_url, service_role_key)
 
 
-# Load the indices on module import so they are ready
-# (Safe to call multiple times as it checks if already loaded)
-retriever.load("tree")
+
 
 class ChatRequest(BaseModel):
     message: str = Field(..., max_length=5000)
@@ -64,10 +61,6 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
         "recursion_limit": 10
     }
     
-    # 2. Setup ContextVar to collect retrieved nodes during execution
-    collected_nodes = []
-    token = retrieved_nodes_var.set(collected_nodes)
-    
     try:
         # Stream updates from the agent
         async for chunk in agent.astream(
@@ -82,7 +75,7 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
             if chunk_type == "custom":
                 msg_text = chunk_data.get("message", "")
                 if msg_text:
-                    yield f"data: {json.dumps({'type': 'status', 'content': msg_text.strip()})}\n\n"
+                    yield {"data": json.dumps({'type': 'status', 'content': msg_text.strip()})}
                     
             elif chunk_type == "updates" and isinstance(chunk_data, dict):
                 for node, update in chunk_data.items():
@@ -92,12 +85,12 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
                             msg = msgs[-1]
                             content = parse_message_content(msg.content)
                             if content:
-                                yield f"data: {json.dumps({'type': 'thought', 'content': content.strip()})}\n\n"
+                                yield {"data": json.dumps({'type': 'thought', 'content': content.strip()})}
                             
                             # Stream tool calls if any
                             if hasattr(msg, "tool_calls") and msg.tool_calls:
                                 for tc in msg.tool_calls:
-                                    yield f"data: {json.dumps({'type': 'tool_call', 'name': tc['name'], 'args': tc['args']})}\n\n"
+                                    yield {"data": json.dumps({'type': 'tool_call', 'name': tc['name'], 'args': tc['args']})}
                                     
                     elif node == "tools":
                         msgs = update.get("messages", [])
@@ -106,7 +99,7 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
                             content = parse_message_content(msg.content)
                             # Yield truncated observation preview to keep SSE package light
                             preview = content[:300] + "..." if len(content) > 300 else content
-                            yield f"data: {json.dumps({'type': 'observation', 'content': preview.strip()})}\n\n"
+                            yield {"data": json.dumps({'type': 'observation', 'content': preview.strip()})}
 
         # 3. Retrieve final state to extract the structured answer
         state = await agent.aget_state(config)
@@ -142,7 +135,7 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
                                 "UPDATE chat_sessions SET title = %s WHERE thread_id = %s",
                                 (new_title, thread_id)
                             )
-                            yield f"data: {json.dumps({'type': 'title_generated', 'title': new_title})}\n\n"
+                            yield {"data": json.dumps({'type': 'title_generated', 'title': new_title})}
             except Exception as title_err:
                 print(f"[Title Update Error]: {title_err}")
         
@@ -179,12 +172,10 @@ async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> Asyn
             "confidence": 0.0 if generated.is_insufficient_context else 1.0,
             "latency_ms": latency
         }
-        yield f"data: {json.dumps(payload)}\n\n"
+        yield {"data": json.dumps(payload)}
         
     except Exception as e:
-        yield f"data: {json.dumps({'type': 'error', 'content': f'API streaming error: {str(e)}'})}\n\n"
-    finally:
-        retrieved_nodes_var.reset(token)
+        yield {"data": json.dumps({'type': 'error', 'content': f'API streaming error: {str(e)}'})}
 
 @router.post("/chats/{thread_id}/message")
 async def chat_message(
@@ -216,9 +207,14 @@ async def chat_message(
     except Exception as db_err:
         print(f"[chat_message] DB tracking error: {db_err}")
 
-    return StreamingResponse(
+    return EventSourceResponse(
         run_agent_stream(agent, scoped_thread_id, payload.message, pool),
-        media_type="text/event-stream"
+        ping=20,
+        headers={
+            "Cache-Control": "no-cache",
+            "Connection": "keep-alive",
+            "X-Accel-Buffering": "no",
+        }
     )
 
 @router.get("/chats/{thread_id}/history")

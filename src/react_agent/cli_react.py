@@ -18,7 +18,6 @@ from src import retriever
 from src.retriever import graph
 from src.react_agent.agent import get_agent
 from src.retriever import client
-from src.react_agent.tools import retrieved_nodes_var
 
 console = Console()
 LOCAL_AGENT = get_agent(MemorySaver())
@@ -86,8 +85,6 @@ async def main():
             thread_id = f"cli_{int(time.time())}"
             config = {"configurable": {"thread_id": thread_id}, "recursion_limit": 10}
             
-            collected_nodes = []
-            token = retrieved_nodes_var.set(collected_nodes)
             try:
                 # If trace mode is ON, we stream updates to show the Thought-Action-Observation loop
                 if trace_mode:
@@ -176,8 +173,8 @@ async def main():
                     # If trace mode is OFF, run the graph to completion in the background
                     with console.status("[bold yellow]Executing agent reasoning...[/bold yellow]", spinner="dots"):
                         await LOCAL_AGENT.ainvoke({"messages": messages}, config=config)
-            finally:
-                retrieved_nodes_var.reset(token)
+            except Exception as e:
+                console.print(f"\n[bold red]Trace Loop Error: {e}[/bold red]\n")
 
             # 3. Retrieve final state to extract the structured answer
             state = await LOCAL_AGENT.aget_state(config)

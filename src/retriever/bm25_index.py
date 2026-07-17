@@ -1,4 +1,5 @@
 import os
+import asyncio
 import bm25s
 from typing import List, Optional
 
@@ -46,7 +47,7 @@ class BM25Index:
         self.retriever.save(save_dir, corpus=payloads)
         print(f"Saved BM25 index to {save_dir}")
 
-    def search(
+    async def search(
         self,
         query: str,
         corpus_index: CorpusIndex,
@@ -59,10 +60,10 @@ class BM25Index:
 
         # We request more hits if filtering, to ensure we get top_k after filter
         fetch_k = top_k * 3 if act_filter else top_k
-        query_tokens = bm25s.tokenize(query)
+        query_tokens = await asyncio.to_thread(bm25s.tokenize, query)
         
         # bm25s returns (results, scores) where results are the payloads we saved
-        results, scores = self.retriever.retrieve(query_tokens, k=fetch_k)
+        results, scores = await asyncio.to_thread(self.retriever.retrieve, query_tokens, k=fetch_k)
         
         # bm25s retrieve returns batch-shaped arrays: results[0] and scores[0]
         hits = results[0]

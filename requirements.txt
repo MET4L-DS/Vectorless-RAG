@@ -20,4 +20,4 @@ PyJWT[crypto]>=2.8.0
 httpx>=0.25.0
 supabase>=2.31.0
 huggingface_hub
-
+sse-starlette>=2.1.0

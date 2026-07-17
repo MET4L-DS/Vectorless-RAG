@@ -92,8 +92,11 @@ async def verify_jwt(credentials: HTTPAuthorizationCredentials = Security(securi
     Otherwise, cryptographically verifies the token signature against the JWKS.
     """
     if credentials is None:
-        print("[auth.py] verify_jwt: No credentials/header provided. Falling back to guest user session.")
-        return {"sub": "guest"}
+        print("[auth.py] verify_jwt: No credentials/header provided. Raising 401 Unauthorized.")
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required. Please provide a valid Authorization header."
+        )
         
     token = credentials.credentials
     print(f"[auth.py] verify_jwt: Authenticating request. JWT token prefix: {token[:15]}...")

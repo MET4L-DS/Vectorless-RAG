@@ -2,9 +2,9 @@
   "total_nodes": 2160,
   "total_calls": 0,
   "model_calls_per_model": {
-    "models/gemma-4-26b-a4b-it": 21,
-    "models/gemma-4-31b-it": 18
+    "models/gemma-4-26b-a4b-it": 0,
+    "models/gemma-4-31b-it": 0
   },
-  "wall_clock_s": 285.7661392688751,
+  "wall_clock_s": 0.05550026893615723,
   "new_calls": 0
 }

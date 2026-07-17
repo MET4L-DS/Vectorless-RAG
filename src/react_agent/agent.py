@@ -1,15 +1,16 @@
 import re
 from typing import Annotated, TypedDict
+from operator import add
 from langchain_core.messages import HumanMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import create_react_agent
+from langgraph.prebuilt.chat_agent_executor import AgentState as PrebuiltAgentState
 from src.react_agent.tools import (
     search_statutes,
     search_police_sop,
     enrich_with_cross_references,
     find_case_law_for_section,
-    retrieved_nodes_var,
 )
 from src.retriever.schemas import GeneratedAnswer
 from src.retriever import client
@@ -29,10 +30,10 @@ def required_acts(query: str) -> set[str]:
             required |= acts
     return required
 
-class AgentState(TypedDict):
-    messages: Annotated[list, add_messages]
+class AgentState(PrebuiltAgentState):
     coverage_retries: int
     structured_response: GeneratedAnswer
+    retrieved_nodes: Annotated[list[dict], add]
 
 # We only use gemini-3.1-flash-lite since it is fast and efficient.
 llm = client.get_langchain_model("models/gemini-3.1-flash-lite", temperature=0.0)
@@ -95,7 +96,8 @@ def get_agent(checkpointer=None):
         model=llm,
         tools=tools,
         response_format=GeneratedAnswer,
-        prompt=SYSTEM_PROMPT
+        prompt=SYSTEM_PROMPT,
+        state_schema=AgentState
     )
 
     def coverage_gate(state: AgentState):
@@ -105,7 +107,7 @@ def get_agent(checkpointer=None):
         query = messages[0].content
         required = required_acts(query)
         
-        nodes = retrieved_nodes_var.get() or []
+        nodes = state.get("retrieved_nodes") or []
         searched = {n.get("act_code") for n in nodes if n.get("act_code")}
         missing = required - searched
         

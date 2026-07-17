@@ -21,8 +21,13 @@ MODELS = ["models/gemma-4-26b-a4b-it", "models/gemma-4-31b-it"]
 MIN_INTERVAL = 6.0  # 6 seconds between calls to same model (= 10 RPM safety pace)
 
 model_next_allowed_time = {m: 0.0 for m in MODELS}
-model_locks = {m: asyncio.Lock() for m in MODELS}
+model_locks = {}
 model_cycle = itertools.cycle(MODELS)
+
+def get_model_lock(model_name: str) -> asyncio.Lock:
+    if model_name not in model_locks:
+        model_locks[model_name] = asyncio.Lock()
+    return model_locks[model_name]
 
 # Metrics tracking
 new_calls_count = 0
@@ -36,7 +41,8 @@ async def call_model(prompt: str) -> str:
     global new_calls_count
     model_name = next(model_cycle)
     
-    async with model_locks[model_name]:
+    lock = get_model_lock(model_name)
+    async with lock:
         now = asyncio.get_event_loop().time()
         target_time = max(now, model_next_allowed_time[model_name])
         delay = target_time - now
@@ -49,10 +55,8 @@ async def call_model(prompt: str) -> str:
     if not client:
         raise ValueError("Google GenAI client is not configured (missing GOOGLE_API_KEY).")
     
-    # Call SDK in executor thread
-    response = await asyncio.to_thread(
-        lambda: client.models.generate_content(model=model_name, contents=prompt)
-    )
+    # Call SDK asynchronously using the native client.aio endpoint
+    response = await client.aio.models.generate_content(model=model_name, contents=prompt)
     
     model_calls_tracker[model_name] += 1
     new_calls_count += 1
@@ -114,10 +118,12 @@ def load_cache():
     else:
         summary_cache = {}
 
-def save_cache():
-    os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
-    with open(CACHE_FILE, "w", encoding="utf-8") as f:
-        json.dump(summary_cache, f, indent=2, ensure_ascii=False)
+async def save_cache():
+    def write_file():
+        os.makedirs(os.path.dirname(CACHE_FILE), exist_ok=True)
+        with open(CACHE_FILE, "w", encoding="utf-8") as f:
+            json.dump(summary_cache, f, indent=2, ensure_ascii=False)
+    await asyncio.to_thread(write_file)
 
 def format_schedule_row_summary(node):
     """
@@ -250,7 +256,7 @@ Part summaries:
         
     summary_cache[cache_key] = final_summary
     node["summary"] = final_summary
-    save_cache()
+    await save_cache()
 
 async def summarize_schedule_chapter(node):
     """
@@ -271,7 +277,7 @@ Provide a keyword-dense 2–3 sentence summary covering its overall structure, p
     summary = await call_model_with_retry(prompt)
     summary_cache[cache_key] = summary
     node["summary"] = summary
-    save_cache()
+    await save_cache()
 
 async def summarize_chapter(node):
     """
@@ -311,7 +317,7 @@ Section summaries:
     summary = await call_model_with_retry(prompt)
     summary_cache[cache_key] = summary
     node["summary"] = summary
-    save_cache()
+    await save_cache()
 
 async def summarize_root(node):
     """
@@ -353,7 +359,7 @@ Chapter summaries:
     summary = await call_model_with_retry(prompt)
     summary_cache[cache_key] = summary
     node["summary"] = summary
-    save_cache()
+    await save_cache()
 
 async def run_summarization_pipeline(trees):
     """
@@ -411,7 +417,7 @@ async def run_summarization_pipeline(trees):
             row["summary"] = summary
             new_rows += 1
             
-    save_cache()
+    await save_cache()
     print(f"Schedule rows formatted: {cache_hits} cached, {new_rows} newly generated.")
     
     # 3. Summarize normal section leaves and the schedule chapters
@@ -500,5 +506,5 @@ async def run_summarization_pipeline(trees):
         print("Root summaries complete.")
         
     # Save final cache
-    save_cache()
+    await save_cache()
     print("Summarization pipeline completed successfully.")

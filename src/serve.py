@@ -1,10 +1,16 @@
+from contextlib import asynccontextmanager
 from typing import List, Dict, Any
 from fastapi import FastAPI
 from pydantic import BaseModel
 from src import retriever
 from src import generator
 
-app = FastAPI(title="Vectorless-RAG Legal Retrieval & Generative API")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    retriever.load()
+    yield
+
+app = FastAPI(title="Vectorless-RAG Legal Retrieval & Generative API", lifespan=lifespan)
 
 class QueryRequest(BaseModel):
     question: str
@@ -13,10 +19,6 @@ class ChatRequest(BaseModel):
     question: str
     history: List[Dict[str, str]] = []
     last_retrieval: Dict[str, Any] | None = None
-
-@app.on_event("startup")
-async def startup():
-    retriever.load()
 
 @app.post("/query")
 async def query(request: QueryRequest):

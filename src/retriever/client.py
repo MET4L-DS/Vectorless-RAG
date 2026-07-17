@@ -19,8 +19,13 @@ MODEL_CONFIGS = {
 
 MODELS = list(MODEL_CONFIGS.keys())
 model_next_allowed_time = {m: 0.0 for m in MODELS}
-model_locks = {m: asyncio.Lock() for m in MODELS}
+model_locks = {}
 model_cycle = itertools.cycle(MODELS)
+
+def get_model_lock(model_name: str) -> asyncio.Lock:
+    if model_name not in model_locks:
+        model_locks[model_name] = asyncio.Lock()
+    return model_locks[model_name]
 
 # Metrics tracking
 new_calls_count = 0
@@ -50,7 +55,8 @@ async def _execute_with_rate_limit(model_name: str, fn, description: str = "Unkn
     global new_calls_count
     min_interval = MODEL_CONFIGS.get(model_name, 1.0)
     
-    async with model_locks.setdefault(model_name, asyncio.Lock()):
+    lock = get_model_lock(model_name)
+    async with lock:
         now = asyncio.get_event_loop().time()
         target_time = max(now, model_next_allowed_time.get(model_name, 0.0))
         delay = target_time - now

@@ -13,6 +13,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from psycopg_pool import AsyncConnectionPool
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
+from src import retriever
 from src.react_agent.agent import get_agent
 from src.api.routes import router as chat_router
 
@@ -26,6 +27,9 @@ async def check_db_connection(conn):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    # Load retrieval indices and BM25 search structures safely during startup
+    retriever.load("tree")
+    
     database_url = os.getenv("DATABASE_URL")
     if not database_url:
         raise ValueError("DATABASE_URL environment variable is not set")

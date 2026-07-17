@@ -1,12 +1,10 @@
-import contextvars
-from typing import Literal, List, Optional
-from langchain_core.tools import tool
+from typing import Literal, List, Optional, Annotated
+from langchain_core.tools import tool, InjectedToolCallId
+from langchain_core.messages import ToolMessage
 from src.retriever import graph
 from src.retriever.state import RetrievedNode
 from langgraph.config import get_stream_writer
-
-# ContextVar to collect retrieved nodes dynamically across tool executions for CLI/serve metadata
-retrieved_nodes_var = contextvars.ContextVar("retrieved_nodes", default=None)
+from langgraph.types import Command
 
 def emit_status(message: str):
     """Helper to safely stream custom status updates to LangGraph if running in an execution context."""
@@ -22,13 +20,6 @@ def _format_nodes(nodes: List[RetrievedNode]) -> str:
     """Helper to format retrieved nodes for LLM observation."""
     if not nodes:
         return "No matching legal sections or procedures found."
-    
-    # Store in ContextVar if active
-    collected = retrieved_nodes_var.get()
-    if collected is not None:
-        for node in nodes:
-            if not any(x["node_id"] == node["node_id"] for x in collected):
-                collected.append(node)
                 
     formatted = []
 
@@ -49,8 +40,10 @@ def _format_nodes(nodes: List[RetrievedNode]) -> str:
 async def search_statutes(
     statute_code: Literal["BNS", "BNSS", "BSA", "IT", "JJA", "POCSO", "NDPS", "PCA"],
     query: str,
-    method: Literal["tree", "bm25", "hybrid"] = "hybrid"
-) -> str:
+    method: Literal["tree", "bm25", "hybrid"] = "hybrid",
+    *,
+    tool_call_id: Annotated[str, InjectedToolCallId]
+) -> Command:
     """
     Searches a specific Indian statutory act for sections relevant to a query.
     Use this when you need legal definitions, criminal offences, punishments, or procedures.
@@ -75,7 +68,11 @@ async def search_statutes(
               'hybrid' for both — recommended).
     """
     if not graph._corpus_index:
-        return "Error: Corpus index not initialized. Ensure retriever.load() has been called."
+        return Command(
+            update={
+                "messages": [ToolMessage(content="Error: Corpus index not initialized. Ensure retriever.load() has been called.", tool_call_id=tool_call_id)]
+            }
+        )
 
     nodes = []
     seen_ids = set()
@@ -96,7 +93,7 @@ async def search_statutes(
     if method in ["bm25", "hybrid"] and graph._bm25_index:
         try:
             emit_status(f"🔍 Searching {statute_code} BM25 index...")
-            bm25_nodes = graph._bm25_index.search(
+            bm25_nodes = await graph._bm25_index.search(
                 query,
                 graph._corpus_index,
                 top_k=5,
@@ -167,10 +164,20 @@ async def search_statutes(
             print(f"[Tool: search_statutes] Sibling Hydration failed: {e}")
 
     emit_status(f"⚡ Completed search for {statute_code}")
-    return _format_nodes(nodes)
+    formatted = _format_nodes(nodes)
+    return Command(
+        update={
+            "retrieved_nodes": nodes,
+            "messages": [ToolMessage(content=formatted, tool_call_id=tool_call_id)]
+        }
+    )
 
 @tool
-async def search_police_sop(query: str) -> str:
+async def search_police_sop(
+    query: str,
+    *,
+    tool_call_id: Annotated[str, InjectedToolCallId]
+) -> Command:
     """
     Searches the Police Standard Operating Procedures (SOP) manual for operational guidelines, 
     patrol duties, checklists, timelines, and practical steps taken by police officers.
@@ -178,18 +185,36 @@ async def search_police_sop(query: str) -> str:
     handle electronic evidence, or maintain a police station diary.
     """
     if not graph._sop_retriever or not graph._corpus_index:
-        return "Error: SOP retriever not initialized."
+        return Command(
+            update={
+                "messages": [ToolMessage(content="Error: SOP retriever not initialized.", tool_call_id=tool_call_id)]
+            }
+        )
         
     try:
         emit_status("📋 Searching Police SOP manual...")
         nodes = await graph._sop_retriever.retrieve(query, top_k=5)
         emit_status("⚡ Completed SOP search")
-        return _format_nodes(nodes)
+        formatted = _format_nodes(nodes)
+        return Command(
+            update={
+                "retrieved_nodes": nodes,
+                "messages": [ToolMessage(content=formatted, tool_call_id=tool_call_id)]
+            }
+        )
     except Exception as e:
-        return f"Error searching Police SOP: {e}"
+        return Command(
+            update={
+                "messages": [ToolMessage(content=f"Error searching Police SOP: {e}", tool_call_id=tool_call_id)]
+            }
+        )
 
 @tool
-async def enrich_with_cross_references(section_id: str) -> str:
+async def enrich_with_cross_references(
+    section_id: str,
+    *,
+    tool_call_id: Annotated[str, InjectedToolCallId]
+) -> Command:
     """
     Fetches other legal sections that are cross-referenced or linked to a specific section ID
     (e.g., 'BNSS_S35', 'IT_S66', 'POCSO_S28').
@@ -198,11 +223,19 @@ async def enrich_with_cross_references(section_id: str) -> str:
     POCSO special court provision to a BNSS trial procedure section).
     """
     if not graph._cross_ref_linker or not graph._corpus_index:
-        return "Error: Cross-reference linker not initialized."
+        return Command(
+            update={
+                "messages": [ToolMessage(content="Error: Cross-reference linker not initialized.", tool_call_id=tool_call_id)]
+            }
+        )
 
     node = graph._corpus_index.get_node(section_id)
     if not node:
-        return f"Error: Legal section '{section_id}' not found in the index."
+        return Command(
+            update={
+                "messages": [ToolMessage(content=f"Error: Legal section '{section_id}' not found in the index.", tool_call_id=tool_call_id)]
+            }
+        )
 
     act_code = section_id.split("_")[0]
     p_node: RetrievedNode = {
@@ -223,9 +256,19 @@ async def enrich_with_cross_references(section_id: str) -> str:
         emit_status(f"🔗 Resolving cross-references for {section_id}...")
         enriched_nodes = graph._cross_ref_linker.enrich([p_node], max_links_per_node=5)
         emit_status(f"⚡ Completed cross-reference resolution for {section_id}")
-        return _format_nodes(enriched_nodes)
+        formatted = _format_nodes(enriched_nodes)
+        return Command(
+            update={
+                "retrieved_nodes": enriched_nodes,
+                "messages": [ToolMessage(content=formatted, tool_call_id=tool_call_id)]
+            }
+        )
     except Exception as e:
-        return f"Error resolving cross references: {e}"
+        return Command(
+            update={
+                "messages": [ToolMessage(content=f"Error resolving cross references: {e}", tool_call_id=tool_call_id)]
+            }
+        )
 
 
 @tool

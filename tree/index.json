@@ -1,6 +1,6 @@
 {
   "corpus": "Indian Legal Corpus — Vectorless RAG",
-  "generated_at": "2026-07-12T11:42:29Z",
+  "generated_at": "2026-07-17T12:31:08Z",
   "acts": {
     "BNS": {
       "path": "tree/BNS.json",
