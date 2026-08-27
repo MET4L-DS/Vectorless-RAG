@@ -1,0 +1,14 @@
+# Pyrefly Configuration
+python-interpreter-path = ".venv/Scripts/python.exe"
+search-path = [".", "src"]
+
+[errors]
+missing-import = false
+invalid-yield = false
+bad-assignment = false
+bad-index = false
+bad-argument-type = false
+no-matching-overload = false
+missing-attribute = false
+unsupported-operand = false
+deprecated = false
