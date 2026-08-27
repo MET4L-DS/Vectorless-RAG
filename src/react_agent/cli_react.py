@@ -96,77 +96,86 @@ async def main():
                             {"messages": messages}, 
                             config=config, 
                             stream_mode=["updates", "custom"],
+                            subgraphs=True,
                             version="v2"
                         ):
-                            if isinstance(chunk, dict):
-                                chunk_type = chunk.get("type")
-                                chunk_data = chunk.get("data")
-                                
-                                if chunk_type == "custom" and isinstance(chunk_data, dict):
-                                    # Stream writer custom status update
-                                    msg_text = chunk_data.get("message", "")
-                                    if msg_text:
-                                        # Strip emojis and non-ASCII characters to prevent Windows console encoding crashes
-                                        clean_msg = str(msg_text).encode('ascii', errors='ignore').decode('ascii').strip()
-                                        clean_msg = " ".join(clean_msg.split())
-                                        if clean_msg:
-                                            console.print(f"[dim cyan]  -> {clean_msg}[/dim cyan]")
-                                
-                                elif chunk_type == "updates" and isinstance(chunk_data, dict):
-                                    for node, update in chunk_data.items():
-                                        if node == "agent" and isinstance(update, dict):
-                                            msgs = update.get("messages", [])
-                                            if msgs:
-                                                msg = msgs[-1]
-                                                
-                                                # Handle list content in agent thoughts
-                                                content = msg.content
-                                                if isinstance(content, list):
-                                                    parts = []
-                                                    for part in content:
-                                                        if isinstance(part, str):
-                                                            parts.append(part)
-                                                        elif isinstance(part, dict) and "text" in part:
-                                                            parts.append(part["text"])
-                                                        elif hasattr(part, "text"):
-                                                            parts.append(part.text)
-                                                    content = "".join(parts)
-                                                    
-                                                if content:
-                                                    console.print(Panel(
-                                                        str(content).strip(), 
-                                                        title="[bold yellow]Agent Thought[/bold yellow]", 
-                                                        border_style="yellow"
-                                                    ))
+                            if isinstance(chunk, tuple):
+                                _, chunk_dict = chunk
+                            elif isinstance(chunk, dict):
+                                chunk_dict = chunk
+                            else:
+                                continue
 
-                                                if hasattr(msg, "tool_calls") and msg.tool_calls:
-                                                    for tc in msg.tool_calls:
-                                                        console.print(f"[bold cyan]Action (Call Tool):[/bold cyan] [bold white]{tc['name']}[/bold white] with args: [magenta]{tc['args']}[/magenta]")
-                                        elif node == "tools" and isinstance(update, dict):
-                                            msgs = update.get("messages", [])
-                                            if msgs:
-                                                msg = msgs[-1]
+                            chunk_type = chunk_dict.get("type")
+                            chunk_data = chunk_dict.get("data")
+                            
+                            if chunk_type == "custom" and isinstance(chunk_data, dict):
+                                # Stream writer custom status update
+                                msg_text = chunk_data.get("message", "")
+                                if msg_text:
+                                    # Strip emojis and non-ASCII characters to prevent Windows console encoding crashes
+                                    clean_msg = str(msg_text).encode('ascii', errors='ignore').decode('ascii').strip()
+                                    clean_msg = " ".join(clean_msg.split())
+                                    if clean_msg:
+                                        console.print(f"[dim cyan]  -> {clean_msg}[/dim cyan]")
+                            
+                            elif chunk_type == "updates" and isinstance(chunk_data, dict):
+                                for node, update in chunk_data.items():
+                                    if node in ("run_inner", "coverage_gate"):
+                                        continue
+                                    if node == "agent" and isinstance(update, dict):
+                                        msgs = update.get("messages", [])
+                                        if msgs:
+                                            msg = msgs[-1]
+                                            
+                                            # Handle list content in agent thoughts
+                                            content = msg.content
+                                            if isinstance(content, list):
+                                                parts = []
+                                                for part in content:
+                                                    if isinstance(part, str):
+                                                        parts.append(part)
+                                                    elif isinstance(part, dict) and "text" in part:
+                                                        parts.append(part["text"])
+                                                    elif hasattr(part, "text"):
+                                                        parts.append(part.text)
+                                                content = "".join(parts)
                                                 
-                                                # Handle list content in tool observations
-                                                content = msg.content
-                                                if isinstance(content, list):
-                                                    parts = []
-                                                    for part in content:
-                                                        if isinstance(part, str):
-                                                            parts.append(part)
-                                                        elif isinstance(part, dict) and "text" in part:
-                                                            parts.append(part["text"])
-                                                        elif hasattr(part, "text"):
-                                                            parts.append(part.text)
-                                                    content = "".join(parts)
-                                                    
-                                                preview = content[:300] + "..." if len(content) > 300 else content
+                                            if content:
                                                 console.print(Panel(
-                                                    preview.strip(), 
-                                                    title="[bold green]Observation (Tool Output)[/bold green]", 
-                                                    border_style="green"
+                                                    str(content).strip(), 
+                                                    title="[bold yellow]Agent Thought[/bold yellow]", 
+                                                    border_style="yellow"
                                                 ))
-                                                console.print()
+
+                                            if hasattr(msg, "tool_calls") and msg.tool_calls:
+                                                for tc in msg.tool_calls:
+                                                    console.print(f"[bold cyan]Action (Call Tool):[/bold cyan] [bold white]{tc['name']}[/bold white] with args: [magenta]{tc['args']}[/magenta]")
+                                    elif node == "tools" and isinstance(update, dict):
+                                        msgs = update.get("messages", [])
+                                        if msgs:
+                                            msg = msgs[-1]
+                                            
+                                            # Handle list content in tool observations
+                                            content = msg.content
+                                            if isinstance(content, list):
+                                                parts = []
+                                                for part in content:
+                                                    if isinstance(part, str):
+                                                        parts.append(part)
+                                                    elif isinstance(part, dict) and "text" in part:
+                                                        parts.append(part["text"])
+                                                    elif hasattr(part, "text"):
+                                                        parts.append(part.text)
+                                                content = "".join(parts)
+                                                
+                                            preview = content[:300] + "..." if len(content) > 300 else content
+                                            console.print(Panel(
+                                                preview.strip(), 
+                                                title="[bold green]Observation (Tool Output)[/bold green]", 
+                                                border_style="green"
+                                            ))
+                                            console.print()
                     except Exception as e:
                         console.print(f"\n[bold red]Trace Loop Error: {e}[/bold red]\n")
                 
