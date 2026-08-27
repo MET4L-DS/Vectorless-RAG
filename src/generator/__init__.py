@@ -1,5 +1,5 @@
 import time
-from typing import List, Dict, Any
+from typing import List, Dict, Any, cast
 from src.generator.state import GeneratorState
 from src.generator.graph import COMPILED_GRAPH
 from src.retriever.state import RetrievalResult
@@ -7,7 +7,7 @@ from src.retriever.state import RetrievalResult
 async def generate(
     query: str,
     history: List[Dict[str, str]],
-    last_retrieval: RetrievalResult | None = None
+    last_retrieval: Dict[str, Any] | RetrievalResult | None = None
 ) -> Dict[str, Any]:
     """
     Public API entry point for Phase 4 Generative & Verifier flow.
@@ -18,7 +18,7 @@ async def generate(
     initial_state: GeneratorState = {
         "query": query,
         "history": history,
-        "retrieval_result": last_retrieval or {"primary": [], "supporting": [], "citations": [], "sources": [], "query_metadata": {}},
+        "retrieval_result": cast(RetrievalResult, last_retrieval) if isinstance(last_retrieval, dict) else {"primary": [], "supporting": [], "citations": [], "sources": [], "query_metadata": {}},
         "context_str": "",
         "raw_answer": "",
         "generated": None,

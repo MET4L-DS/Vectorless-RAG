@@ -4,6 +4,7 @@ import hashlib
 import json
 import fitz
 import pandas as pd
+from typing import cast, Dict, Any, List
 
 # Define the body start pages (0-indexed) for the three Acts
 BODY_START_PAGES = {
@@ -103,25 +104,29 @@ class PDFParser:
             page = doc[p_idx]
             page_no = p_idx + 1 # 1-indexed page number
             
-            # Extract raw page text
-            page_text_raw = page.get_text()
+            page_text_raw = str(page.get_text())
             
             # Retrieve detailed layout dictionary
-            blocks = page.get_text("dict")["blocks"]
+            page_dict = cast(Dict[str, Any], page.get_text("dict"))
+            blocks = cast(List[Dict[str, Any]], page_dict.get("blocks", []) if isinstance(page_dict, dict) else [])
             spans = []
             for b in blocks:
-                if "lines" in b:
-                    for l in b["lines"]:
-                        for s in l["spans"]:
-                            text = s["text"].strip()
-                            if text:
-                                spans.append({
-                                    "text": text,
-                                    "bbox": s["bbox"],
-                                    "font": s["font"],
-                                    "size": s["size"],
-                                    "flags": s["flags"]
-                                })
+                if isinstance(b, dict) and "lines" in b:
+                    lines_list = cast(List[Dict[str, Any]], b.get("lines", []))
+                    for l in lines_list:
+                        if isinstance(l, dict) and "spans" in l:
+                            spans_list = cast(List[Dict[str, Any]], l.get("spans", []))
+                            for s in spans_list:
+                                if isinstance(s, dict) and "text" in s:
+                                    text = str(s["text"]).strip()
+                                    if text:
+                                        spans.append({
+                                            "text": text,
+                                            "bbox": s.get("bbox"),
+                                            "font": s.get("font"),
+                                            "size": s.get("size"),
+                                            "flags": s.get("flags")
+                                        })
             
             # Sort spans top-to-bottom, then left-to-right
             spans.sort(key=lambda s: (round(s["bbox"][1], 1), s["bbox"][0]))
@@ -177,7 +182,7 @@ class PDFParser:
             cleaned_lines = []
             
             for idx, line in enumerate(page_lines):
-                t = line["text"]
+                t: str = str(line["text"])
                 # Header check (first line)
                 if idx == 0 and PAGE_NUM_NOISE_RE.match(t):
                     header_text = t
@@ -208,7 +213,7 @@ class PDFParser:
             skip_next_line = False
             
             for l_idx, line in enumerate(cleaned_lines):
-                text = line["text"]
+                text: str = str(line["text"])
                 
                 # Determine which section ID to assign to this line
                 assigned_section_id = front_matter_id
@@ -224,8 +229,8 @@ class PDFParser:
                         if not sec_match:
                             start_match = SECTION_START_RE.match(text)
                             if start_match and l_idx + 1 < len(cleaned_lines):
-                                next_line_text = cleaned_lines[l_idx + 1]["text"].strip()
-                                joined_text = text + " " + next_line_text
+                                next_line_text: str = str(cleaned_lines[l_idx + 1]["text"]).strip()
+                                joined_text: str = text + " " + next_line_text
                                 sec_match = SECTION_RE.match(joined_text)
                         
                         # 3. Chapter Heading Detection
@@ -344,19 +349,20 @@ class PDFParser:
         toc_df = pd.DataFrame(toc_nodes)
         if not toc_df.empty:
             # Dynamically set end_page to the start_page of the next node of the same or higher level - 1
-            for idx, row in toc_df.iterrows():
-                level = row["level"]
-                start_p = row["start_page"]
+            for idx_i in range(len(toc_df)):
+                row = toc_df.iloc[idx_i]
+                level = int(row["level"])
+                start_p = int(row["start_page"])
                 # Find the next node that has level <= row's level
-                next_nodes = toc_df.iloc[idx+1:]
+                next_nodes = toc_df.iloc[idx_i + 1:]
                 next_same_or_higher = next_nodes[next_nodes["level"] <= level]
                 if not next_same_or_higher.empty:
-                    end_p = next_same_or_higher.iloc[0]["start_page"]
+                    end_p = int(next_same_or_higher.iloc[0]["start_page"])
                     # If same page, end page is same. Else, end page is next start page - 1
-                    toc_df.at[idx, "end_page"] = max(start_p, end_p - 1)
+                    toc_df.at[idx_i, "end_page"] = max(start_p, end_p - 1)
                 else:
                     # Last node goes to end of document
-                    toc_df.at[idx, "end_page"] = len(doc)
+                    toc_df.at[idx_i, "end_page"] = len(doc)
                     
         # We also need to add a node for the Schedule in BNSS's TOC
         if self.act_code == "BNSS":
@@ -619,9 +625,9 @@ class PDFParser:
                                 if col_idx == 1 and current_row[key] == text.strip():
                                     continue
                                 if current_row[key]:
-                                    current_row[key] += " " + text
+                                    current_row[key] = str(current_row[key]) + " " + str(text)
                                 else:
-                                    current_row[key] = text
+                                    current_row[key] = str(text)
             if current_row:
                 page_rows.append(current_row)
             all_rows.extend(page_rows)

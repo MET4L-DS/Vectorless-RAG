@@ -52,6 +52,7 @@ async def call_gemma_comparator_with_retry(prompt: str, retries: int = 5) -> str
                 raise e
             # Exponential backoff plus safety delay
             await asyncio.sleep(2 ** attempt + 5)
+    raise RuntimeError("Gemma comparator failed after retries")
 
 async def run_accuracy_benchmark():
     if not os.path.exists(DATASET_PATH):

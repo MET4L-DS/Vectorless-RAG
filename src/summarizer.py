@@ -60,13 +60,15 @@ async def call_model(prompt: str) -> str:
     
     model_calls_tracker[model_name] += 1
     new_calls_count += 1
-    return response.text.strip()
+    return (response.text or "").strip()
 
 def extract_final_summary(text: str) -> str:
     """
     Extracts only the final summary paragraph from Gemma's output,
     ignoring thinking process, scratchpads, and bullet points.
     """
+    if not text:
+        return ""
     paragraphs = [p.strip() for p in text.split("\n") if p.strip()]
     if not paragraphs:
         return ""
@@ -100,6 +102,7 @@ async def call_model_with_retry(prompt: str, retries=5) -> str:
                 await asyncio.sleep(2 ** attempt + 5)
             if attempt == retries - 1:
                 raise e
+    raise RuntimeError("call_model_with_retry failed after retries")
 
 # Cache Management
 CACHE_FILE = "tree/summary_cache.json"

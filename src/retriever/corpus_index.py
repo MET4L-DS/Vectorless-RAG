@@ -89,7 +89,12 @@ class CorpusIndex:
     def get_children(self, node_id: str) -> List[dict]:
         """Returns the lightweight dictionaries of all immediate children."""
         child_ids = self._children_map.get(node_id, [])
-        return [self.get_node(cid) for cid in child_ids if self.get_node(cid) is not None]
+        res: List[dict] = []
+        for cid in child_ids:
+            node = self.get_node(cid)
+            if node is not None:
+                res.append(node)
+        return res
 
     def get_path_to_root(self, node_id: str) -> List[dict]:
         """Returns the hierarchy path from the root down to (and including) this node."""

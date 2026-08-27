@@ -28,17 +28,18 @@ async def query(question: str) -> RetrievalResult:
         
     start_time = time.time()
         
-    initial_state = AgentState(
-        query=question,
-        target_corpora=[],
-        query_type="unknown",
-        bm25_hits=[], 
-        tree_hits=[], 
-        cross_ref_hits=[],
-        final_results=[], 
-        error=None, 
-        iteration_count=0
-    )
+    initial_state: AgentState = {
+        "query": question,
+        "target_corpora": [],
+        "query_type": "unknown",
+        "bm25_hits": [], 
+        "tree_hits": [], 
+        "cross_ref_hits": [],
+        "final_results": [],
+        "metadata": {},
+        "error": None, 
+        "iteration_count": 0
+    }
     
     final_state = await COMPILED_GRAPH.ainvoke(initial_state)
     

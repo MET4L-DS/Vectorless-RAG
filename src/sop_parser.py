@@ -4,6 +4,7 @@ import hashlib
 import json
 import fitz
 import pandas as pd
+from typing import cast
 
 # Regular expressions
 XREF_INTERNAL_RE = re.compile(r'\bsection\s+(\d+[A-Za-z]?)\b', re.IGNORECASE)
@@ -90,7 +91,7 @@ class SOPParser:
                 }
             else:
                 if current_item:
-                    current_item['topic'] += ' ' + topic_text
+                    current_item['topic'] = str(current_item['topic']) + ' ' + topic_text
                     if page_text and not current_item['page_str']:
                         current_item['page_str'] = page_text
 
@@ -99,11 +100,11 @@ class SOPParser:
 
         # Parse start/end page numbers (printed pages + 10 = PDF 1-indexed page)
         for item in index_items:
-            topic = item['topic']
+            topic = str(item['topic'])
             topic = re.sub(r'[\s\u200b\u00a0\ufffd]+', ' ', topic).strip()
             item['topic'] = topic
             
-            page_str = item['page_str']
+            page_str = str(item['page_str'])
             page_str = re.sub(r'[\s\u200b\u00a0\ufffd]+', ' ', page_str).strip()
             
             m_range = re.match(r'^(\d+)\s*[\-–—to\s]+\s*(\d+)$', page_str)
@@ -238,9 +239,9 @@ class SOPParser:
             page = doc[p_idx]
             page_no = p_idx + 1
             
-            page_text_raw = page.get_text()
-            
-            blocks = page.get_text("dict")["blocks"]
+            page_text_raw = str(page.get_text())
+            page_dict = cast(dict, page.get_text("dict"))
+            blocks = page_dict.get("blocks", []) if isinstance(page_dict, dict) else []
             spans = []
             for b in blocks:
                 if "lines" in b:

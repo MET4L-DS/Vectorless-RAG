@@ -2,6 +2,8 @@ import bm25s
 from src import retriever
 
 retriever.load("tree")
+assert retriever._corpus_index is not None, "_corpus_index is None"
+assert retriever._bm25_index is not None, "_bm25_index is None"
 
 print(f"Total leaves: {len(retriever._corpus_index.get_flat_leaves())}")
 

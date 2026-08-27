@@ -1,11 +1,10 @@
 import re
-from typing import Annotated, TypedDict
+from typing import Annotated, TypedDict, Any, cast
 from operator import add
-from langchain_core.messages import HumanMessage
+from langchain_core.messages import BaseMessage, HumanMessage
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
 from langgraph.prebuilt import create_react_agent
-from langgraph.prebuilt.chat_agent_executor import AgentState as PrebuiltAgentState
 from src.react_agent.tools import (
     search_statutes,
     search_police_sop,
@@ -30,7 +29,9 @@ def required_acts(query: str) -> set[str]:
             required |= acts
     return required
 
-class AgentState(PrebuiltAgentState):
+class AgentState(TypedDict):
+    messages: Annotated[list[BaseMessage], add_messages]
+    remaining_steps: int
     coverage_retries: int
     structured_response: GeneratedAnswer
     retrieved_nodes: Annotated[list[dict], add]
@@ -104,7 +105,7 @@ def get_agent(checkpointer=None):
         messages = state["messages"]
         if not messages:
             return {}
-        query = messages[0].content
+        query = str(messages[0].content)
         required = required_acts(query)
         
         nodes = state.get("retrieved_nodes") or []
@@ -126,11 +127,12 @@ def get_agent(checkpointer=None):
         if not messages:
             return END
         last_msg = messages[-1]
-        if isinstance(last_msg, HumanMessage) and "COVERAGE CHECK FAILED" in last_msg.content:
+        last_content = str(last_msg.content)
+        if isinstance(last_msg, HumanMessage) and "COVERAGE CHECK FAILED" in last_content:
             return "run_inner"
         return END
 
-    builder = StateGraph(AgentState)
+    builder = StateGraph(cast(Any, AgentState))
     builder.add_node("run_inner", inner_agent)
     builder.add_node("coverage_gate", coverage_gate)
     

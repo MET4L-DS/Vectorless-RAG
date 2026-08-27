@@ -1,4 +1,4 @@
-from typing import List, Dict, Any
+from typing import List, Dict, Any, cast
 from .state import RetrievedNode, RetrievalResult
 
 class Assembler:
@@ -12,14 +12,14 @@ class Assembler:
         cross_ref_hits: List[RetrievedNode]
     ) -> RetrievalResult:
         
-        merged_nodes: Dict[str, RetrievedNode] = {}
+        merged_nodes: Dict[str, Dict[str, Any]] = {}
         
         # Helper to merge nodes and compute composite scores
         def add_node(node: RetrievedNode, source_score: float, is_tree: bool = False, is_cross_ref: bool = False):
             n_id = node["node_id"]
             if n_id not in merged_nodes:
                 # Make a copy so we don't mutate state history
-                merged_nodes[n_id] = node.copy()
+                merged_nodes[n_id] = dict(node)
                 merged_nodes[n_id]["score"] = 0.0 # reset for composite calculation
                 merged_nodes[n_id]["_bm25_score"] = 0.0
                 merged_nodes[n_id]["_is_tree"] = False
@@ -31,7 +31,7 @@ class Assembler:
                 merged_nodes[n_id]["_is_cross_ref"] = True
             else:
                 # BM25
-                merged_nodes[n_id]["_bm25_score"] = max(merged_nodes[n_id].get("_bm25_score", 0.0), source_score)
+                merged_nodes[n_id]["_bm25_score"] = max(float(merged_nodes[n_id].get("_bm25_score", 0.0)), source_score)
 
         # Merge them all
         for hit in bm25_hits:
@@ -46,7 +46,7 @@ class Assembler:
         # Compute final scores
         # final_score = (0.5 × bm25_score) + (0.4 × tree_nav_score) + (0.1 × cross_ref_bonus)
         for n_id, node in merged_nodes.items():
-            bm25 = node.get("_bm25_score", 0.0)
+            bm25 = float(node.get("_bm25_score", 0.0))
             tree = 1.0 if node.get("_is_tree") else 0.0
             cross = 1.0 if node.get("_is_cross_ref") else 0.0
             
@@ -58,11 +58,10 @@ class Assembler:
             node.pop("_is_tree", None)
             node.pop("_is_cross_ref", None)
             
-        # Sort by final score
-        sorted_nodes = sorted(merged_nodes.values(), key=lambda x: x["score"], reverse=True)
+        sorted_nodes = sorted(merged_nodes.values(), key=lambda x: float(x["score"]), reverse=True)
         
-        primary = sorted_nodes[:5]
-        supporting = sorted_nodes[5:15]
+        primary: List[RetrievedNode] = [cast(RetrievedNode, n) for n in sorted_nodes[:5]]
+        supporting: List[RetrievedNode] = [cast(RetrievedNode, n) for n in sorted_nodes[5:15]]
         
         citations = []
         sources = []

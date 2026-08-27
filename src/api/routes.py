@@ -1,7 +1,7 @@
 import json
 import asyncio
 import time
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Any, List, Dict
 from fastapi import APIRouter, HTTPException, Request, Depends
 from sse_starlette.sse import EventSourceResponse
 from pydantic import BaseModel, Field
@@ -51,7 +51,7 @@ def parse_message_content(content) -> str:
         return "".join(parts)
     return str(content)
 
-async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> AsyncGenerator[str, None]:
+async def run_agent_stream(agent, thread_id: str, query: str, pool=None) -> AsyncGenerator[Dict[str, Any], None]:
     """Runs the LangGraph agent and yields SSE events showing thoughts, tool calls, and final answer."""
     start_time = time.time()
     
@@ -235,7 +235,7 @@ async def get_chat_history(
             snapshots.append(s)
         snapshots.reverse()
         
-        formatted_messages = []
+        formatted_messages: List[Dict[str, Any]] = []
         prev_msg_count = 0
         
         for snapshot in snapshots:

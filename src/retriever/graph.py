@@ -1,6 +1,6 @@
 import time
 import re
-from typing import List, cast
+from typing import List, cast, Any
 from langgraph.graph import StateGraph, END
 
 from .state import AgentState
@@ -167,7 +167,7 @@ def route_after_intent(state: AgentState) -> List[str]:
 
 # --- Graph Definition ---
 
-builder = StateGraph(AgentState)
+builder = StateGraph(cast(Any, AgentState))
 
 builder.add_node("analyse_intent", analyse_intent_node)
 builder.add_node("bm25_search", bm25_search_node)

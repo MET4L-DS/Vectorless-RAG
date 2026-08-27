@@ -12,7 +12,7 @@ import hashlib
 import json
 import re
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, cast, Dict, Any, List
 
 import fitz
 import pandas as pd
@@ -153,23 +153,28 @@ class GenericPDFParser:
             page    = doc[p_idx]
             page_no = p_idx + 1
 
-            page_text_raw = page.get_text()
-            blocks        = page.get_text("dict")["blocks"]
+            page_text_raw = str(page.get_text())
+            page_dict     = cast(Dict[str, Any], page.get_text("dict"))
+            blocks        = cast(List[Dict[str, Any]], page_dict.get("blocks", []) if isinstance(page_dict, dict) else [])
 
             spans = []
             for b in blocks:
-                if "lines" in b:
-                    for l in b["lines"]:
-                        for s in l["spans"]:
-                            text = s["text"].strip()
-                            if text:
-                                spans.append({
-                                    "text":  text,
-                                    "bbox":  s["bbox"],
-                                    "font":  s["font"],
-                                    "size":  s["size"],
-                                    "flags": s["flags"],
-                                })
+                if isinstance(b, dict) and "lines" in b:
+                    lines_list = cast(List[Dict[str, Any]], b.get("lines", []))
+                    for l in lines_list:
+                        if isinstance(l, dict) and "spans" in l:
+                            spans_list = cast(List[Dict[str, Any]], l.get("spans", []))
+                            for s in spans_list:
+                                if isinstance(s, dict) and "text" in s:
+                                    text = str(s["text"]).strip()
+                                    if text:
+                                        spans.append({
+                                            "text":  text,
+                                            "bbox":  s.get("bbox"),
+                                            "font":  s.get("font"),
+                                            "size":  s.get("size"),
+                                            "flags": s.get("flags"),
+                                        })
 
             # Sort spans top-to-bottom, left-to-right
             spans.sort(key=lambda s: (round(s["bbox"][1], 1), s["bbox"][0]))
@@ -216,7 +221,7 @@ class GenericPDFParser:
             footer_text = None
             cleaned_lines = []
             for idx, line in enumerate(page_lines):
-                t = line["text"]
+                t: str = str(line["text"])
                 if idx == 0 and PAGE_NUM_NOISE_RE.match(t):
                     header_text = t
                     continue
@@ -237,7 +242,7 @@ class GenericPDFParser:
             skip_next_line = False
 
             for l_idx, line in enumerate(cleaned_lines):
-                text = line["text"]
+                text: str = str(line["text"])
                 # Clean footnote marker prefix like "1 [" or "2 [" from the start of the line
                 text = re.sub(r"^\d+\s*\[", "", text.strip())
                 assigned_section_id = front_matter_id
@@ -252,7 +257,7 @@ class GenericPDFParser:
                         if not sec_match:
                             start_match = adapter.section_start_re.match(text)
                             if start_match and l_idx + 1 < len(cleaned_lines):
-                                next_text   = cleaned_lines[l_idx + 1]["text"].strip()
+                                next_text: str   = str(cleaned_lines[l_idx + 1]["text"]).strip()
                                 joined_text = text + " " + next_text
                                 sec_match   = adapter.section_re.match(joined_text)
 
@@ -350,16 +355,17 @@ class GenericPDFParser:
         # ---- Build DataFrames and update end_page dynamically ----
         toc_df = pd.DataFrame(toc_nodes)
         if not toc_df.empty:
-            for idx, row in toc_df.iterrows():
-                level   = row["level"]
-                start_p = row["start_page"]
-                next_nodes         = toc_df.iloc[idx + 1:]
+            for idx_i in range(len(toc_df)):
+                row = toc_df.iloc[idx_i]
+                level   = int(row["level"])
+                start_p = int(row["start_page"])
+                next_nodes         = toc_df.iloc[idx_i + 1:]
                 next_same_or_higher = next_nodes[next_nodes["level"] <= level]
                 if not next_same_or_higher.empty:
-                    end_p = next_same_or_higher.iloc[0]["start_page"]
-                    toc_df.at[idx, "end_page"] = max(start_p, end_p - 1)
+                    end_p = int(next_same_or_higher.iloc[0]["start_page"])
+                    toc_df.at[idx_i, "end_page"] = max(start_p, end_p - 1)
                 else:
-                    toc_df.at[idx, "end_page"] = len(doc)
+                    toc_df.at[idx_i, "end_page"] = len(doc)
 
         page_df     = pd.DataFrame(pages_data)
         line_df     = pd.DataFrame(lines_data)

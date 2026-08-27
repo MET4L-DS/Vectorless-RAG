@@ -1,5 +1,5 @@
 import time
-from typing import Dict, Any, List
+from typing import Dict, Any, List, cast
 from langgraph.graph import StateGraph, END
 
 from src import retriever
@@ -70,7 +70,7 @@ async def verify_answer_node(state: GeneratorState) -> dict:
     history = state["history"]
     
     # Edge Case 1: Insufficient context escape hatch
-    if generated.is_insufficient_context:
+    if generated and generated.is_insufficient_context:
         if bypassed:
             print("[GeneratorGraph] VerifierAgent: Insufficient Context detected on Cache Hit. Forcing fresh retrieval.")
             # Trigger fresh retrieval
@@ -94,6 +94,9 @@ async def verify_answer_node(state: GeneratorState) -> dict:
                 "citations": []
             }
             
+    if not generated:
+        raise ValueError("No generated answer found in state for verification.")
+
     print("[GeneratorGraph] VerifierAgent: Verifying groundedness (Threshold: 0.90)...")
     report, citations = await verify_answer(generated, retrieval_res, context_str)
     print(f"[GeneratorGraph] VerifierAgent: Score={report['score']}, Passed={report['passed']}")
@@ -116,13 +119,14 @@ async def finalize_node(state: GeneratorState) -> dict:
     
     lines = []
     lines.append("[Answer]")
-    lines.append(generated.answer_text)
+    lines.append(generated.answer_text if generated else "No answer generated.")
     lines.append("")
     
-    if generated.key_provisions:
+    key_provisions = generated.key_provisions if generated and generated.key_provisions else []
+    if key_provisions:
         lines.append("[Key Provisions]")
-        for provision in generated.key_provisions:
-            p_strip = provision.strip()
+        for provision in key_provisions:
+            p_strip = str(provision).strip()
             if not p_strip.startswith("-"):
                 p_strip = f"- {p_strip}"
             lines.append(p_strip)
@@ -152,7 +156,7 @@ def route_after_verification(state: GeneratorState) -> str:
     bypassed = state.get("bypassed_retrieval", False)
     
     # Escape hatch
-    if generated.is_insufficient_context:
+    if generated and generated.is_insufficient_context:
         if bypassed:
             return "build_context" # loop back with fresh retrieval result
         else:
@@ -174,7 +178,7 @@ def route_after_verification(state: GeneratorState) -> str:
 
 # --- Define graph ---
 
-builder = StateGraph(GeneratorState)
+builder = StateGraph(cast(Any, GeneratorState))
 
 builder.add_node("route_context", route_context_node)
 builder.add_node("build_context", build_context_node)

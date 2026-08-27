@@ -84,7 +84,7 @@ async def _execute_with_rate_limit(model_name: str, fn, description: str = "Unkn
     new_calls_count += 1
     return result
 
-async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool = False, model_name: str = None) -> str:
+async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool = False, model_name: str | None = None) -> str:
     """
     Raw text LLM call with LangChain, wrapped in retry and rate-limiting.
     """
@@ -135,7 +135,7 @@ async def call_model_with_retry(prompt: str, retries: int = 5, json_mode: bool =
             if attempt == retries - 1:
                 raise e
 
-async def call_model_structured(prompt: str, response_schema: type[BaseModel], model_name: str = None, retries: int = 5) -> Any:
+async def call_model_structured(prompt: str, response_schema: type[BaseModel], model_name: str | None = None, retries: int = 5) -> Any:
     """
     Structured schema LLM call with LangChain, wrapped in retry and rate-limiting.
     Returns an instance of response_schema (Pydantic model).
@@ -169,4 +169,5 @@ async def call_model_structured(prompt: str, response_schema: type[BaseModel], m
                 await asyncio.sleep(2 ** attempt + 5)
             if attempt == retries - 1:
                 raise e
+    raise RuntimeError("call_model_structured failed after retries")
 
