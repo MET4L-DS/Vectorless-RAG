@@ -2,8 +2,8 @@ name: Keep-Alive Cron Job
 
 on:
   schedule:
-    # Run every 3 days at midnight UTC (Supabase pauses after 7 days, HF Spaces after 48h)
-    - cron: '0 0 */3 * *'
+    # Run every 3 days at 09:00 UTC (Supabase pauses after 7 days, HF Spaces idle after 48h)
+    - cron: '0 9 */3 * *'
   workflow_dispatch: # Allows manual trigger
 
 jobs:
@@ -23,37 +23,71 @@ jobs:
           python -m pip install --upgrade pip
           pip install psycopg2-binary httpx
 
-      - name: Ping Supabase Database
+      - name: Ping Supabase Database & Auth API
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
         run: |
           python -c "
           import os
           import psycopg2
+          import httpx
+
           db_url = os.getenv('DATABASE_URL')
           if not db_url:
-              print('DATABASE_URL not set, skipping DB ping')
-              exit(0)
-          conn = psycopg2.connect(db_url)
-          cur = conn.cursor()
-          cur.execute('SELECT 1;')
-          print('Supabase DB Ping Status:', cur.fetchone()[0])
-          cur.close()
-          conn.close()
+              print('::warning::DATABASE_URL secret is not set!')
+          else:
+              try:
+                  conn = psycopg2.connect(db_url)
+                  cur = conn.cursor()
+                  cur.execute('SELECT 1;')
+                  res = cur.fetchone()[0]
+                  print('Supabase DB Ping Status: SUCCESS (SELECT 1 ->', res, ')')
+                  cur.close()
+                  conn.close()
+              except Exception as e:
+                  print('::error::Supabase DB Ping Failed:', e)
+
+          # Also ping Supabase REST / Auth endpoint to ensure DNS and API gateway are warmed
+          sr_key = os.getenv('SUPABASE_SERVICE_ROLE_KEY')
+          if sr_key:
+              try:
+                  # Extract project ref if in DB url or use standard headers
+                  headers = {'apikey': sr_key, 'Authorization': f'Bearer {sr_key}'}
+                  # Derive url if possible
+                  if '@' in (db_url or ''):
+                      host = db_url.split('@')[1].split(':')[0]
+                      if 'pooler.supabase.com' in host or 'supabase.co' in host:
+                          ref = 'sjqiojrqigyufftigvyp'
+                          resp = httpx.get(f'https://{ref}.supabase.co/rest/v1/', headers=headers, timeout=15)
+                          print('Supabase REST Gateway Ping Status:', resp.status_code)
+              except Exception as e:
+                  print('Supabase REST Ping note:', e)
           "
 
-      - name: Ping Hugging Face Space
+      - name: Ping Hugging Face Space Backend
         env:
           HF_SPACE_URL: ${{ secrets.HF_SPACE_URL }}
         run: |
           python -c "
           import os
           import httpx
+
           hf_url = os.getenv('HF_SPACE_URL')
           if not hf_url:
-              print('HF_SPACE_URL not set, skipping Space ping')
+              print('::warning::HF_SPACE_URL secret is not set!')
               exit(0)
-          # Query backend health endpoint to keep container active
-          response = httpx.get(f'{hf_url.rstrip(\"/\")}/')
-          print('HF Space Ping Status:', response.status_code)
+
+          target = hf_url.rstrip('/')
+          try:
+              # Query backend health endpoint to keep container active
+              response = httpx.get(f'{target}/health', timeout=30)
+              print('HF Space /health Ping Status:', response.status_code, response.text)
+          except Exception as e:
+              print('Attempting fallback to / root endpoint. /health error:', e)
+              try:
+                  response = httpx.get(f'{target}/', timeout=30)
+                  print('HF Space / Ping Status:', response.status_code)
+              except Exception as err:
+                  print('::error::HF Space Ping Failed:', err)
           "

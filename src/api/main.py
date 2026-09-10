@@ -107,3 +107,11 @@ def read_root():
         "status": "online",
         "message": "Vectorless-RAG Legal Assistant API is fully operational locally."
     }
+
+@app.get("/health")
+def read_health():
+    return {
+        "status": "ok",
+        "service": "vectorless-rag"
+    }
+
