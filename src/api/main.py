@@ -34,21 +34,63 @@ async def lifespan(app: FastAPI):
     if not database_url:
         raise ValueError("DATABASE_URL environment variable is not set")
     
-    # Establish persistent connection pool to Supabase
-    async with AsyncConnectionPool(
-        conninfo=database_url,
-        max_size=10,
-        max_lifetime=300,  # 5 minutes connection lifetime to refresh before idle timeouts
-        check=check_db_connection,
-        kwargs={
-            "autocommit": True,
-            "prepare_threshold": None,
-            "keepalives": 1,
-            "keepalives_idle": 30,
-            "keepalives_interval": 10,
-            "keepalives_count": 3
-        }
-    ) as pool:
+    # Establish persistent connection pool to Supabase with startup retry
+    # This prevents the Space from hard-crashing if Supabase is still waking up
+    pool = None
+    last_exc = None
+    startup_retries = 6
+    startup_delay = 10  # seconds between retries (10, 20, 30, 40, 50, 60)
+
+    for attempt in range(1, startup_retries + 1):
+        try:
+            print(f"[main.py] DB startup attempt {attempt}/{startup_retries}...")
+            pool = AsyncConnectionPool(
+                conninfo=database_url,
+                min_size=0,
+                max_size=10,
+                max_lifetime=300,
+                open=False,  # Don't open connections eagerly
+                check=check_db_connection,
+                kwargs={
+                    "autocommit": True,
+                    "prepare_threshold": None,
+                    "keepalives": 1,
+                    "keepalives_idle": 30,
+                    "keepalives_interval": 10,
+                    "keepalives_count": 3
+                }
+            )
+            await pool.open(wait=True, timeout=20)
+
+            # Verify we can actually query the DB
+            async with pool.connection(timeout=10) as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute("SELECT 1")
+
+            print(f"[main.py] DB connection established on attempt {attempt}.")
+            last_exc = None
+            break
+        except Exception as e:
+            last_exc = e
+            print(f"[main.py] DB startup attempt {attempt} failed: {e}")
+            if pool:
+                try:
+                    await pool.close()
+                except Exception:
+                    pass
+                pool = None
+            if attempt < startup_retries:
+                wait_secs = startup_delay * attempt
+                print(f"[main.py] Retrying in {wait_secs}s...")
+                await asyncio.sleep(wait_secs)
+
+    if pool is None or last_exc is not None:
+        raise RuntimeError(
+            f"Failed to connect to Supabase after {startup_retries} attempts. "
+            f"Last error: {last_exc}"
+        )
+
+    async with pool:
         app.state.pool = pool
         checkpointer = AsyncPostgresSaver(pool)
         # Create checkpoint tables if they don't exist (migrations)
