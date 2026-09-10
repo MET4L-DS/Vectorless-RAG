@@ -109,9 +109,35 @@ def read_root():
     }
 
 @app.get("/health")
-def read_health():
+async def read_health(request: Request):
+    db_status = "ok"
+    pool = getattr(request.app.state, "pool", None)
+    if pool:
+        try:
+            async with pool.connection(timeout=3) as conn:
+                async with conn.cursor() as cur:
+                    await cur.execute("SELECT 1")
+        except Exception as e:
+            db_status = f"unreachable: {e}"
+    else:
+        db_status = "no_pool"
+
+    if db_status != "ok":
+        from fastapi.responses import JSONResponse
+        return JSONResponse(
+            status_code=503,
+            content={
+                "status": "degraded",
+                "database": "paused_or_unreachable",
+                "service": "vectorless-rag",
+                "detail": str(db_status)
+            }
+        )
+
     return {
         "status": "ok",
+        "database": "connected",
         "service": "vectorless-rag"
     }
+
 
